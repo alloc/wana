@@ -11,7 +11,7 @@ export function auto(effect: () => void, config: AutoConfig = {}) {
 }
 
 export interface AutoConfig {
-  delay?: number
+  delay?: number | boolean
   /** By default, calls the `run` method with the previous effect */
   onDirty?: Auto['onDirty']
   /** By default, errors are rethrown */
@@ -20,7 +20,7 @@ export interface AutoConfig {
 
 export class Auto extends Observer {
   dirty = true
-  delay: number
+  delay: number | true
   onDirty: (this: Auto) => void
   onError: (this: Auto, error: Error) => void
   prevEffect = noop
@@ -61,7 +61,12 @@ export class Auto extends Observer {
     if (!this.dirty) {
       this.dirty = true
       if (this.delay > 0) {
-        setTimeout(() => this.disposed || this.onDirty(), this.delay)
+        const update = () => this.disposed || this.onDirty()
+        if (this.delay === true) {
+          Promise.resolve().then(update)
+        } else {
+          setTimeout(update, this.delay)
+        }
       } else {
         this.onDirty()
       }
