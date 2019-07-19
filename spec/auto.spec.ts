@@ -266,6 +266,7 @@ describe('auto()', () => {
       map.set(1, 2)
     })
     const key = {}
+    test.todo('.has()')
     test('.get()', () => {
       use(() => map.get(key))
 
