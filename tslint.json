@@ -1,0 +1,8 @@
+{
+  "extends": ["tslint-mango"],
+  "rules": {
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": false,
+    "unified-signatures": false
+  }
+}

@@ -1,0 +1,604 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`o(Array) .length emits when set directly 1`] = `
+Array [
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 0,
+      "op": "replace",
+      "target": Array [],
+      "value": 3,
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 3,
+      "op": "replace",
+      "target": Array [],
+      "value": 0,
+    },
+  ],
+  Array [
+    Object {
+      "key": 0,
+      "oldValue": Array [
+        undefined,
+        undefined,
+        undefined,
+      ],
+      "op": "splice",
+      "target": Array [],
+      "value": Array [],
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() can insert and remove at the same time 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        2,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+        0,
+        0,
+        3,
+      ],
+      "value": Array [
+        0,
+        0,
+      ],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 3,
+      "op": "replace",
+      "target": Array [
+        1,
+        0,
+        0,
+        3,
+      ],
+      "value": 4,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() can insert and remove at the same time 2`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        0,
+        0,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+        3,
+        3,
+      ],
+      "value": Array [
+        3,
+      ],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 4,
+      "op": "replace",
+      "target": Array [
+        1,
+        3,
+        3,
+      ],
+      "value": 3,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() can insert and remove at the same time 3`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        3,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+        0,
+        3,
+      ],
+      "value": Array [
+        0,
+      ],
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() emits even if values did not change 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 0,
+      "oldValue": Array [
+        1,
+        2,
+        3,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+        2,
+        3,
+      ],
+      "value": Array [
+        1,
+        2,
+        3,
+      ],
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() insertion can insert at the end 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [],
+      "op": "splice",
+      "target": Array [
+        1,
+        2,
+        3,
+      ],
+      "value": Array [
+        2,
+        3,
+      ],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 1,
+      "op": "replace",
+      "target": Array [
+        1,
+        2,
+        3,
+      ],
+      "value": 3,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() insertion can insert at the start 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 0,
+      "oldValue": Array [],
+      "op": "splice",
+      "target": Array [
+        3,
+        2,
+        1,
+      ],
+      "value": Array [
+        3,
+        2,
+      ],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 1,
+      "op": "replace",
+      "target": Array [
+        3,
+        2,
+        1,
+      ],
+      "value": 3,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() insertion can insert into the middle 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [],
+      "op": "splice",
+      "target": Array [
+        1,
+        0,
+        0,
+        2,
+      ],
+      "value": Array [
+        0,
+        0,
+      ],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 2,
+      "op": "replace",
+      "target": Array [
+        1,
+        0,
+        0,
+        2,
+      ],
+      "value": 4,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() negative start index starts from the end 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        2,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+        3,
+      ],
+      "value": Array [],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 3,
+      "op": "replace",
+      "target": Array [
+        1,
+        3,
+      ],
+      "value": 2,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() negative start index stops at zero 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 0,
+      "oldValue": Array [
+        1,
+      ],
+      "op": "splice",
+      "target": Array [
+        2,
+      ],
+      "value": Array [],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 2,
+      "op": "replace",
+      "target": Array [
+        2,
+      ],
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() removal can splice the end 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        2,
+        3,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+      ],
+      "value": Array [],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 3,
+      "op": "replace",
+      "target": Array [
+        1,
+      ],
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() removal can splice the middle 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        2,
+        3,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+        4,
+      ],
+      "value": Array [],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 4,
+      "op": "replace",
+      "target": Array [
+        1,
+        4,
+      ],
+      "value": 2,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() removal can splice the start 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 0,
+      "oldValue": Array [
+        1,
+        2,
+      ],
+      "op": "splice",
+      "target": Array [
+        3,
+      ],
+      "value": Array [],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 3,
+      "op": "replace",
+      "target": Array [
+        3,
+      ],
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) .splice() remove count can exceed the last index 1`] = `
+Array [
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [
+        2,
+      ],
+      "op": "splice",
+      "target": Array [
+        1,
+      ],
+      "value": Array [],
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 2,
+      "op": "replace",
+      "target": Array [
+        1,
+      ],
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) [[Set]] emits for new indices 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "1",
+      "op": "add",
+      "target": Array [
+        undefined,
+        1,
+      ],
+      "value": 1,
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 0,
+      "op": "replace",
+      "target": Array [
+        undefined,
+        1,
+      ],
+      "value": 2,
+    },
+  ],
+]
+`;
+
+exports[`o(Array) [[Set]] emits for new values 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "0",
+      "oldValue": 0,
+      "op": "replace",
+      "target": Array [
+        1,
+      ],
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Object) [[Delete]] emits for known keys 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "a",
+      "oldValue": 1,
+      "op": "remove",
+      "target": Object {},
+    },
+  ],
+]
+`;
+
+exports[`o(Object) [[Set]] emits for new keys 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "a",
+      "op": "add",
+      "target": Object {
+        "a": 1,
+      },
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Object) [[Set]] emits for new values 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "a",
+      "oldValue": 0,
+      "op": "replace",
+      "target": Object {
+        "a": 1,
+      },
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Set) .add() emits for new values 1`] = `
+Array [
+  Array [
+    Object {
+      "key": undefined,
+      "op": "add",
+      "target": Set {
+        1,
+      },
+      "value": 1,
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 0,
+      "op": "replace",
+      "target": Set {
+        1,
+      },
+      "value": 1,
+    },
+  ],
+]
+`;
+
+exports[`o(Set) .clear() emits only when not empty 1`] = `
+Array [
+  Array [
+    Object {
+      "oldValue": Set {
+        1,
+        2,
+      },
+      "op": "clear",
+      "target": Set {},
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 2,
+      "op": "replace",
+      "target": Set {},
+      "value": 0,
+    },
+  ],
+]
+`;
+
+exports[`o(Set) .delete() emits for known values 1`] = `
+Array [
+  Array [
+    Object {
+      "key": undefined,
+      "oldValue": 1,
+      "op": "remove",
+      "target": Set {},
+    },
+  ],
+  Array [
+    Object {
+      "key": Symbol(wana:size),
+      "oldValue": 1,
+      "op": "replace",
+      "target": Set {},
+      "value": 0,
+    },
+  ],
+]
+`;

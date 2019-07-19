@@ -1,0 +1,8 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "prettier.tslintIntegration": true,
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.rpt2_cache": true
+  }
+}
