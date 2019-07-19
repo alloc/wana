@@ -4,6 +4,7 @@ import {
   ReactNode,
   useEffect,
   useReducer,
+  useRef,
 } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { auto, Auto } from './auto'
@@ -37,10 +38,14 @@ export function withAuto(render: any) {
 
 /** Run an effect when implicit dependencies are changed */
 export function useAuto(effect: () => void, deps?: any[]) {
+  const effectRef = useRef(effect)
   useEffect(() => {
-    const observer = auto(effect)
+    effectRef.current = effect
+  })
+  useEffect(() => {
+    const observer = auto(() => effectRef.current())
     return () => observer.dispose()
-  }, deps)
+  }, deps || emptyArray)
 }
 
 /** Create observable component state */
