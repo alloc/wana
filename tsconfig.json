@@ -2,6 +2,7 @@
   "include": ["src"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "jsx": "react",
     "lib": ["es2017", "dom"],
     "moduleResolution": "node",
     "noUnusedLocals": true,

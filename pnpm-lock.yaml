@@ -14,6 +14,7 @@ devDependencies:
   prettier: 1.18.2
   prettier-tslint: 0.4.2
   react: 16.8.6
+  react-dom: 16.8.6
   rollup: 1.17.0
   rollup-plugin-babel: 4.3.3
   rollup-plugin-dts: 1.1.5
@@ -3950,6 +3951,17 @@ packages:
       node: '>=0.6'
     resolution:
       integrity: sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+  /react-dom/16.8.6:
+    dependencies:
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.7.2
+      scheduler: 0.13.6
+    dev: true
+    peerDependencies:
+      react: ^16.0.0
+    resolution:
+      integrity: sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA==
   /react-is/16.8.6:
     dev: true
     resolution:
@@ -5231,6 +5243,7 @@ specifiers:
   prettier: ^1.18.2
   prettier-tslint: ^0.4.2
   react: ^16.8.6
+  react-dom: ^16.8.6
   rollup: ^1.17.0
   rollup-plugin-babel: ^4.3.3
   rollup-plugin-dts: ^1.1.5
