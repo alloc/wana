@@ -1,4 +1,4 @@
-import { noop, rethrowError } from './common'
+import { isUndefined, noop, rethrowError } from './common'
 import { track } from './global'
 import { Observer } from './observable'
 import { $O } from './symbols'
@@ -27,7 +27,7 @@ export class Auto extends Observer {
 
   constructor(config: AutoConfig = {}) {
     super()
-    this.delay = config.delay || 0
+    this.delay = isUndefined(config.delay) || config.delay
     this.onDirty = config.onDirty || this.rerun
     this.onError = config.onError || rethrowError
   }

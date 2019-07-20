@@ -9,6 +9,9 @@ export const isObject = (value: unknown): value is object =>
 export const isFunction = (value: unknown): value is Function =>
   typeof value == 'function'
 
+export const isUndefined = (value: unknown): value is undefined =>
+  value === void 0
+
 export function rethrowError(error: Error) {
   throw error
 }
