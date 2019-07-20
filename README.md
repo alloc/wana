@@ -69,6 +69,27 @@ state.count++ // logs "even"
 observer.dispose()
 ```
 
+The `auto` function accepts a config object:
+  
+  - `onError?: (this: Auto, error: Error) => void`
+  - `delay?: number | boolean`
+
+When `delay` is `true`, reactions are batched using the [microtask queue](https://javascript.info/microtask-queue). When `delay` is > 0, reactions are batched using `setTimeout`.
+
+By default, `auto` errors are rethrown. When `delay` is 0, reactions are synchronous, so the stack trace will show you which observable was changed before the error.
+
+You should always provide an `onError` callback when `delay` is true. Otherwise, an unhandled promise rejection is imminent.
+
+```ts
+auto(effect, {
+  delay: true,
+  onError(error) {
+    // The `run` method lets you replace the effect.
+    this.run(newEffect)
+  }
+})
+```
+
 &nbsp;
 
 ### withAuto ⚛️
