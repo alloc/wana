@@ -15,7 +15,7 @@ const track = (effect: () => void) => {
 
 const watch = (obj: object) => {
   const spy = jest.fn()
-  const observer = { _onChange: spy }
+  const observer = { observed: new Set(), _onChange: spy }
   obj[$O].add($O, observer)
   obj[$O].add(SIZE, observer)
   return spy.mock.calls
