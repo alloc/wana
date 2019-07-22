@@ -42,11 +42,13 @@ export class Observable {
       observers.owner = this
       this.observers.set(key, observers)
     }
+    observer.observed.add(observers)
   }
 
   remove(key: ObservedKey, observer: Observer) {
     const observers = this.observers.get(key)
     if (observers) {
+      observer.observed.delete(observers)
       observers.delete(observer)
       if (!observers.size) {
         this.observers.delete(key)
