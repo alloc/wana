@@ -19,9 +19,11 @@ Bring your React components to the next level. ⚛️
 
 ## API Reference
 
-The entirety of `wana` is 5 functions:
+The entirety of `wana` is 7 functions:
 - `o` for making observables
 - `auto` for reactive effects
+- `watch` for listening to deep changes
+- `untracked` for unobserved access
 - `withAuto` for reactive components
 - `useAuto` for easy `auto` calls in components
 - `useO` for observable component state
@@ -70,7 +72,7 @@ observer.dispose()
 ```
 
 The `auto` function accepts a config object:
-  
+
   - `onError?: (this: Auto, error: Error) => void`
   - `delay?: number | boolean`
 
@@ -90,6 +92,52 @@ auto(effect, {
     this.run(newEffect)
   }
 })
+```
+
+&nbsp;
+
+### watch ⚡️
+
+The `watch` function lets you listen for deep changes within an observable object.
+
+```ts
+import { o, watch } from 'wana'
+
+const obj = o({ arr: o([]) })
+const observer = watch(obj, change => console.log('changed:', change))
+
+// Every observable object in `obj` is watched.
+obj.x = true
+obj.arr.push(1)
+
+// You can even add new observables!
+const foo = o({})
+obj.arr.push(foo)
+foo.x = true
+
+// Call "dispose" to stop observing.
+observer.dispose()
+```
+
+**Note:** When an object is made observable *after* being added to a watched object, it won't be watched. Be sure you pass objects to `o()` before adding them to a watched object!
+
+&nbsp;
+
+### untracked ⚡️
+
+The `untracked` function lets you access an observable object without it being implicitly observed.
+
+```ts
+import { o, auto, untracked } from 'wana'
+
+const obj = o({ a: 1 })
+auto(() => {
+  // This will only be logged once.
+  console.log(untracked(() => obj.a))
+})
+
+// The "obj.a" value was never observed.
+obj.a = 2
 ```
 
 &nbsp;
