@@ -86,24 +86,7 @@ const ArrayTraps: ProxyHandler<any[]> = {
   preventExtensions: nope,
 }
 
-interface ArrayOverrides {
-  copyWithin(this: any[], target: number, start: number, end?: number): this
-  fill(this: any[], value: number, start?: number, end?: number): this
-  pop(this: any[]): any
-  push(this: any[], ...values: any[]): number
-  reverse(this: any[]): this
-  shift(this: any[]): any
-  sort(this: any[], compare?: (a: any, b: any) => number): this
-  splice(
-    this: any[],
-    start: number,
-    removeCount: number | undefined,
-    ...values: any[]
-  ): any[]
-  unshift(this: any[], ...items: any[]): number
-}
-
-const ArrayOverrides: ArrayOverrides = {
+const ArrayOverrides: any = {
   ...ArrayIterators,
   copyWithin: todo,
   fill: todo,
@@ -119,7 +102,7 @@ const ArrayOverrides: ArrayOverrides = {
       return value
     }
   },
-  push(...values: any[]) {
+  push(...values: any[]): number {
     const self: any[] = this[$$]
     const oldLength = self.length
     if (values.length) {
@@ -148,14 +131,14 @@ const ArrayOverrides: ArrayOverrides = {
       return value
     }
   },
-  sort(compare) {
+  sort(compare: (a: any, b: any) => number) {
     const self: any[] = this[$$]
     const oldValue = [...self]
     self.sort(compare)
     emitSplice(self, 0, [...self], oldValue)
     return this
   },
-  splice(start, removeCount = 0, ...values) {
+  splice(start: number, removeCount = 0, ...values: any[]): any[] {
     const self: any[] = this[$$]
     const oldLength = self.length
     if (start < 0) {
@@ -193,28 +176,20 @@ const MapTraps: ProxyHandler<any> = {
   ),
 }
 
-interface MapOverrides {
-  has(this: Map<any, any>, key: any): boolean
-  get(this: Map<any, any>, key: any): any
-  set(this: Map<any, any>, key: any, value: any): this
-  delete(this: Map<any, any>, key: any): boolean
-  clear(this: Map<any, any>): void
-}
-
-const MapOverrides: MapOverrides = {
+const MapOverrides: any = {
   ...MapIterators,
-  has(key) {
+  has(key: any) {
     const self: Map<any, any> = this[$$]
     // TODO: Avoid observing "replace" events here.
     observe(self, key)
     return self.has(key)
   },
-  get(key) {
+  get(key: any) {
     const self: Map<any, any> = this[$$]
     observe(self, key)
     return self.get(key)
   },
-  set(key, value) {
+  set(key: any, value: any) {
     const self: Map<any, any> = this[$$]
     const exists = self.has(key)
     const oldValue = exists ? self.get(key) : void 0
@@ -230,7 +205,7 @@ const MapOverrides: MapOverrides = {
     }
     return this
   },
-  delete(key) {
+  delete(key: any) {
     const self: Map<any, any> = this[$$]
     const oldSize = self.size
     const oldValue = self.get(key)
@@ -259,21 +234,14 @@ const SetTraps: ProxyHandler<any> = {
   ),
 }
 
-interface SetOverrides {
-  has(this: Set<any>, value: any): boolean
-  add(this: Set<any>, value: any): this
-  delete(this: Set<any>, value: any): boolean
-  clear(this: Set<any>): void
-}
-
-const SetOverrides: SetOverrides = {
+const SetOverrides: any = {
   ...SetIterators,
-  has(value) {
+  has(value: any) {
     const self: Set<any> = this[$$]
     observe(self, SIZE)
     return self.has(value)
   },
-  add(value) {
+  add(value: any) {
     const self: Set<any> = this[$$]
     const oldSize = self.size
     self.add(value)
@@ -283,7 +251,7 @@ const SetOverrides: SetOverrides = {
     }
     return this
   },
-  delete(value) {
+  delete(value: any) {
     const self: Set<any> = this[$$]
     const oldSize = self.size
     return (
