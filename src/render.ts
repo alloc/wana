@@ -52,7 +52,7 @@ export function useAuto(effect: () => void, deps?: any[]) {
 }
 
 /** Create observable component state */
-export function useO<T extends object>(
+export function useO<T>(
   state: Exclude<T, Function> | (() => T),
   deps?: readonly any[]
 ): T {
