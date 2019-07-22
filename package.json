@@ -47,5 +47,21 @@
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "use-memo-one": "^1.1.1"
-  }
+  },
+  "keywords": [
+    "transparent",
+    "observable",
+    "proxy",
+    "reactive",
+    "data flow",
+    "state management",
+    "react-component",
+    "component",
+    "reactjs",
+    "react",
+    "hooks",
+    "hoc",
+    "tiny",
+    "mobx"
+  ]
 }
