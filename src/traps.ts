@@ -1,5 +1,5 @@
 import { emptyArray, hasOwn, isUndefined, nope, todo } from './common'
-import { observe } from './global'
+import { observe, untracked } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { Change } from './observable'
 import { $$, $O, $P, SIZE } from './symbols'
@@ -88,6 +88,17 @@ const ArrayTraps: ProxyHandler<any[]> = {
 
 const ArrayOverrides: any = {
   ...ArrayIterators,
+  concat(...args: any[]) {
+    const self: any[] = this[$$]
+    observe(self, $O)
+    args.forEach(arg => {
+      arg = arg && arg[$$]
+      if (Array.isArray(arg)) {
+        observe(arg, $O)
+      }
+    })
+    return untracked(() => self.concat(...args))
+  },
   copyWithin: todo,
   fill: todo,
   pop() {
