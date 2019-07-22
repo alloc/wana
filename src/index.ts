@@ -1,3 +1,4 @@
+import './shims'
 export { o, Observer, Change } from './observable'
 export { auto, Auto } from './auto'
 export { watch, Watcher } from './watch'
