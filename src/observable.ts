@@ -1,4 +1,4 @@
-import { isObject, setHidden } from './common'
+import { isMap, isObject, setHidden } from './common'
 import { $O, $P, SIZE } from './symbols'
 import { traps } from './traps'
 
@@ -57,7 +57,7 @@ export class Observable {
   emit(change: Change) {
     if (change.op !== 'clear') {
       this._notify(change.key, change)
-    } else if (change.oldValue instanceof Map) {
+    } else if (isMap(change.oldValue)) {
       change.oldValue.forEach((_, key) => this._notify(key, change))
     }
     if (change.key !== SIZE) {

@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`watch() observes the root object deeply when created 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "b",
+      "op": "add",
+      "target": Object {
+        "a": Object [
+          Map {
+            0 => Set {
+              1,
+            },
+            1 => 1,
+          },
+          0,
+        ],
+        "b": true,
+      },
+      "value": true,
+    },
+  ],
+  Array [
+    Object {
+      "key": 1,
+      "oldValue": Array [],
+      "op": "splice",
+      "target": Array [
+        Map {
+          0 => Set {
+            1,
+          },
+          1 => 1,
+        },
+        0,
+      ],
+      "value": Array [
+        0,
+      ],
+    },
+  ],
+  Array [
+    Object {
+      "key": 1,
+      "op": "add",
+      "target": Map {
+        0 => Set {
+          1,
+        },
+        1 => 1,
+      },
+      "value": 1,
+    },
+  ],
+  Array [
+    Object {
+      "key": undefined,
+      "op": "add",
+      "target": Set {
+        1,
+      },
+      "value": 1,
+    },
+  ],
+]
+`;
