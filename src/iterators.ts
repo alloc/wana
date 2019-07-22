@@ -4,6 +4,7 @@ import { $$, $O } from './symbols'
 // These methods observe everything.
 const observeAll = [
   Symbol.iterator,
+  'entries',
   'every',
   'filter',
   'find',
@@ -14,12 +15,14 @@ const observeAll = [
   'includes',
   'indexOf',
   'join',
+  'keys',
   'lastIndexOf',
   'map',
   'reduce',
   'reduceRight',
   'slice',
   'some',
+  'values',
 ]
 
 const wrapIterators = (ctr: Function) =>
