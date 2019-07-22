@@ -20,7 +20,7 @@ export interface AutoConfig {
 
 export class Auto extends Observer {
   dirty = true
-  delay: number | true
+  delay: number | boolean
   onDirty: (this: Auto) => void
   onError: (this: Auto, error: Error) => void
   prevEffect = noop
@@ -65,7 +65,7 @@ export class Auto extends Observer {
         if (this.delay === true) {
           Promise.resolve().then(update)
         } else {
-          setTimeout(update, this.delay)
+          setTimeout(update, this.delay as any)
         }
       } else {
         this.onDirty()
