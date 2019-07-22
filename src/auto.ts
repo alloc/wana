@@ -61,7 +61,7 @@ export class Auto extends Observer {
     if (!this.dirty) {
       this.dirty = true
       if (this.delay > 0) {
-        const update = () => this.disposed || this.onDirty()
+        const update = this._onDelay.bind(this)
         if (this.delay === true) {
           Promise.resolve().then(update)
         } else {
@@ -71,5 +71,9 @@ export class Auto extends Observer {
         this.onDirty()
       }
     }
+  }
+
+  protected _onDelay() {
+    if (!this.disposed) this.onDirty()
   }
 }
