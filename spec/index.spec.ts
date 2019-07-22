@@ -119,6 +119,10 @@ describe('o(Object)', () => {
 })
 
 describe('o(Array)', () => {
+  it('works with Array.isArray', () => {
+    const arr = o([])
+    expect(Array.isArray(arr)).toBeTruthy()
+  })
   describe('[[Get]]', () => {
     it('ignores known indices', () => {
       const arr = o([0])
