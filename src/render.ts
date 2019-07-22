@@ -1,7 +1,10 @@
 import {
   forwardRef,
-  MutableRefObject,
-  ReactNode,
+  ForwardRefExoticComponent,
+  PropsWithoutRef,
+  ReactElement,
+  RefAttributes,
+  RefForwardingComponent,
   useEffect,
   useReducer,
   useRef,
@@ -13,15 +16,15 @@ import { o } from './observable'
 
 const useForceUpdate = () => useReducer(() => ({}), {})[1] as (() => void)
 
+type Component = (props: object) => ReactElement | null
+
 /** Wrap a component with magic observable tracking */
-export function withAuto<T, Props extends object>(
-  component: (props: Props) => ReactNode
-): typeof component
+export function withAuto<T extends Component>(component: T): T
 
 /** Wrap a component with `forwardRef` and magic observable tracking */
-export function withAuto<T, Props extends object>(
-  component: (props: Props, ref: MutableRefObject<T>) => ReactNode
-): typeof component
+export function withAuto<T, P = {}>(
+  component: RefForwardingComponent<T, P>
+): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T>>
 
 /** @internal */
 export function withAuto(render: any) {
