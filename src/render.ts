@@ -7,10 +7,9 @@ import {
   RefForwardingComponent,
   useEffect,
   useReducer,
-  useRef,
 } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
-import { auto, Auto } from './auto'
+import { Auto } from './auto'
 import { emptyArray, isFunction } from './common'
 import { o } from './observable'
 
@@ -44,14 +43,11 @@ export function withAuto(render: any) {
 
 /** Run an effect when implicit dependencies are changed */
 export function useAuto(effect: () => void, deps?: any[]) {
-  const effectRef = useRef(effect)
+  const auto = useConstant(() => new Auto())
+  useDispose(() => auto.dispose())
   useEffect(() => {
-    effectRef.current = effect
-  })
-  useEffect(() => {
-    const observer = auto(() => effectRef.current())
-    return () => observer.dispose()
-  }, deps || emptyArray)
+    auto.run(effect)
+  }, deps)
 }
 
 /** Create observable component state */
