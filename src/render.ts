@@ -15,6 +15,8 @@ import { emptyArray, isFunction } from './common'
 import { o } from './observable'
 
 const useForceUpdate = () => useReducer(() => ({}), {})[1] as (() => void)
+const useConstant = <T>(create: () => T) => useMemo(create, emptyArray)
+const useDispose = (dispose: () => void) => useEffect(() => dispose, emptyArray)
 
 type Component = (props: object) => ReactElement | null
 
@@ -29,8 +31,9 @@ export function withAuto<T, P = {}>(
 /** @internal */
 export function withAuto(render: any) {
   const component = (props: object, ref?: any) => {
-    const forceUpdate = useForceUpdate()
-    const auto = useMemo(() => new Auto({ onDirty: forceUpdate }), emptyArray)
+    const onDirty = useForceUpdate()
+    const auto = useConstant(() => new Auto({ onDirty }))
+    useDispose(() => auto.dispose())
     return auto.run(() => render(props, ref))
   }
   // prettier-ignore
