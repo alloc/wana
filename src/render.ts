@@ -17,10 +17,13 @@ const useForceUpdate = () => useReducer(() => ({}), {})[1] as (() => void)
 const useConstant = <T>(create: () => T) => useMemo(create, emptyArray)
 const useDispose = (dispose: () => void) => useEffect(() => dispose, emptyArray)
 
-type Component = (props: object) => ReactElement | null
+interface Component<P> {
+  (props: P): ReactElement | null
+  displayName?: string
+}
 
 /** Wrap a component with magic observable tracking */
-export function withAuto<T extends Component>(component: T): T
+export function withAuto<P>(component: Component<P>): Component<P>
 
 /** Wrap a component with `forwardRef` and magic observable tracking */
 export function withAuto<T, P = {}>(
