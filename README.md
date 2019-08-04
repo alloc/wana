@@ -19,9 +19,10 @@ Bring your React components to the next level. ⚛️
 
 ## API Reference
 
-The entirety of `wana` is 7 functions:
+The entirety of `wana` is 8 functions:
 - `o` for making observables
 - `auto` for reactive effects
+- `when` for reactive promises
 - `watch` for listening to deep changes
 - `untracked` for unobserved access
 - `withAuto` for reactive components
@@ -93,6 +94,26 @@ auto(effect, {
   }
 })
 ```
+
+&nbsp;
+
+### when ️️⚡️
+
+The `when` function creates a promise that resolves when the given condition returns true.
+
+Any observable access within the condition is tracked. The condition is rerun whenever a change is detected.
+
+```ts
+import { o, when } from 'wana'
+
+const obj = o({ count: 0 })
+const promise = when(() => obj.count > 1)
+
+obj.count++ // "promise" stays pending
+obj.count++ // "promise" is resolved
+```
+
+The promise is rejected when the condition throws an error.
 
 &nbsp;
 
