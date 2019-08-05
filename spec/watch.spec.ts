@@ -27,6 +27,7 @@ describe('watch()', () => {
     root.a[0].get(0).add(1)
     expect(spy.mock.calls).toMatchSnapshot()
   })
+
   it('observes new objects deeply when added', () => {
     withRoot({ a: o([]), s: o(new Set()), m: o(new Map()) })
     const obj: any = o({})
@@ -51,6 +52,7 @@ describe('watch()', () => {
     expect(spy).toBeCalledTimes(5)
     expect(counts.get(obj)).toBe(5)
   })
+
   it('only observes the first occurrence', () => {
     withRoot({})
     const obj: any = { a: 0 }
@@ -71,8 +73,22 @@ describe('watch()', () => {
     obj.a++
     expect(spy).toBeCalledTimes(2)
   })
+
+  it('stops observing replaced objects', () => {
+    const obj = o({ b: 1 })
+    withRoot({ a: obj })
+
+    root.a = null
+    expect(spy).toBeCalledTimes(1)
+    obj.b++
+    expect(spy).toBeCalledTimes(1)
+  })
+
   it.todo('observes object keys in Map objects')
+
   it.todo('crawls non-observable objects')
+
   it.todo('survives circular references')
+
   it.todo('survives duplicate references')
 })
