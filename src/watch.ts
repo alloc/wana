@@ -76,15 +76,19 @@ export class Watcher extends Observer {
 
   protected _onChange(change: Change) {
     const { op, target, key, value, oldValue } = change
-    if (op == 'add' || op == 'replace') {
-      this.watch(value, key, target)
-    } else if (op == 'remove') {
-      this.unwatch(value, key, target)
-    } else {
-      if (op == 'splice') {
+    switch (op) {
+      case 'replace':
+        if (isObject(oldValue)) this._unwatch(oldValue)
+      case 'add':
+        this.watch(value, key, target)
+        break
+      case 'remove':
+        this.unwatch(value, key, target)
+        break
+      case 'splice':
         value.forEach(this.watch)
-      }
-      oldValue.forEach(this.unwatch)
+      default:
+        oldValue.forEach(this.unwatch)
     }
     this.onChange(change)
   }
