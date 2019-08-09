@@ -144,17 +144,23 @@ observer.dispose()
 
 &nbsp;
 
-### untracked ⚡️
+### noto ⚡️
 
-The `untracked` function lets you access an observable object without it being implicitly observed.
+The `noto` function takes an observable proxy and returns the original object. If the given value is *not* observable, it's returned as-is.
+
+Its name is pronounced "not-oh". It's the polar opposite of the `o` function.
+
+If you pass a function, it will be called with implicit observation **disabled**.
 
 ```ts
-import { o, auto, untracked } from 'wana'
+import { o, auto, noto } from 'wana'
 
-const obj = o({ a: 1 })
+const obj = o({ a: 1, b: 2 })
 auto(() => {
   // This will only be logged once.
-  console.log(untracked(() => obj.a))
+  console.log(noto(() => obj.a + obj.b))
+  // Using the other signature:
+  console.log(noto(obj).a + noto(obj).b)
 })
 
 // The "obj.a" value was never observed.
