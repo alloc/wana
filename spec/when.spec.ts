@@ -1,5 +1,12 @@
 import { o, when } from '../src'
 
+// Sleep for `n` microtask queue flushes.
+const sleep = (n = 1) => {
+  let p: Promise<void> | undefined
+  while (n--) p = p ? p.then(() => {}) : Promise.resolve()
+  return p
+}
+
 describe('when()', () => {
   describe('first run', () => {
     it('remains pending when the condition is false', async () => {
@@ -9,7 +16,7 @@ describe('when()', () => {
       const resolve = jest.fn()
       promise.then(resolve, resolve)
 
-      await Promise.resolve()
+      await sleep(2)
       expect(resolve).not.toBeCalled()
     })
 
@@ -20,7 +27,7 @@ describe('when()', () => {
       const fulfill = jest.fn()
       promise.then(fulfill)
 
-      await Promise.resolve()
+      await sleep(2)
       expect(fulfill).toBeCalled()
     })
 
@@ -32,7 +39,7 @@ describe('when()', () => {
       const reject = jest.fn()
       promise.catch(reject)
 
-      await Promise.resolve()
+      await sleep(2)
       expect(reject).toBeCalled()
     })
   })
@@ -44,10 +51,10 @@ describe('when()', () => {
 
       const resolve = jest.fn()
       promise.then(resolve, resolve)
-      await Promise.resolve()
+      await sleep(2)
 
       state.count = 1
-      await Promise.resolve()
+      await sleep(2)
       expect(resolve).not.toBeCalled()
     })
 
@@ -57,10 +64,10 @@ describe('when()', () => {
 
       const fulfill = jest.fn()
       promise.then(fulfill)
-      await Promise.resolve()
+      await sleep(2)
 
       state.count = 1
-      await Promise.resolve()
+      await sleep(2)
       expect(fulfill).toBeCalled()
     })
 
@@ -75,10 +82,10 @@ describe('when()', () => {
 
       const reject = jest.fn()
       promise.catch(reject)
-      await Promise.resolve()
+      await sleep(2)
 
       state.count = 1
-      await Promise.resolve()
+      await sleep(2)
       expect(reject).toBeCalled()
     })
   })
