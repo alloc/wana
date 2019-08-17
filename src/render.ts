@@ -6,7 +6,6 @@ import {
   RefAttributes,
   RefForwardingComponent,
   useEffect,
-  useLayoutEffect,
   useReducer,
 } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
@@ -37,7 +36,7 @@ export function withAuto(render: any) {
     const onDirty = useForceUpdate()
     const auto = useConstant(() => new Auto({ onDirty }))
     useDispose(() => auto.dispose())
-    useLayoutEffect(() => {
+    useEffect(() => {
       if (!auto.commit()) onDirty()
     })
     return auto.run(() => render(props, ref))
