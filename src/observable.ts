@@ -14,46 +14,41 @@ export function o<T>(value: T): T {
     }
     proxy = new Proxy(value, traps[value.constructor.name] || traps.Object)
     setHidden(value, $P, proxy)
-    setHidden(value, $O, new Observable())
+    setHidden(value, $O, new Observable(value))
   }
   return proxy
 }
 
+/** Mutable state with an associated observable */
+export type ObservedState = object & { [$O]?: Observable }
+
 /** Any value acting as an object key */
-type ObservedKey = any
+export type ObservedKey = any
 
 /** An observer set with metadata about what's being observed */
-export interface ObserverSet extends Set<Observer> {
-  key: ObservedKey
-  owner: Observable
+export class ObservedValue extends Set<Observer> {
+  constructor(readonly owner: Observable, readonly key: ObservedKey) {
+    super()
+  }
+
+  get() {
+    return this.owner.source[this.key]
+  }
 }
 
 /** Glorified event emitter */
-export class Observable {
-  private observers = new Map<ObservedKey, ObserverSet>()
-
-  add(key: ObservedKey, observer: Observer) {
-    let observers = this.observers.get(key)!
-    if (observers) {
-      observers.add(observer)
-    } else {
-      observers = new Set([observer]) as any
-      observers.key = key
-      observers.owner = this
-      this.observers.set(key, observers)
-    }
-    observer.observed.add(observers)
+export class Observable extends Map<ObservedKey, ObservedValue> {
+  constructor(readonly source: object) {
+    super()
   }
 
-  remove(key: ObservedKey, observer: Observer) {
-    const observers = this.observers.get(key)
-    if (observers) {
-      observer.observed.delete(observers)
-      observers.delete(observer)
-      if (!observers.size) {
-        this.observers.delete(key)
-      }
+  get(key: ObservedKey): ObservedValue {
+    let observers = super.get(key)!
+    if (!observers) {
+      observers = new ObservedValue(this, key)
+      this.set(key, observers)
     }
+    return observers
   }
 
   emit(change: Change) {
@@ -68,12 +63,12 @@ export class Observable {
   }
 
   private _notify(key: any, change: Change) {
-    const observers = this.observers.get(key)
-    if (observers) {
+    const observers = this.get(key)
+    if (observers.size) {
       // Clone the "observers" in case they get mutated by an effect.
       for (const observer of Array.from(observers)) {
-        if (!observer.disposed) {
-          observer['_onChange'](change)
+        if (observer.onChange) {
+          observer.onChange(change)
         }
       }
     }
@@ -89,17 +84,13 @@ export interface Change {
 }
 
 export abstract class Observer {
-  observed = new Set<ObserverSet>()
-  disposed = false
+  observed!: ReadonlySet<ObservedValue>
+  onChange: ((change: Change) => void) | null = null
 
   dispose() {
-    if (!this.disposed) {
-      this.disposed = true
-      this.observed.forEach(cache => {
-        cache.owner.remove(cache.key, this)
-      })
+    if (this.onChange) {
+      this.onChange = null
+      this.observed.forEach(value => value.delete(this))
     }
   }
-
-  protected abstract _onChange(change: Change): void
 }
