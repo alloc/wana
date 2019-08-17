@@ -6,7 +6,19 @@ import { Auto } from './auto'
  */
 export const when = (condition: () => boolean): Promise<void> =>
   new Promise((resolve, reject) => {
-    const check = () => auto.run(condition) && resolve()
-    const auto = new Auto({ onDirty: check, onError: reject })
-    check()
+    const auto = new Auto({
+      onDirty() {
+        if (this.run(condition)) {
+          this.dispose()
+          resolve()
+        } else {
+          this.commit(true)
+        }
+      },
+      onError(error) {
+        this.dispose()
+        reject(error)
+      },
+    })
+    auto.onDirty()
   })
