@@ -21,6 +21,18 @@ let use = (effect: () => void) => {
 }
 
 describe('auto()', () => {
+  it('ignores any mutations made inside its callback', () => {
+    const state = o({ count: 0 })
+    use(() => {
+      if (state.count < 5) {
+        state.count++
+      }
+    })
+    expect(state.count).toBe(1)
+    state.count += 1
+    expect(state.count).toBe(3)
+  })
+
   describe('objects', () => {
     let obj: any
     beforeEach(() => {
@@ -81,6 +93,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
   })
+
   describe('arrays', () => {
     let arr: any[]
     beforeEach(() => {
@@ -225,6 +238,7 @@ describe('auto()', () => {
       expectRuns(0)
     }
   })
+
   describe('sets', () => {
     let set: Set<any>
     beforeEach(() => {
@@ -278,6 +292,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
   })
+
   describe('maps', () => {
     let map: Map<any, any>
     beforeEach(() => {
