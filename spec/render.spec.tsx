@@ -4,9 +4,9 @@ import { o, useAuto, withAuto } from '../src'
 import { Auto } from '../src/auto'
 
 beforeAll(() => {
-  const update = Auto.prototype['_onDelay']
-  Auto.prototype['_onDelay'] = function() {
-    act(() => void update.call(this))
+  const onDelay = Auto.prototype['_onDelay']
+  Auto.prototype['_onDelay'] = function(update) {
+    onDelay.call(this, () => void act(update))
   }
 })
 

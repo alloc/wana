@@ -1,4 +1,5 @@
 import { auto, o } from '../src'
+import { $O } from '../src/symbols'
 
 let runs: number
 let prevRuns: number
@@ -31,6 +32,33 @@ describe('auto()', () => {
     expect(state.count).toBe(1)
     state.count += 1
     expect(state.count).toBe(3)
+  })
+
+  it('unsubscribes from observables when an error is thrown', () => {
+    const a = o({ count: 0 })
+    const b = o({ count: 1 })
+    use(() => {
+      // Subscribe to "a.count" in the first run.
+      if (!a.count) return
+      // Subscribe to "b.count" before throwing.
+      if (a.count == b.count) {
+        expect(getObservers(b, 'count')).toBeUndefined()
+        throw Error()
+      }
+    })
+    const getObservers = (state: any, key: string) =>
+      state[$O].get(key) as Set<any>
+    expect(getObservers(a, 'count').size).toBe(1)
+    expect(getObservers(b, 'count').size).toBe(0)
+    try {
+      a.count++
+    } catch {
+      // Stay subscribed to "a.count" from the previous run.
+      expect(getObservers(a, 'count').size).toBe(1)
+      // Stop observing "b.count" from the throwing run.
+      expect(getObservers(b, 'count').size).toBe(0)
+    }
+    expect.assertions(5)
   })
 
   describe('objects', () => {
