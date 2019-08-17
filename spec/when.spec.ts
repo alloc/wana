@@ -89,4 +89,12 @@ describe('when()', () => {
       expect(reject).toBeCalled()
     })
   })
+
+  describe('resolved promise', () => {
+    it.todo('stops observing every value')
+  })
+
+  describe('rejected promise', () => {
+    it.todo('stops observing every value')
+  })
 })
