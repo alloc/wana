@@ -11,6 +11,7 @@ import {
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { Auto } from './auto'
 import { emptyArray, isFunction } from './common'
+import { untracked } from './global'
 import { o } from './observable'
 
 const useForceUpdate = () => useReducer(() => ({}), {})[1] as (() => void)
@@ -65,7 +66,7 @@ export function useO<T>(
   deps?: readonly any[]
 ): T {
   return useMemo(
-    () => o(isFunction(state) ? state() : state),
+    () => o(isFunction(state) ? untracked(state) : state),
     deps || emptyArray
   )
 }
