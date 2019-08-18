@@ -29,7 +29,7 @@ export function withAuto<P>(component: Component<P>): Component<P>
 /** Wrap a component with `forwardRef` and magic observable tracking */
 export function withAuto<T, P = {}>(
   component: RefForwardingComponent<T, P>
-): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T | undefined>>
+): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T>>
 
 /** @internal */
 export function withAuto(render: any) {
