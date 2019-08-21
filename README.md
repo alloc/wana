@@ -139,14 +139,14 @@ Pass a function to wrap it with a new function that disables implicit observatio
 ```ts
 const state = o({
   count: 1,
-  increment: noto(function(n: number) {
-    this.count = this.count + n
-  })
+})
+
+const increment = noto((n: number) => {
+  state.count = state.count + n
 })
 
 auto(() => {
-  // Nothing will be observed in here.
-  state.increment(1)
+  increment(1) // Nothing will be observed in here.
 })
 
 state.count == 2 // => true

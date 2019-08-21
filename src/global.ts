@@ -27,13 +27,11 @@ export function track<T>(
 }
 
 /** Run an effect without any observable tracking */
-export function untracked<T>(effect: () => T): T
-export function untracked<T, This>(effect: (this: This) => T, self: This): T
-export function untracked(effect: (this: any) => any, self?: any) {
+export function untracked<T>(effect: () => T): T {
   const oldValue = global.observe
   global.observe = null
   try {
-    return effect.call(self)
+    return effect()
   } finally {
     global.observe = oldValue
   }

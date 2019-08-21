@@ -394,10 +394,11 @@ describe('noto()', () => {
     orig = new Map()
     expect(noto(o(orig))).toBe(orig)
   })
-  it('calls functions with implicit observation disabled', () => {
+  it('wraps functions to disable implicit observation for future calls', () => {
     const state = o({ a: 1 })
+    const increment = noto(() => ++state.a)
     track(() => {
-      expect(noto(() => state.a)).toBe(1)
+      expect(increment()).toBe(2)
     })
     expect(observed).toEqual([])
   })

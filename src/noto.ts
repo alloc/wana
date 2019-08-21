@@ -8,9 +8,7 @@ import { $$ } from './symbols'
  */
 export function noto<T>(value: T): T {
   if (isFunction(value)) {
-    function fn(this: any) {
-      return untracked(value as any, this)
-    }
+    const fn = untracked.bind(null, value as any)
     setHidden(fn, 'name', value.name)
     return fn as any
   }
