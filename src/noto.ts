@@ -1,15 +1,20 @@
-import { isFunction } from './common'
+import { isFunction, setHidden } from './common'
 import { untracked } from './global'
 import { $$ } from './symbols'
 
 /**
  * Get the original object from an observable proxy,
- * or call a given function with implicit observation disabled.
+ * or wrap a function to disable observation inside it.
  */
 export function noto<T>(
   value: T
 ): T extends (...args: any[]) => infer U ? U : T {
-  return isFunction(value)
-    ? untracked(value as any)
-    : (value && value[$$]) || value
+  if (isFunction(value)) {
+    function fn(this: any) {
+      return untracked(value as any, this)
+    }
+    setHidden(fn, 'name', value.name)
+    return fn as any
+  }
+  return (value && value[$$]) || value
 }

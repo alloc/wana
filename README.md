@@ -119,11 +119,7 @@ The promise is rejected when the condition throws an error.
 
 ### noto ⚡️
 
-The `noto` function takes an observable proxy and returns the original object. If the given value is *not* observable, it's returned as-is.
-
-Its name is pronounced "not-oh". It's the polar opposite of the `o` function.
-
-If you pass a function, it will be called with implicit observation **disabled**.
+The `noto` function (pronounced "not oh") takes any observable object and returns the underlying object that isn't observable.
 
 ```ts
 import { o, auto, noto } from 'wana'
@@ -131,14 +127,32 @@ import { o, auto, noto } from 'wana'
 const obj = o({ a: 1, b: 2 })
 auto(() => {
   // This will only be logged once.
-  console.log(noto(() => obj.a + obj.b))
-  // Using the other signature:
   console.log(noto(obj).a + noto(obj).b)
 })
 
-// The "obj.a" value was never observed.
+// This change will not be observed.
 obj.a = 2
 ```
+
+Pass a function to wrap it with a new function that disables implicit observation for each call.
+
+```ts
+const state = o({
+  count: 1,
+  increment: noto(function(n: number) {
+    this.count = this.count + n
+  })
+})
+
+auto(() => {
+  // Nothing will be observed in here.
+  state.increment(1)
+})
+
+state.count == 2 // => true
+```
+
+Pass anything else and you get the same value back.
 
 &nbsp;
 
