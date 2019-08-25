@@ -11,13 +11,18 @@ export type Derived<T extends any[] = any[], U = any> = ((...args: T) => U) &
     clear: () => void
   }
 
-export function derive<T extends any[], U>(fn: (...args: T) => U): Derived<T, U>
-export function derive(fn: Function): Derived
+export function derive<T extends any[], U>(
+  fn: (...args: T) => U,
+  lazy?: boolean
+): Derived<T, U>
+
+export function derive(fn: Function, lazy?: boolean): Derived
 
 /** Create an observable function. */
-export function derive(fn: Function) {
+export function derive(fn: Function, lazy?: boolean) {
   const observable = new Observable()
   const auto = new Auto({
+    lazy,
     delay: 0,
     onDirty: () => (
       observable.emit({

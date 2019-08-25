@@ -1,11 +1,9 @@
-import { useEffect } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray, isFunction } from '../common'
-import { derive, Derived } from '../derive'
+import { Derived } from '../derive'
 import { untracked } from '../global'
 import { o } from '../o'
-import { $$ } from '../symbols'
-import { useDispose } from './common'
+import { useDerived } from './useDerived'
 
 /** Create a derived function that is managed by React. */
 export function useO<T extends any[], U>(
@@ -24,20 +22,10 @@ export function useO<T>(state: Exclude<T, Function>, deps?: readonly any[]): T
 
 /** @internal */
 export function useO(state: any, deps?: readonly any[]) {
-  let result = useMemo<any>(
+  const result = useMemo<any>(
     () => (isFunction(state) ? untracked(state) : state),
     deps || emptyArray
   )
-  if (isFunction(result)) {
-    result = useMemo(() => {
-      const derived = derive(result)
-      derived[$$].lazy = true
-      return derived
-    }, [result])
-    useDispose(result.dispose)
-    useEffect(() => {
-      result[$$].commit()
-    })
-  }
-  return o(result)
+  // Beware: Never switch between observable function and observable object.
+  return isFunction(result) ? useDerived(result, [result]) : o(result)
 }
