@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useChanges lets you observe Change events for an observable object 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "count",
+      "oldValue": 0,
+      "op": "replace",
+      "target": Object {
+        "count": 0,
+      },
+      "value": 1,
+    },
+  ],
+  Array [
+    Object {
+      "key": "count",
+      "oldValue": 1,
+      "op": "remove",
+      "target": Object {
+        "count": 0,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "key": "count",
+      "op": "add",
+      "target": Object {
+        "count": 0,
+      },
+      "value": 0,
+    },
+  ],
+]
+`;
