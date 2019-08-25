@@ -3,8 +3,8 @@ import { derive, Derived } from './derive'
 import { Observable, ObservedState } from './observable'
 import { $O } from './symbols'
 
-/** Create an observable function that memoizes its result. */
-export function o<T extends any[], U>(fn: (...args: T) => U): Derived<T, U>
+/** Create an observable getter that memoizes its result. */
+export function o<T>(fn: () => T): Derived<T>
 
 /** Get an observable proxy for an object. Non-objects are returned as-is. */
 export function o<T>(value: Exclude<T, Function>): T
@@ -17,7 +17,7 @@ export function o(value: ObservedState) {
   let state = value && value[$O]
   if (!state) {
     if (isFunction(value)) {
-      return derive(value)
+      return derive(value as any)
     }
     if (!isObject(value) || Object.isFrozen(value)) {
       return value

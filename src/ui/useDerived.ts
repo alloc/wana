@@ -6,13 +6,10 @@ import { $$ } from '../symbols'
 import { useDispose } from './common'
 
 /**
- * Create an observable function that is managed by React.
+ * Create an observable getter that is managed by React.
  * This lets you memoize an expensive combination of observable values.
  */
-export function useDerived<T extends any[], U>(
-  fn: (...args: T) => U,
-  deps?: any[]
-) {
+export function useDerived<T>(fn: () => T, deps?: readonly any[]) {
   const derived = useMemo(() => derive(fn, true), deps || emptyArray)
   useDispose(derived.dispose)
   useEffect(() => {

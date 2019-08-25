@@ -6,13 +6,13 @@ import { o } from '../o'
 import { useDerived } from './useDerived'
 
 /**
- * Create an observable function that is managed by React.
+ * Create an observable getter that is managed by React.
  * This lets you memoize an expensive combination of observable values.
  */
-export function useO<T extends any[], U>(
-  create: () => (...args: T) => U,
+export function useO<T>(
+  create: () => () => T,
   deps?: readonly any[]
-): Derived<T, U>
+): Derived<T>
 
 /** Create observable component state. */
 export function useO<T>(
@@ -29,6 +29,6 @@ export function useO(state: any, deps?: readonly any[]) {
     () => (isFunction(state) ? untracked(state) : state),
     deps || emptyArray
   )
-  // Beware: Never switch between observable function and observable object.
+  // Beware: Never switch between observable getter and observable object.
   return isFunction(result) ? useDerived(result, [result]) : o(result)
 }

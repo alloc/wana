@@ -4,22 +4,15 @@ import { observe, untracked } from './global'
 import { Observable } from './observable'
 import { $$, $O } from './symbols'
 
-/** A function that memoizes its result until an observed value is changed. The memoization is observable. */
-export type Derived<T extends any[] = any[], U = any> = ((...args: T) => U) &
+/** A getter that memoizes its result until an observed value is changed. The memoization is observable. */
+export type Derived<T = any> = (() => T) &
   Disposable & {
     /** Recompute the value on next call */
     clear: () => void
   }
 
-export function derive<T extends any[], U>(
-  fn: (...args: T) => U,
-  lazy?: boolean
-): Derived<T, U>
-
-export function derive(fn: Function, lazy?: boolean): Derived
-
-/** Create an observable function. */
-export function derive(fn: Function, lazy?: boolean) {
+/** Create an observable getter. */
+export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
   const observable = new Observable()
   const auto = new Auto({
     lazy,
@@ -34,10 +27,10 @@ export function derive(fn: Function, lazy?: boolean) {
     ),
   })
   let lastResult: any
-  const derived: Derived = (...args) => {
+  const derived: Derived<T> = () => {
     observe(derived, $O)
     return auto.dirty
-      ? (lastResult = untracked(() => auto.run(() => fn(...args))))!
+      ? (lastResult = untracked(() => auto.run(fn)))!
       : lastResult!
   }
   setHidden(derived, $$, auto)
