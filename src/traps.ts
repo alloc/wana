@@ -1,4 +1,4 @@
-import { emptyArray, hasOwn, isUndefined, nope, todo } from './common'
+import { emptyArray, hasOwn, isArray, isUndefined, nope, todo } from './common'
 import { observe, untracked } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { Change } from './observable'
@@ -93,7 +93,7 @@ const ArrayOverrides: any = {
     observe(self, $O)
     args.forEach(arg => {
       arg = arg && arg[$$]
-      if (Array.isArray(arg)) {
+      if (isArray(arg)) {
         observe(arg, $O)
       }
     })

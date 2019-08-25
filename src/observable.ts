@@ -1,4 +1,4 @@
-import { Disposable, isMap } from './common'
+import { Disposable, isArray, isMap } from './common'
 import { $O, SIZE } from './symbols'
 import { traps } from './traps'
 
@@ -15,7 +15,17 @@ export class ObservedValue extends Set<ChangeObserver> {
   }
 
   get() {
-    return this.owner.source[this.key]
+    const { key } = this
+    const { source } = this.owner
+    return key === $O
+      ? source
+      : key === SIZE
+      ? isArray(source)
+        ? source.length
+        : source.size
+      : isMap(source)
+      ? source.get(key)
+      : source[key]
   }
 }
 
