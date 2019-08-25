@@ -1,21 +1,6 @@
-import { Disposable, isMap, isObject, setHidden } from './common'
+import { Disposable, isMap } from './common'
 import { $O, SIZE } from './symbols'
 import { traps } from './traps'
-
-/**
- * Get an observable proxy for the given value,
- * except for functions and primitives.
- */
-export function o<T>(value: T): T {
-  let state: Observable<T> | undefined = value && value[$O]
-  if (!state) {
-    if (!isObject(value) || Object.isFrozen(value)) {
-      return value
-    }
-    setHidden(value, $O, (state = new Observable(value)))
-  }
-  return state.proxy
-}
 
 /** Mutable state with an associated observable */
 export type ObservedState = object & { [$O]?: Observable }
