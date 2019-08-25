@@ -15,11 +15,12 @@ export class ObservedValue extends Set<ChangeObserver> {
   }
 
   get() {
-    const { key } = this
-    const { source } = this.owner
-    return key === $O
-      ? source
-      : key === SIZE
+    const { key, owner } = this
+    if (key === $O) {
+      return owner.nonce
+    }
+    const { source } = owner
+    return key === SIZE
       ? isArray(source)
         ? source.length
         : source.size
@@ -35,6 +36,7 @@ export class Observable<T extends object = any> extends Map<
   ObservedValue
 > {
   readonly proxy: T | undefined
+  nonce = 0
 
   constructor(readonly source?: T) {
     super()
@@ -62,6 +64,7 @@ export class Observable<T extends object = any> extends Map<
       change.oldValue.forEach((_, key) => this._notify(key, change))
     }
     if (change.key !== SIZE) {
+      this.nonce++
       this._notify($O, change)
     }
   }
