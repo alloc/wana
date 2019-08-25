@@ -2,7 +2,7 @@ import { emptyArray, hasOwn, isUndefined, nope, todo } from './common'
 import { observe, untracked } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { Change } from './observable'
-import { $$, $O, $P, SIZE } from './symbols'
+import { $$, $O, SIZE } from './symbols'
 
 const emit = (target: object, change: Change) => (target[$O].emit(change), true)
 const emitAdd = (target: object, key: any, value: any) =>
@@ -47,7 +47,7 @@ const ObjectTraps: ProxyHandler<object> = {
     // Avoid observing inherited keys.
     if (hasOwn(self, key) || isUndefined(self[key])) {
       if (key === $$) return self
-      if (key !== $P) observe(self, key)
+      if (key !== $O) observe(self, key)
     }
     return self[key]
   },

@@ -1,5 +1,5 @@
 import { isMap, isObject, setHidden } from './common'
-import { $O, $P, SIZE } from './symbols'
+import { $O, SIZE } from './symbols'
 import { traps } from './traps'
 
 /**
@@ -7,16 +7,14 @@ import { traps } from './traps'
  * except for functions and primitives.
  */
 export function o<T>(value: T): T {
-  let proxy: any = value && value[$P]
-  if (!proxy) {
+  let state: Observable<T> | undefined = value && value[$O]
+  if (!state) {
     if (!isObject(value) || Object.isFrozen(value)) {
       return value
     }
-    proxy = new Proxy(value, traps[value.constructor.name] || traps.Object)
-    setHidden(value, $P, proxy)
-    setHidden(value, $O, new Observable(value))
+    setHidden(value, $O, (state = new Observable(value)))
   }
-  return proxy
+  return state.proxy
 }
 
 /** Mutable state with an associated observable */
@@ -37,9 +35,18 @@ export class ObservedValue extends Set<Observer> {
 }
 
 /** Glorified event emitter */
-export class Observable extends Map<ObservedKey, ObservedValue> {
-  constructor(readonly source: object) {
+export class Observable<T extends object> extends Map<
+  ObservedKey,
+  ObservedValue
+> {
+  readonly proxy: T
+
+  constructor(readonly source: T) {
     super()
+    this.proxy = new Proxy(
+      source,
+      traps[source.constructor.name] || traps.Object
+    )
   }
 
   get(key: ObservedKey): ObservedValue {
