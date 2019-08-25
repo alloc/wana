@@ -65,7 +65,7 @@ export class Auto {
 
   /** Rerun the last effect and commit its observer */
   rerun() {
-    this.run(this.lastEffect)
+    return this.run(this.lastEffect)
   }
 
   /** Commit the observer from the last run, except when the observer is dirty */
