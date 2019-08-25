@@ -19,7 +19,7 @@ Bring your React components to the next level. ⚛️
 
 ## API Reference
 
-The entirety of `wana` is 8 functions:
+The entirety of `wana` is 10 functions:
 - `o` for making observables
 - `auto` for reactive effects
 - `when` for reactive promises
@@ -28,6 +28,8 @@ The entirety of `wana` is 8 functions:
 - `withAuto` for reactive components
 - `useAuto` for easy `auto` calls in components
 - `useO` for observable component state
+- `useDerived` for observable getters
+- `useChanges` for change listeners
 
 &nbsp;
 
@@ -35,7 +37,15 @@ The entirety of `wana` is 8 functions:
 
 The `o` function wraps an object with an observable proxy (sorry, no IE11 support). These proxies are transparent, which means they look and act just like the object they wrap. The only difference is that now they're observable!
 
-You can pass anything to the `o` function, but functions and primitive values are merely pass-through, and thus won't be observable.
+Even custom class instances can be wrapped with an observable proxy!
+
+Passing the same object into `o` twice always returns the same proxy.
+
+By wrapping a function with `o`, you get an observable getter, which memoizes its result until one of its observed values is changed. Calling an observable getter triggers an observation! To prevent leaks, call the `dispose` method before releasing an observable getter. Lastly, you can call the `clear` method to force re-memoization on next call.
+
+Passing an observable getter into `o` is a no-op.
+
+Passing a primitive value into `o` is a no-op.
 
 **Note:** Nested objects are **not** made observable. You'll need to wrap them with `o` calls too.
 
@@ -240,6 +250,45 @@ const MyView = props => {
   const state = useO(new Set(), deps)
   const state = useO(() => [1, 2, 3])
   const state = useO(() => new Map(), deps)
+}
+```
+
+When you pass a function that returns a function, you get an observable getter, which is disposed of automatically on dismount. You can even pass a deps array as the last argument if you want to mix non-observable props into the memoized value.
+
+&nbsp;
+
+### useDerived ⚛️
+
+The `useDerived` hook creates an observable getter. You can pass a deps array as the last argument if you want to mix non-observable props into the memoized value.
+
+```tsx
+import { o, useDerived, useAuto } from 'wana'
+
+const state = o({ count: 0 })
+
+const MyView = props => {
+  const foo = useDerived(() => state.count + props.foo, [props.foo])
+  useAuto(() => {
+    console.log('foo:', foo())
+  })
+  return <div />
+}
+```
+
+&nbsp;
+
+### useChanges ⚛️
+
+The `useChanges` hook lets you listen for `Change` events on an observable object. Only shallow changes are reported.
+
+```tsx
+import { o, useChanges } from 'wana'
+
+const state = o({ count: 0 })
+
+const MyView = () => {
+  useChanges(state, console.log)
+  return null
 }
 ```
 
