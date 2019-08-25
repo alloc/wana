@@ -8,7 +8,7 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "react-native": "dist/index.js",
+  "react-native": "src/index.ts",
   "files": [
     "src",
     "dist"
