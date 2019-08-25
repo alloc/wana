@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
+import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
 
 export const useForceUpdate = () =>
