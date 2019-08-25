@@ -5,7 +5,10 @@ import { untracked } from '../global'
 import { o } from '../o'
 import { useDerived } from './useDerived'
 
-/** Create a derived function that is managed by React. */
+/**
+ * Create an observable function that is managed by React.
+ * This lets you memoize an expensive combination of observable values.
+ */
 export function useO<T extends any[], U>(
   create: () => (...args: T) => U,
   deps?: readonly any[]
