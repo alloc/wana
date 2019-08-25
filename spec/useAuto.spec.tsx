@@ -4,7 +4,7 @@ import { o, useAuto, withAuto } from '../src'
 
 describe('useAuto', () => {
   it('runs on every render by default', () => {
-    const calls = []
+    const calls: any[] = []
     const state = o({ count: 0 })
     const Test = () => {
       useAuto(() => {
@@ -19,7 +19,7 @@ describe('useAuto', () => {
     expect(calls).toEqual([0, 0])
   })
   it('can be given a deps array', () => {
-    const calls = []
+    const calls: any[] = []
     const state = o({ count: 0 })
     const Test = (props: { deps: any[] }) => {
       useAuto(() => {
@@ -35,7 +35,7 @@ describe('useAuto', () => {
     expect(calls).toEqual([0, 0])
   })
   it('reacts to observable changes', async () => {
-    const calls = []
+    const calls: any[] = []
     const state = o({ count: 0 })
     const Test = () => {
       useAuto(() => {
@@ -54,7 +54,7 @@ describe('useAuto', () => {
   })
   it.todo('stops observing on dismount')
   it('can be used inside a "withAuto" component', async () => {
-    const calls = []
+    const calls: any[] = []
     const state = o({ count: 0 })
     const Test = withAuto(() => {
       useAuto(() => {

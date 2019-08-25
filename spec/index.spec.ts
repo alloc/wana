@@ -27,16 +27,20 @@ describe('o()', () => {
     expect(o(obj)).toBe(o(obj))
     expect(o(obj)).not.toBe(obj)
   })
-  it('is a no-op for primitives and functions', () => {
+  it('is a no-op for primitives', () => {
     expect(o(0)).toBe(0)
     expect(o(true)).toBe(true)
     expect(o(null)).toBe(null)
     expect(o(undefined)).toBe(undefined)
-    expect(o(o)).toBe(o)
   })
   it('is a no-op for frozen objects', () => {
     const obj = Object.freeze({})
     expect(o(obj)).toBe(obj)
+  })
+  // Note: See "useDerived.spec.tsx" for more tests.
+  describe('observable getter', () => {
+    it.todo('wraps a normal function')
+    it.todo('never wraps another observable getter')
   })
 })
 

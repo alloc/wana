@@ -1,5 +1,4 @@
-import { o } from '../src/observable'
-import { watch, Watcher } from '../src/watch'
+import { o, watch, Watcher } from '../src'
 
 let spy: jest.Mock
 let root: any
