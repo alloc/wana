@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
+import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
-import { Change, ObservedState } from '../observable'
+import { Change, ChangeObserver, ObservedState } from '../observable'
 import { $O } from '../symbols'
 
 /** Listen for shallow changes to an observable object. */
@@ -13,15 +14,21 @@ export function useChanges(
   if (!observable) {
     throw Error('Expected an observable object')
   }
+
+  const observer = useMemo<ChangeObserver>(
+    () => ({ onChange } as any),
+    emptyArray
+  )
+
+  useEffect(() => {
+    observer.onChange = onChange
+  }, deps)
+
   useEffect(() => {
     const observers = observable.get($O)
-    const observer = {
-      onChange,
-      dispose() {
-        observers.delete(observer)
-      },
-    }
     observers.add(observer)
-    return observer.dispose
-  }, deps || emptyArray)
+    return () => {
+      observers.delete(observer)
+    }
+  }, emptyArray)
 }
