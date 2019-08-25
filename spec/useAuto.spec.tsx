@@ -1,14 +1,6 @@
-import { act, render } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import * as React from 'react'
 import { o, useAuto, withAuto } from '../src'
-import { Auto } from '../src/auto'
-
-beforeAll(() => {
-  const onDelay = Auto.prototype['_onDelay']
-  Auto.prototype['_onDelay'] = function(update) {
-    onDelay.call(this, () => void act(update))
-  }
-})
 
 describe('useAuto', () => {
   it('runs on every render by default', () => {
