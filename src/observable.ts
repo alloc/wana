@@ -20,18 +20,20 @@ export class ObservedValue extends Set<Observer> {
 }
 
 /** Glorified event emitter */
-export class Observable<T extends object> extends Map<
+export class Observable<T extends object = any> extends Map<
   ObservedKey,
   ObservedValue
 > {
-  readonly proxy: T
+  readonly proxy: T | undefined
 
-  constructor(readonly source: T) {
+  constructor(readonly source?: T) {
     super()
-    this.proxy = new Proxy(
-      source,
-      traps[source.constructor.name] || traps.Object
-    )
+    if (source) {
+      this.proxy = new Proxy(
+        source,
+        traps[source.constructor.name] || traps.Object
+      )
+    }
   }
 
   get(key: ObservedKey): ObservedValue {
