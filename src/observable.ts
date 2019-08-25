@@ -57,8 +57,8 @@ export class Observable<T extends object = any> extends Map<
   }
 
   private _notify(key: any, change: Change) {
-    const observers = this.get(key)
-    if (observers.size) {
+    const observers = super.get(key)
+    if (observers && observers.size) {
       // Clone the "observers" in case they get mutated by an effect.
       for (const observer of Array.from(observers)) {
         if (observer.onChange) {
