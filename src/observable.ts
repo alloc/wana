@@ -1,4 +1,4 @@
-import { isMap, isObject, setHidden } from './common'
+import { Disposable, isMap, isObject, setHidden } from './common'
 import { $O, SIZE } from './symbols'
 import { traps } from './traps'
 
@@ -90,7 +90,7 @@ export interface Change {
   oldValue?: any
 }
 
-export abstract class Observer {
+export abstract class Observer implements Disposable {
   observed!: ReadonlySet<ObservedValue>
   onChange: ((change: Change) => void) | null = null
 

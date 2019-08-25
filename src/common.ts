@@ -1,3 +1,8 @@
+export interface Disposable {
+  /** Release any memory that would otherwise leak */
+  dispose: () => void
+}
+
 export const emptyArray: readonly any[] = Object.freeze([])
 
 export const setHidden = (obj: any, key: any, value: any) =>
