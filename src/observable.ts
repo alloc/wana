@@ -9,7 +9,7 @@ export type ObservedState = object & { [$O]?: Observable }
 export type ObservedKey = any
 
 /** An observer set with metadata about what's being observed */
-export class ObservedValue extends Set<Observer> {
+export class ObservedValue extends Set<ChangeObserver> {
   constructor(readonly owner: Observable, readonly key: ObservedKey) {
     super()
   }
@@ -75,6 +75,10 @@ export interface Change {
   key?: any
   value?: any
   oldValue?: any
+}
+
+export interface ChangeObserver extends Disposable {
+  onChange: ((change: Change) => void) | null
 }
 
 export abstract class Observer implements Disposable {
