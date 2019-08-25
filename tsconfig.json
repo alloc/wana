@@ -1,5 +1,5 @@
 {
-  "include": ["src"],
+  "include": ["src", "spec"],
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
