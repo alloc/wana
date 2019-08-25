@@ -12,7 +12,7 @@ export const when = (condition: () => boolean): Promise<void> =>
           this.dispose()
           resolve()
         } else {
-          this.commit(true)
+          this.commit()
         }
       },
       onError(error) {

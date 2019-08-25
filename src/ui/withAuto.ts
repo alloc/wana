@@ -27,7 +27,7 @@ export function withAuto<T, P = {}>(
 export function withAuto(render: any) {
   const component = (props: object, ref?: any) => {
     const onDirty = useForceUpdate()
-    const auto = useConstant(() => new Auto({ onDirty }))
+    const auto = useConstant(() => new Auto({ lazy: true, onDirty }))
     useDispose(() => auto.dispose())
     useEffect(() => {
       if (!auto.commit()) onDirty()

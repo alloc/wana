@@ -8,6 +8,5 @@ export function useAuto(effect: () => void, deps?: any[]) {
   useDispose(() => auto.dispose())
   useEffect(() => {
     auto.run(effect)
-    auto.commit(true)
   }, deps)
 }
