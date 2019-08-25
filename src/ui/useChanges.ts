@@ -8,7 +8,7 @@ import { $O } from '../symbols'
 export function useChanges(
   target: ObservedState,
   onChange: (change: Change) => void,
-  deps?: any[]
+  deps?: readonly any[]
 ) {
   const observable = target[$O]
   if (!observable) {
