@@ -1,4 +1,11 @@
-import { emptyArray, hasOwn, isArray, isUndefined, nope, todo } from './common'
+import {
+  emptyArray,
+  getDescriptor,
+  hasOwn,
+  isArray,
+  nope,
+  todo,
+} from './common'
 import { observe, untracked } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { Change } from './observable'
@@ -44,10 +51,12 @@ const ObjectTraps: ProxyHandler<object> = {
     observe(self, key), Reflect.has(self, key)
   ),
   get(self, key) {
-    // Avoid observing inherited keys.
-    if (hasOwn(self, key) || isUndefined(self[key])) {
-      if (key === $$) return self
-      if (key !== $O) observe(self, key)
+    if (key === $$) return self
+    if (key !== $O) {
+      const desc = getDescriptor(self, key)
+      if (!desc || (!desc.get && hasOwn(self, key))) {
+        observe(self, key)
+      }
     }
     return self[key]
   },

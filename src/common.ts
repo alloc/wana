@@ -26,15 +26,25 @@ export function rethrowError(error: Error) {
   throw error
 }
 
-export const hasOwn = Function.call.bind({}.hasOwnProperty) as (
-  obj: object,
-  key: keyof any
-) => boolean
-
 export const noop = () => {}
 
 export const nope = () => false
 
 export const todo: any = () => {
   throw Error('Not yet implemented')
+}
+
+export const hasOwn = Function.call.bind({}.hasOwnProperty) as (
+  obj: object,
+  key: keyof any
+) => boolean
+
+export function getDescriptor(self: object, key: any) {
+  let desc: PropertyDescriptor | undefined
+  let proto = self
+  do {
+    if ((desc = Object.getOwnPropertyDescriptor(proto, key))) {
+      return desc
+    }
+  } while ((proto = Object.getPrototypeOf(proto)))
 }
