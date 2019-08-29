@@ -37,8 +37,35 @@ describe('o()', () => {
     const obj = Object.freeze({})
     expect(o(obj)).toBe(obj)
   })
+  describe('property getter', () => {
+    it('is called with the proxy as its "this" value', () => {
+      class Foo {
+        get foo() {
+          return this
+        }
+      }
+      const foo = o(new Foo())
+      expect(foo.foo).toBe(foo)
+    })
+  })
+  describe('property setter', () => {
+    it('is called with the proxy as its "this" value', () => {
+      class Foo {
+        this: any
+        get foo() {
+          return this
+        }
+        set foo(out: Foo) {
+          out.this = this
+        }
+      }
+      const foo = o(new Foo())
+      foo.foo = foo
+      expect(foo.this).toBe(foo)
+    })
+  })
   // Note: See "useDerived.spec.tsx" for more tests.
-  describe('observable getter', () => {
+  describe('observable function', () => {
     it.todo('wraps a normal function')
     it.todo('never wraps another observable getter')
   })

@@ -54,13 +54,25 @@ const ObjectTraps: ProxyHandler<object> = {
     if (key === $$) return self
     if (key !== $O) {
       const desc = getDescriptor(self, key)
-      if (!desc || (!desc.get && hasOwn(self, key))) {
+      const get = desc && desc.get
+      if (get) {
+        return get.call(self[$O].proxy)
+      }
+      // Observe unknown keys and own keys only.
+      if (!desc || hasOwn(self, key)) {
         observe(self, key)
       }
     }
     return self[key]
   },
-  set: setProperty,
+  set(self, key, value) {
+    const desc = getDescriptor(self, key)
+    return desc && desc.get
+      ? desc.set
+        ? (desc.set.call(self[$O].proxy, value), true)
+        : false
+      : setProperty(self, key, value)
+  },
   deleteProperty,
   preventExtensions: nope,
 }
