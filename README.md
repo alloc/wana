@@ -20,10 +20,11 @@ Bring your React components to the next level. ⚛️
 ## API Reference
 
 The entirety of `wana` is 10 functions:
-- `o` for making observables
+- `o` for making observable objects
 - `auto` for reactive effects
 - `when` for reactive promises
-- `noto` for unobserved access
+- `no` for unobserved objects
+- `noto` for unobserved scopes
 - `watch` for listening to deep changes
 - `withAuto` for reactive components
 - `useAuto` for easy `auto` calls in components
@@ -127,17 +128,17 @@ The promise is rejected when the condition throws an error.
 
 &nbsp;
 
-### noto ⚡️
+### no ⚡️
 
-The `noto` function (pronounced "not oh") takes any observable object and returns the underlying object that isn't observable.
+The `no` function (pronounced "not oh") takes any observable object and returns the underlying object that isn't observable.
 
 ```ts
-import { o, auto, noto } from 'wana'
+import { o, auto, no } from 'wana'
 
 const obj = o({ a: 1, b: 2 })
 auto(() => {
   // This will only be logged once.
-  console.log(noto(obj).a + noto(obj).b)
+  console.log(no(obj).a + no(obj).b)
 })
 
 // This change will not be observed.
@@ -151,7 +152,7 @@ const state = o({
   count: 1,
 })
 
-const increment = noto((n: number) => {
+const increment = no((n: number) => {
   state.count = state.count + n
 })
 
@@ -163,6 +164,16 @@ state.count == 2 // => true
 ```
 
 Pass anything else and you get the same value back.
+
+&nbsp;
+
+### noto ⚡️
+
+There are two ways to disable implicit observation for a function:
+  1. By calling `no(fn)(...args)`
+  2. By calling `noto(fn)`
+
+Either way is acceptable. You cannot pass arguments to `noto` callbacks.
 
 &nbsp;
 

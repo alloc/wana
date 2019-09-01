@@ -1,4 +1,4 @@
-import { noto, o } from '../src'
+import { no, o } from '../src'
 import { global } from '../src/global'
 import { $$, $O, SIZE } from '../src/symbols'
 
@@ -414,20 +414,20 @@ describe('o(Map)', () => {
   })
 })
 
-describe('noto()', () => {
+describe('no()', () => {
   it('returns the original object of an observable proxy', () => {
     let orig: any = {}
-    expect(noto(o(orig))).toBe(orig)
+    expect(no(o(orig))).toBe(orig)
     orig = []
-    expect(noto(o(orig))).toBe(orig)
+    expect(no(o(orig))).toBe(orig)
     orig = new Set()
-    expect(noto(o(orig))).toBe(orig)
+    expect(no(o(orig))).toBe(orig)
     orig = new Map()
-    expect(noto(o(orig))).toBe(orig)
+    expect(no(o(orig))).toBe(orig)
   })
   it('wraps functions to disable implicit observation for future calls', () => {
     const state = o({ a: 1 })
-    const increment = noto(() => ++state.a)
+    const increment = no(() => ++state.a)
     track(() => {
       expect(increment()).toBe(2)
     })
