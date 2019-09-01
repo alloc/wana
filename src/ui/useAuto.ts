@@ -7,4 +7,5 @@ export function useAuto(effect: React.EffectCallback, deps?: readonly any[]) {
   const auto = useConstant(() => new Auto())
   useDispose(() => auto.dispose())
   useEffect(() => auto.run(effect), deps)
+  return auto
 }
