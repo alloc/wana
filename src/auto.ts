@@ -46,11 +46,11 @@ export class Auto {
   run<T>(effect: () => T): T | undefined {
     let result: T | undefined
     try {
-      const observed = new Set<ObservedValue>()
+      const observer = new AutoObserver(this.lazy && [])
       result = track(effect, (target, key) => {
-        observed.add(target[$O]!.get(key))
+        observer.observe(target, key)
       })
-      this.nextObserver = new AutoObserver(observed, this.lazy && [])
+      this.nextObserver = observer
       this.nextEffect = effect
       this.dirty = false
       if (!this.lazy) {
@@ -126,18 +126,11 @@ export class Auto {
 }
 
 export class AutoObserver extends Observer {
+  observed = new Set<ObservedValue>()
   onChange: (() => void) | null = null
-  values?: any[] | false
 
-  constructor(
-    readonly observed: ReadonlySet<ObservedValue>,
-    values?: any[] | false
-  ) {
+  constructor(public values?: any[] | false) {
     super()
-    if (values) {
-      observed.forEach(value => values.push(value.get()))
-      this.values = values
-    }
   }
 
   /** Returns false when the observed values are still current */
@@ -153,5 +146,21 @@ export class AutoObserver extends Observer {
     this.values = false
     this.onChange = onChange
     this.observed.forEach(value => value.add(this))
+  }
+
+  observe(state: ObservedState, key: keyof any) {
+    const { observed, values } = this
+    const { size } = observed
+
+    const observable = state[$O]!.get(key)
+    observed.add(observable)
+
+    if (observed.size > size) {
+      if (values) {
+        values.push(observable.get())
+      } else {
+        observable.add(this)
+      }
+    }
   }
 }
