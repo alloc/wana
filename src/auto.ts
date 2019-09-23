@@ -45,18 +45,28 @@ export class Auto {
   }
 
   wrap<T extends object>(state: Exclude<T, Function>, reset?: boolean): T {
-    const auto = this
-    const observer =
-      (!reset && this.nextObserver) ||
-      (this.nextObserver = new AutoObserver(this.lazy && []))
+    const observer = reset
+      ? (this.nextObserver = new AutoObserver(this.lazy && []))
+      : this.nextObserver!
 
-    return new Proxy(o(state), {
+    const auto = this
+    const traps: ProxyHandler<T> = {
       get(obj, key) {
         const value = obj[key]
-        observer.observe(obj, key)
-        return value && value[$O] ? auto.wrap(value) : value
+        if (observer.values) {
+          observer.observe(obj, key)
+          if (value && value[$O]) {
+            return auto.wrap(value)
+          }
+        } else {
+          // This proxy is outdated. Make it pass through.
+          traps.get = Reflect.get
+        }
+        return value
       },
-    })
+    }
+
+    return new Proxy(o(state), traps)
   }
 
   run<T>(effect: () => T): T | undefined {
