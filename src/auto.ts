@@ -44,19 +44,22 @@ export class Auto {
     this.onError = config.onError || rethrowError
   }
 
-  wrap<T extends object>(state: Exclude<T, Function>, reset?: boolean): T {
-    const observer = reset
-      ? (this.nextObserver = new AutoObserver(this.lazy && []))
-      : this.nextObserver!
-
+  wrap<T extends object>(
+    state: Exclude<T, Function>,
+    observer?: AutoObserver
+  ): T {
+    if (!observer) {
+      this.dirty = false
+      this.nextObserver = observer = new AutoObserver(this.lazy && [])
+    }
     const auto = this
     const traps: ProxyHandler<T> = {
       get(obj, key) {
         const value = obj[key]
-        if (observer.values) {
-          observer.observe(obj, key)
+        if (observer!.values) {
+          observer!.observe(obj, key)
           if (value && value[$O]) {
-            return auto.wrap(value)
+            return auto.wrap(value, observer)
           }
         } else {
           // This proxy is outdated. Make it pass through.

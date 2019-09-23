@@ -10,6 +10,6 @@ export function createHook<T extends object>(state: Exclude<T, Function>) {
     useEffect(() => {
       if (!auto.commit()) onDirty()
     })
-    return auto.wrap(state, true)
+    return auto.wrap(state)
   }
 }
