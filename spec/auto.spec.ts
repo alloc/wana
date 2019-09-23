@@ -16,7 +16,7 @@ let ctx = o({
 auto(() => (ctx.effect(), runs++), { delay: 0 })
 
 // Replace the effect and reset the run count.
-let use = (effect: () => void) => {
+let setEffect = (effect: () => void) => {
   ctx.effect = effect
   prevRuns = runs = 0
 }
@@ -24,7 +24,7 @@ let use = (effect: () => void) => {
 describe('auto()', () => {
   it('ignores any mutations made inside its callback', () => {
     const state = o({ count: 0 })
-    use(() => {
+    setEffect(() => {
       if (state.count < 5) {
         state.count++
       }
@@ -37,7 +37,7 @@ describe('auto()', () => {
   it('unsubscribes from observables when an error is thrown', () => {
     const a = o({ count: 0 })
     const b = o({ count: 1 })
-    use(() => {
+    setEffect(() => {
       // Subscribe to "a.count" in the first run.
       if (!a.count) return
       // Subscribe to "b.count" before throwing.
@@ -67,7 +67,7 @@ describe('auto()', () => {
       obj = o({})
     })
     test('get', () => {
-      use(() => obj.a)
+      setEffect(() => obj.a)
 
       obj.a = 1 // add our key
       expectRuns(1)
@@ -94,7 +94,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
     test('in', () => {
-      use(() => 'a' in obj)
+      setEffect(() => 'a' in obj)
 
       obj.a = 1 // add our key
       expectRuns(1)
@@ -128,7 +128,7 @@ describe('auto()', () => {
       arr = o([])
     })
     test('.length', () => {
-      use(() => arr.length)
+      setEffect(() => arr.length)
 
       arr.pop() // empty pop
       expectRuns(0)
@@ -184,7 +184,7 @@ describe('auto()', () => {
     test('.concat()', () => {
       const left = arr
       const right: any[] = o([])
-      use(() => left.concat(right))
+      setEffect(() => left.concat(right))
 
       left.push(1)
       expectRuns(1)
@@ -193,11 +193,11 @@ describe('auto()', () => {
       expectRuns(1)
     })
     test('.forEach()', () => {
-      use(() => arr.forEach(() => {}))
+      setEffect(() => arr.forEach(() => {}))
       wholeMutations()
     })
     test('.keys()', () => {
-      use(() => arr.keys())
+      setEffect(() => arr.keys())
       wholeMutations()
     })
     function ensureReversed() {
@@ -274,7 +274,7 @@ describe('auto()', () => {
       set.add(1).add(2)
     })
     test('.forEach()', () => {
-      use(() => set.forEach(() => {}))
+      setEffect(() => set.forEach(() => {}))
 
       set.add(3) // add unknown value
       expectRuns(1)
@@ -297,7 +297,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
     test('.size', () => {
-      use(() => set.size)
+      setEffect(() => set.size)
 
       set.add(3) // add unknown value
       expectRuns(1)
@@ -329,7 +329,7 @@ describe('auto()', () => {
     })
     const key = {}
     test('.has()', () => {
-      use(() => map.has(key))
+      setEffect(() => map.has(key))
 
       map.set(key, 1) // add our key
       expectRuns(1)
@@ -370,7 +370,7 @@ describe('auto()', () => {
       expectRuns(1)
     })
     test('.get()', () => {
-      use(() => map.get(key))
+      setEffect(() => map.get(key))
 
       map.set(key, 1) // add our key
       expectRuns(1)
@@ -411,7 +411,7 @@ describe('auto()', () => {
       expectRuns(1)
     })
     test('.forEach()', () => {
-      use(() => map.forEach(() => {}))
+      setEffect(() => map.forEach(() => {}))
 
       map.set(key, 1) // add a key
       expectRuns(1)
@@ -434,7 +434,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
     test('.size', () => {
-      use(() => map.size)
+      setEffect(() => map.size)
 
       map.set(key, 1) // add a key
       expectRuns(1)
