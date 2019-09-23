@@ -42,7 +42,7 @@ describe('auto()', () => {
       if (!a.count) return
       // Subscribe to "b.count" before throwing.
       if (a.count == b.count) {
-        expect(getObservers(b, 'count')).toBeUndefined()
+        expect(getObservers(b, 'count').size).toBe(1)
         throw Error()
       }
     })
