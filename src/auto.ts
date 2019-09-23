@@ -73,9 +73,9 @@ export class Auto {
   }
 
   run<T>(effect: () => T): T | undefined {
+    const observer = new AutoObserver(this.lazy && [])
     let result: T | undefined
     try {
-      const observer = new AutoObserver(this.lazy && [])
       result = track(effect, (target, key) => {
         observer.observe(target, key)
       })
@@ -86,6 +86,9 @@ export class Auto {
         this.commit()
       }
     } catch (error) {
+      if (!this.lazy) {
+        observer.dispose()
+      }
       this.dirty = false
       this.onError(error)
     }
@@ -160,6 +163,9 @@ export class AutoObserver extends Observer {
 
   constructor(public values?: any[] | false) {
     super()
+    if (!values) {
+      this.onChange = noop
+    }
   }
 
   /** Returns false when the observed values are still current */
