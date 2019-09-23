@@ -1,6 +1,7 @@
 import { isUndefined, noop, rethrowError } from './common'
 import { track } from './global'
-import { ObservedValue, Observer } from './observable'
+import { o } from './o'
+import { ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
 
 /** Run an effect when its tracked values change. */
@@ -41,6 +42,21 @@ export class Auto {
     this.onDirty = config.onDirty || this.rerun
     this.onDelay = config.onDelay || this._onDelay
     this.onError = config.onError || rethrowError
+  }
+
+  wrap<T extends object>(state: Exclude<T, Function>, reset?: boolean): T {
+    const auto = this
+    const observer =
+      (!reset && this.nextObserver) ||
+      (this.nextObserver = new AutoObserver(this.lazy && []))
+
+    return new Proxy(o(state), {
+      get(obj, key) {
+        const value = obj[key]
+        observer.observe(obj, key)
+        return value && value[$O] ? auto.wrap(value) : value
+      },
+    })
   }
 
   run<T>(effect: () => T): T | undefined {
