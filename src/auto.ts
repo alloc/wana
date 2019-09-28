@@ -1,8 +1,9 @@
 import { isUndefined, noop, rethrowError } from './common'
 import { track } from './global'
+import { no } from './no'
 import { o } from './o'
 import { ObservedState, ObservedValue, Observer } from './observable'
-import { $O } from './symbols'
+import { $$, $O } from './symbols'
 
 /** Run an effect when its tracked values change. */
 export function auto(effect: () => void, config?: AutoConfig) {
@@ -55,6 +56,9 @@ export class Auto {
     const auto = this
     const traps: ProxyHandler<T> = {
       get(obj, key) {
+        if (key == $$) {
+          return no(obj)
+        }
         const value = obj[key]
         if (observer!.values) {
           observer!.observe(obj, key)
