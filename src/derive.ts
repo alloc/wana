@@ -1,6 +1,7 @@
 import { Auto } from './auto'
 import { Disposable, setHidden } from './common'
-import { observe, untracked } from './global'
+import { observe } from './global'
+import { noto } from './noto'
 import { Observable } from './observable'
 import { $$, $O } from './symbols'
 
@@ -29,9 +30,7 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
   let lastResult: any
   const derived: Derived<T> = () => {
     observe(derived, $O)
-    return auto.dirty
-      ? (lastResult = untracked(() => auto.run(fn)))!
-      : lastResult!
+    return auto.dirty ? (lastResult = noto(() => auto.run(fn)))! : lastResult!
   }
   setHidden(derived, $$, auto)
   setHidden(derived, $O, observable)

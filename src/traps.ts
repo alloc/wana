@@ -6,8 +6,9 @@ import {
   nope,
   todo,
 } from './common'
-import { observe, untracked } from './global'
+import { observe } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
+import { noto } from './noto'
 import { Change } from './observable'
 import { $$, $O, SIZE } from './symbols'
 
@@ -118,7 +119,7 @@ const ArrayOverrides: any = {
         observe(arg, $O)
       }
     })
-    return untracked(() => self.concat(...args))
+    return noto(() => self.concat(...args))
   },
   copyWithin: todo,
   fill: todo,

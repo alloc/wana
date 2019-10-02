@@ -1,8 +1,13 @@
+// Observation
 export { o } from './o'
-export { no } from './no'
 export { auto, Auto } from './auto'
 export { when } from './when'
 export { watch, Watcher } from './watch'
 export { Observer, Change } from './observable'
-export { untracked as noto } from './global'
+
+// Escape hatches
+export { no } from './no'
+export { noto } from './noto'
+
+// Internals
 export { $O, $$ } from './symbols'

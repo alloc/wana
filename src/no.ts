@@ -1,5 +1,5 @@
 import { isFunction, setHidden } from './common'
-import { untracked } from './global'
+import { noto } from './noto'
 import { $$ } from './symbols'
 
 /**
@@ -10,7 +10,7 @@ import { $$ } from './symbols'
  */
 export function no<T>(value: T): T {
   if (isFunction(value)) {
-    const fn = untracked.bind(null, value as any)
+    const fn = noto.bind(null, value as any)
     setHidden(fn, 'name', value.name)
     return fn as any
   }
