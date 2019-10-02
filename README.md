@@ -130,7 +130,7 @@ The promise is rejected when the condition throws an error.
 
 ### no ⚡️
 
-The `no` function (pronounced "not oh") takes any observable object and returns the underlying object that isn't observable.
+The `no` function takes any observable object and returns the underlying object that isn't observable.
 
 ```ts
 import { o, auto, no } from 'wana'
@@ -169,11 +169,36 @@ Pass anything else and you get the same value back.
 
 ### noto ⚡️
 
-There are two ways to disable implicit observation for a function:
-  1. By calling `no(fn)(...args)`
-  2. By calling `noto(fn)`
+The `noto` function (pronounced "not oh") is the **exact opposite** of the `auto` function.
+The function you pass to `noto` is called immediately (with implicit observation disabled)
+and whatever you return is passed through. Your function is never called again after that.
 
-Either way is acceptable. You cannot pass arguments to `noto` callbacks.
+```ts
+import { o, auto, noto } from 'noto'
+
+const state = o({ count: 0 })
+
+// Create an auto observer.
+auto(() => {
+  // Do something you want observed.
+  noto(() => {
+    // Do something you don't want observed.
+  })
+})
+```
+
+It's also useful inside methods of an observable object:
+
+```ts
+const state = o({
+  count: 0,
+  // Calling "increment" in an observable scope does
+  // *not* result in "count" being observed.
+  increment() {
+    noto(() => this.count++)
+  }
+})
+```
 
 &nbsp;
 
