@@ -10,7 +10,7 @@ import { $$ } from './symbols'
  */
 export function no<T>(value: T): T {
   if (isFunction(value)) {
-    const fn = noto.bind(null, value as any)
+    const fn = (...args: any[]) => noto(() => value(...args))
     setHidden(fn, 'name', value.name)
     return fn as any
   }
