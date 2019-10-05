@@ -1,9 +1,7 @@
 import { isUndefined, noop, rethrowError } from './common'
 import { track } from './global'
-import { no } from './no'
-import { o } from './o'
 import { ObservedState, ObservedValue, Observer } from './observable'
-import { $$, $O } from './symbols'
+import { $O } from './symbols'
 
 /** Run an effect when its tracked values change. */
 export function auto(effect: () => void, config?: AutoConfig) {
@@ -43,37 +41,6 @@ export class Auto {
     this.onDirty = config.onDirty || this.rerun
     this.onDelay = config.onDelay || this._onDelay
     this.onError = config.onError || rethrowError
-  }
-
-  wrap<T extends object>(
-    state: Exclude<T, Function>,
-    observer?: AutoObserver
-  ): T {
-    if (!observer) {
-      this.dirty = false
-      this.nextObserver = observer = new AutoObserver(this.lazy && [])
-    }
-    const auto = this
-    const traps: ProxyHandler<T> = {
-      get(obj, key) {
-        if (key == $$) {
-          return no(obj)
-        }
-        const value = obj[key]
-        if (observer!.values) {
-          observer!.observe(obj, key)
-          if (value && value[$O]) {
-            return auto.wrap(value, observer)
-          }
-        } else {
-          // This proxy is outdated. Make it pass through.
-          traps.get = Reflect.get
-        }
-        return value
-      },
-    }
-
-    return new Proxy(o(state), traps)
   }
 
   run<T>(effect: () => T): T | undefined {
