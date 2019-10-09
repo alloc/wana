@@ -6,8 +6,11 @@ import { $O } from './symbols'
 /** Create an observable getter that memoizes its result. */
 export function o<T>(fn: () => T): Derived<T>
 
+/** Create an observable getter that memoizes its result. */
+export function o(fn: Function): Derived
+
 /** Get an observable proxy for an object. Non-objects are returned as-is. */
-export function o<T>(value: Exclude<T, Function>): T
+export function o<T>(value: T): T
 
 /**
  * Get an observable proxy for the given value,
