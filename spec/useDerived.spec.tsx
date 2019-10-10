@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react'
 import * as React from 'react'
 import { $O, o, useAuto, useDerived } from '../src'
+import { Derived } from '../src/derive'
 
 describe('useDerived', () => {
   it('memoizes the result until an observed value changes', () => {
@@ -69,13 +70,20 @@ describe('useDerived', () => {
   it('does not let you observe its computation', () => {
     const state = o({ a: 1, b: 1 })
     const spy = jest.fn(() => state.a + state.b)
+
+    let derived!: Derived<number>
     const Test = () => {
-      const fn = useDerived(spy)
-      useAuto(() => void fn())
+      derived = useDerived(spy)
+      useAuto(() => void derived())
       return null
     }
 
     render(<Test />)
+
+    // The "derived" is observed by "useAuto"
+    expect(derived[$O].get($O).size).toBe(1)
+
+    // The "state" is observed by "derived"
     expect(state[$O].get('a').size).toBe(1)
     expect(state[$O].get('b').size).toBe(1)
   })
