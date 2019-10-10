@@ -3,7 +3,7 @@ export { o } from './o'
 export { auto, Auto } from './auto'
 export { when } from './when'
 export { watch, Watcher } from './watch'
-export { Observer, Change } from './observable'
+export { Observable, Observer, Change } from './observable'
 export { Derived } from './derive'
 
 // Escape hatches
