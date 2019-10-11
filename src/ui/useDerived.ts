@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
+import { Auto } from '../auto'
 import { emptyArray } from '../common'
 import { derive } from '../derive'
-import { $$ } from '../symbols'
 import { useDispose } from './common'
 
 /**
@@ -13,9 +13,10 @@ export function useDerived<T>(fn: () => T, deps?: readonly any[]) {
   const derived = useMemo(() => derive(fn, true), deps || emptyArray)
   useDispose(derived.dispose)
   useEffect(() => {
+    const auto: Auto = derived['_auto']
     // The first commit is lazy, but the rest are not.
-    derived[$$].commit()
-    derived[$$].lazy = false
+    auto.commit()
+    auto.lazy = false
   }, [derived])
   return derived
 }

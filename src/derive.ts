@@ -53,7 +53,7 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
     return memo!
   }
 
-  setHidden(derived, $$, auto)
+  setHidden(derived, '_auto', auto)
   setHidden(derived, $O, observable)
 
   derived.clear = () => auto['_onChange']()
