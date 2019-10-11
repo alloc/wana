@@ -1,27 +1,29 @@
-import {
-  forwardRef,
-  ForwardRefExoticComponent,
-  PropsWithoutRef,
-  ReactElement,
-  RefAttributes,
-  RefForwardingComponent,
-  useEffect,
-} from 'react'
+import { forwardRef, ReactElement, Ref, RefAttributes, useEffect } from 'react'
 import { Auto } from '../auto'
 import { useConstant, useDispose, useForceUpdate } from './common'
 
-interface Component<P> {
+interface Component<P = any> {
   (props: P): ReactElement | null
   displayName?: string
 }
 
+interface RefForwardingComponent<T = any, P = any> {
+  (props: P, ref: Ref<T>): ReactElement | null
+  displayName?: string
+}
+
 /** Wrap a component with magic observable tracking */
-export function withAuto<P>(component: Component<P>): Component<P>
+export function withAuto<T extends Component>(component: T): T
 
 /** Wrap a component with `forwardRef` and magic observable tracking */
-export function withAuto<T, P = {}>(
-  component: RefForwardingComponent<T, P>
-): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<T>>
+export function withAuto<T extends RefForwardingComponent>(
+  component: T
+): T &
+  ((
+    props: T extends RefForwardingComponent<infer U, infer P>
+      ? P & RefAttributes<U>
+      : never
+  ) => ReactElement | null)
 
 /** @internal */
 export function withAuto(render: any) {
