@@ -3,7 +3,7 @@ import { Disposable, setHidden } from './common'
 import { observe } from './global'
 import { noto } from './noto'
 import { Observable } from './observable'
-import { $$, $O } from './symbols'
+import { $O } from './symbols'
 
 /**
  * An observable getter that memoizes its result.
@@ -53,7 +53,7 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
     return memo!
   }
 
-  setHidden(derived, $$, auto)
+  setHidden(derived, '_auto', auto)
   setHidden(derived, $O, observable)
 
   derived.clear = () => auto['_onChange']()
