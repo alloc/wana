@@ -39,11 +39,13 @@ export const hasOwn = Function.call.bind({}.hasOwnProperty) as (
   key: keyof any
 ) => boolean
 
+export const getOwnDescriptor = Object.getOwnPropertyDescriptor
+
 export function getDescriptor(self: object, key: any) {
   let desc: PropertyDescriptor | undefined
   let proto = self
   do {
-    if ((desc = Object.getOwnPropertyDescriptor(proto, key))) {
+    if ((desc = getOwnDescriptor(proto, key))) {
       return desc
     }
   } while ((proto = Object.getPrototypeOf(proto)))

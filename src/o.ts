@@ -1,4 +1,4 @@
-import { isFunction, isObject, setHidden } from './common'
+import { getOwnDescriptor, isFunction, isObject, setHidden } from './common'
 import { derive, Derived } from './derive'
 import { Observable, ObservedState } from './observable'
 import { $O } from './symbols'
@@ -18,7 +18,7 @@ export function o<T>(value: T): T
  */
 export function o(value: ObservedState) {
   let state = value && value[$O]
-  if (!state) {
+  if (!state || !getOwnDescriptor(value, $O)) {
     if (isFunction(value)) {
       return derive(value as any)
     }
