@@ -20,13 +20,17 @@ Bring your React components to the next level. ⚛️
 - **Prevent unnecessary renders**
 - **20x less SLOC than MobX**
 
+&nbsp;
+
 **Why build this?** The goal of this library is to explore the MobX approach of
-writing React components by designing a new API (along with a custom observable
-implementation) from the ground up with React in mind from the start. And stay
-lean while doing so!
+writing React components by designing a new API from the ground up with React in
+mind from the get-go. Another goal is to keep a lean core by writing an observability
+engine from scratch.
 
 **Who built this?** [Alec Larson](https://twitter.com/alecdotbiz), the co-author of
 `react-spring` and `immer`. You can support his work by [becoming a patron](https://www.patreon.com/aleclarson).
+
+&nbsp;
 
 ## API Reference
 
