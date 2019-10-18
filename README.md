@@ -85,16 +85,12 @@ observer.dispose()
 
 The `auto` function accepts a config object:
 
+  - `sync?: boolean`
   - `onError?: (this: Auto, error: Error) => void`
-  - `delay?: number | boolean`
 
-When `delay === true`, reactions are batched using the [microtask queue](https://javascript.info/microtask-queue). This is the default behavior.
+By default, reactions are batched using the [microtask queue](https://javascript.info/microtask-queue). When `sync` is true, batching is skipped entirely.
 
-When `delay > 0`, reactions are batched using `setTimeout`.
-
-By default, `auto` errors are rethrown. When `delay <= 0`, reactions are synchronous, so the stack trace will show you which observable was changed before the error.
-
-You should always provide an `onError` callback when `sync` is **not** true. Otherwise, an unhandled promise rejection is imminent.
+By default, `auto` errors are rethrown. To customize error handling, provide an `onError` callback.
 
 ```ts
 auto(effect, {
