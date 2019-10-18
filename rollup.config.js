@@ -6,7 +6,7 @@ import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 
 const external = id => !id.startsWith('.')
-const extensions = ['.ts']
+const extensions = ['.ts', '.tsx']
 
 const bundle = ({
   input = 'src/index.ts',
