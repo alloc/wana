@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import * as React from 'react'
+import React from 'react'
 import { $O, Change, o, useChanges } from '../src'
 
 describe('useChanges', () => {
