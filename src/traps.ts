@@ -1,10 +1,10 @@
 import {
   emptyArray,
+  flop,
   getDescriptor,
   hasOwn,
   isArray,
   nope,
-  todo,
 } from './common'
 import { observe } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
@@ -121,8 +121,8 @@ const ArrayOverrides: any = {
     })
     return noto(() => self.concat(...args))
   },
-  copyWithin: todo,
-  fill: todo,
+  copyWithin: flop,
+  fill: flop,
   pop() {
     const self: any[] = this[$$]
     const oldLength = self.length

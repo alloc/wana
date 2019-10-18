@@ -30,7 +30,7 @@ export const noop = () => {}
 
 export const nope = () => false
 
-export const todo: any = () => {
+export const flop: any = () => {
   throw Error('Not yet implemented')
 }
 
