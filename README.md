@@ -30,7 +30,7 @@ lean while doing so!
 
 ## API Reference
 
-The entirety of `wana` is 10 functions:
+The entirety of `wana` is 11 functions:
 - `o` for making observable objects
 - `auto` for reactive effects
 - `when` for reactive promises
