@@ -16,7 +16,7 @@ Bring your React components to the next level. ⚛️
 - **Observable objects, arrays, sets, and maps** (even custom classes)
 - **Automatic reactions to observable changes** (see the `auto/useAuto/withAuto` functions)
 - **Support for deep observation** (see the `watch` function)
-- **Memoized derivations** (see the `o/useO` functions)
+- **Memoized derivations** (see the `o/useDerived` functions)
 - **Prevent unnecessary renders**
 - **20x less SLOC than MobX**
 
