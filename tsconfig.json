@@ -10,6 +10,7 @@
     "sourceMap": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
-    "target": "esnext"
+    "target": "esnext",
+    "typeRoots": ["node_modules/@types", "@types"]
   }
 }
