@@ -1,4 +1,5 @@
-import { auto, o } from '../src'
+import { auto, Auto, o } from '../src'
+import { ObservedState } from '../src/observable'
 import { $O } from '../src/symbols'
 
 let runs: number
@@ -8,23 +9,38 @@ function expectRuns(n: number) {
   prevRuns = runs
 }
 
+let runner: Auto
 let ctx = o({
   effect: () => {},
 })
 
-// Synchronously run the effect when it changes.
-auto(() => (ctx.effect(), runs++), { delay: 0 })
-
-// Replace the effect and reset the run count.
-let setEffect = (effect: () => void) => {
-  ctx.effect = effect
-  prevRuns = runs = 0
-}
+beforeEach(() => {
+  if (runner) {
+    runner.dispose()
+    ctx.effect = () => {}
+  }
+  // Synchronously run the effect when it changes.
+  runner = auto(
+    () => {
+      ctx.effect()
+      runs++
+    },
+    {
+      sync: true,
+      onError(error) {
+        // Reset the observer on error.
+        ctx.effect = () => {}
+        this.rerun()
+        throw error
+      },
+    }
+  )
+})
 
 describe('auto()', () => {
   it('ignores any mutations made inside its callback', () => {
     const state = o({ count: 0 })
-    setEffect(() => {
+    withEffect(() => {
       if (state.count < 5) {
         state.count++
       }
@@ -37,28 +53,21 @@ describe('auto()', () => {
   it('unsubscribes from observables when an error is thrown', () => {
     const a = o({ count: 0 })
     const b = o({ count: 1 })
-    setEffect(() => {
-      // Subscribe to "a.count" in the first run.
+    withEffect(() => {
       if (!a.count) return
-      // Subscribe to "b.count" before throwing.
       if (a.count == b.count) {
-        expect(getObservers(b, 'count').size).toBe(1)
         throw Error()
       }
     })
-    const getObservers = (state: any, key: string) =>
-      state[$O].get(key) as Set<any>
     expect(getObservers(a, 'count').size).toBe(1)
     expect(getObservers(b, 'count').size).toBe(0)
     try {
       a.count++
     } catch {
-      // Stay subscribed to "a.count" from the previous run.
-      expect(getObservers(a, 'count').size).toBe(1)
-      // Stop observing "b.count" from the throwing run.
+      expect(getObservers(a, 'count').size).toBe(0)
       expect(getObservers(b, 'count').size).toBe(0)
     }
-    expect.assertions(5)
+    expect.assertions(4)
   })
 
   describe('objects', () => {
@@ -67,7 +76,7 @@ describe('auto()', () => {
       obj = o({})
     })
     test('get', () => {
-      setEffect(() => obj.a)
+      withEffect(() => obj.a)
 
       obj.a = 1 // add our key
       expectRuns(1)
@@ -94,7 +103,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
     test('in', () => {
-      setEffect(() => 'a' in obj)
+      withEffect(() => 'a' in obj)
 
       obj.a = 1 // add our key
       expectRuns(1)
@@ -128,7 +137,7 @@ describe('auto()', () => {
       arr = o([])
     })
     test('.length', () => {
-      setEffect(() => arr.length)
+      withEffect(() => arr.length)
 
       arr.pop() // empty pop
       expectRuns(0)
@@ -184,7 +193,7 @@ describe('auto()', () => {
     test('.concat()', () => {
       const left = arr
       const right: any[] = o([])
-      setEffect(() => left.concat(right))
+      withEffect(() => left.concat(right))
 
       left.push(1)
       expectRuns(1)
@@ -193,11 +202,11 @@ describe('auto()', () => {
       expectRuns(1)
     })
     test('.forEach()', () => {
-      setEffect(() => arr.forEach(() => {}))
+      withEffect(() => arr.forEach(() => {}))
       wholeMutations()
     })
     test('.keys()', () => {
-      setEffect(() => arr.keys())
+      withEffect(() => arr.keys())
       wholeMutations()
     })
     function ensureReversed() {
@@ -274,7 +283,7 @@ describe('auto()', () => {
       set.add(1).add(2)
     })
     test('.forEach()', () => {
-      setEffect(() => set.forEach(() => {}))
+      withEffect(() => set.forEach(() => {}))
 
       set.add(3) // add unknown value
       expectRuns(1)
@@ -297,7 +306,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
     test('.size', () => {
-      setEffect(() => set.size)
+      withEffect(() => set.size)
 
       set.add(3) // add unknown value
       expectRuns(1)
@@ -329,7 +338,7 @@ describe('auto()', () => {
     })
     const key = {}
     test('.has()', () => {
-      setEffect(() => map.has(key))
+      withEffect(() => map.has(key))
 
       map.set(key, 1) // add our key
       expectRuns(1)
@@ -370,7 +379,7 @@ describe('auto()', () => {
       expectRuns(1)
     })
     test('.get()', () => {
-      setEffect(() => map.get(key))
+      withEffect(() => map.get(key))
 
       map.set(key, 1) // add our key
       expectRuns(1)
@@ -411,7 +420,7 @@ describe('auto()', () => {
       expectRuns(1)
     })
     test('.forEach()', () => {
-      setEffect(() => map.forEach(() => {}))
+      withEffect(() => map.forEach(() => {}))
 
       map.set(key, 1) // add a key
       expectRuns(1)
@@ -434,7 +443,7 @@ describe('auto()', () => {
       expectRuns(0)
     })
     test('.size', () => {
-      setEffect(() => map.size)
+      withEffect(() => map.size)
 
       map.set(key, 1) // add a key
       expectRuns(1)
@@ -458,3 +467,13 @@ describe('auto()', () => {
     })
   })
 })
+
+// Replace the effect and reset the run count.
+function withEffect(effect: () => void) {
+  ctx.effect = effect
+  prevRuns = runs = 0
+}
+
+function getObservers(state: ObservedState, key: string) {
+  return state[$O]!.get(key)
+}

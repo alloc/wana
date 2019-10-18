@@ -94,11 +94,10 @@ When `delay > 0`, reactions are batched using `setTimeout`.
 
 By default, `auto` errors are rethrown. When `delay <= 0`, reactions are synchronous, so the stack trace will show you which observable was changed before the error.
 
-You should always provide an `onError` callback when `delay` is true. Otherwise, an unhandled promise rejection is imminent.
+You should always provide an `onError` callback when `sync` is **not** true. Otherwise, an unhandled promise rejection is imminent.
 
 ```ts
 auto(effect, {
-  delay: true,
   onError(error) {
     // The `run` method lets you replace the effect.
     this.run(newEffect)

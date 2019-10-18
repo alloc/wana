@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "queue-microtask": "^1.1.2",
     "use-memo-one": "^1.1.1"
   },
   "keywords": [

@@ -1,4 +1,4 @@
-import { Disposable, isArray, isMap } from './common'
+import { Disposable, isMap } from './common'
 import { $O, SIZE } from './symbols'
 import { traps } from './traps'
 
@@ -10,23 +10,9 @@ export type ObservedKey = any
 
 /** An observer set with metadata about what's being observed */
 export class ObservedValue extends Set<ChangeObserver> {
+  nonce = 0
   constructor(readonly owner: Observable, readonly key: ObservedKey) {
     super()
-  }
-
-  get() {
-    const { key, owner } = this
-    if (key === $O) {
-      return owner.nonce
-    }
-    const { source } = owner
-    return key === SIZE
-      ? isArray(source)
-        ? source.length
-        : source.size
-      : isMap(source)
-      ? source.get(key)
-      : source[key]
   }
 }
 
@@ -72,6 +58,8 @@ export class Observable<T extends object = any> extends Map<
   private _notify(key: any, change: Change) {
     const observers = super.get(key)
     if (observers && observers.size) {
+      observers.nonce++
+
       // Clone the "observers" in case they get mutated by an effect.
       for (const observer of Array.from(observers)) {
         if (observer.onChange) {

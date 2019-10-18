@@ -31,7 +31,7 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
   // For observing others
   const auto = new Auto({
     lazy,
-    delay: 0,
+    sync: true,
     onDirty() {
       observable.emit({
         op: 'clear',

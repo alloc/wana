@@ -1,4 +1,5 @@
-import { isUndefined, noop, rethrowError } from './common'
+import { batch } from './batch'
+import { rethrowError } from './common'
 import { track } from './global'
 import { ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
@@ -11,47 +12,45 @@ export function auto(effect: () => void, config?: AutoConfig) {
 }
 
 export interface AutoConfig {
-  /** When true, commits must be manual */
+  /** When true, you must call `commit` to subscribe to observed values */
   lazy?: boolean
-  /** By default, delay changes until the next microtask loop */
-  delay?: number | boolean
+  /** When true, react to changes immediately. By default, changes are delayed until the next microtask loop */
+  sync?: boolean
   /** By default, rerun the last effect */
   onDirty?: Auto['onDirty']
-  /** By default, attach the `update` callback to a promise or timeout */
-  onDelay?: Auto['onDelay']
   /** By default, errors are rethrown */
   onError?: Auto['onError']
 }
 
 export class Auto {
   lazy: boolean
+  sync: boolean
   dirty = true
-  delay: number | boolean
   onDirty: (this: Auto) => void
-  onDelay: (this: Auto, update: () => void) => void
   onError: (this: Auto, error: Error) => void
   lastObserver: AutoObserver | null = null
-  lastEffect = noop
   nextObserver: AutoObserver | null = null
-  nextEffect = noop
 
   constructor(config: AutoConfig = {}) {
     this.lazy = !!config.lazy
-    this.delay = isUndefined(config.delay) || config.delay
-    this.onDirty = config.onDirty || this.rerun
-    this.onDelay = config.onDelay || this._onDelay
+    this.sync = !!config.sync
+    this.onDirty = config.onDirty || this._onDirty
     this.onError = config.onError || rethrowError
   }
 
+  /** The nonce from the last run */
+  get nonce() {
+    return this.lastObserver!.nonce
+  }
+
   run<T>(effect: () => T): T | undefined {
-    const observer = new AutoObserver(this.lazy && [])
+    const observer = new AutoObserver(effect)
     let result: T | undefined
     try {
       result = track(effect, (target, key) => {
         observer.observe(target, key)
       })
       this.nextObserver = observer
-      this.nextEffect = effect
       this.dirty = false
       if (!this.lazy) {
         this.commit()
@@ -68,7 +67,7 @@ export class Auto {
 
   /** Rerun the last effect and commit its observer */
   rerun() {
-    return this.run(this.lastEffect)
+    return this.run(this.lastObserver!.effect)
   }
 
   /** Commit the observer from the last run, except when the observer is dirty */
@@ -79,9 +78,6 @@ export class Auto {
       if (this.lastObserver) {
         this.lastObserver.dispose()
       }
-
-      this.lastEffect = this.nextEffect
-      this.nextEffect = noop
 
       // Check for changes between run and commit.
       if (observer.dirty) {
@@ -97,9 +93,9 @@ export class Auto {
   }
 
   dispose() {
-    const observer = this.lastObserver
-    if (observer) {
-      observer.dispose()
+    const { lastObserver } = this
+    if (lastObserver) {
+      lastObserver.dispose()
       // Prevent delayed changes.
       this.lastObserver = null
     }
@@ -110,63 +106,49 @@ export class Auto {
   protected _onChange() {
     if (!this.dirty) {
       this.dirty = true
-      if (this.delay > 0) {
-        const observer = this.lastObserver
-        this.onDelay(() => observer == this.lastObserver && this.onDirty())
-      } else {
-        this.onDirty()
-      }
+      this.onDirty()
     }
   }
 
-  protected _onDelay(update: () => void) {
-    if (this.delay === true) {
-      Promise.resolve().then(update)
+  protected _onDirty() {
+    if (this.sync) {
+      this.rerun()
     } else {
-      setTimeout(update, this.delay as any)
+      batch.run(this)
     }
   }
 }
 
 export class AutoObserver extends Observer {
   observed = new Set<ObservedValue>()
-  onChange: (() => void) | null = null
+  nonce = 0
 
-  constructor(public values?: any[] | false) {
+  constructor(readonly effect: () => void) {
     super()
-    if (!values) {
-      this.onChange = noop
-    }
   }
 
-  /** Returns false when the observed values are still current */
   get dirty() {
-    const { values } = this
-    return (
-      !!values &&
-      Array.from(this.observed).some((value, i) => values[i] !== value.get())
-    )
-  }
-
-  commit(onChange: () => void) {
-    this.values = false
-    this.onChange = onChange
-    this.observed.forEach(value => value.add(this))
+    let nonce = 0
+    this.observed.forEach(observable => {
+      nonce += observable.nonce
+    })
+    return nonce != this.nonce
   }
 
   observe(state: ObservedState, key: keyof any) {
-    const { observed, values } = this
+    const { observed } = this
     const { size } = observed
 
     const observable = state[$O]!.get(key)
     observed.add(observable)
 
     if (observed.size > size) {
-      if (values) {
-        values.push(observable.get())
-      } else {
-        observable.add(this)
-      }
+      this.nonce += observable.nonce
     }
+  }
+
+  commit(onChange: () => void) {
+    this.onChange = onChange
+    this.observed.forEach(observable => observable.add(this))
   }
 }

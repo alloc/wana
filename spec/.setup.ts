@@ -1,7 +1,7 @@
 import { act } from '@testing-library/react'
-import { Auto } from '../src/auto'
+import { batch } from '../src/batch'
 
-const onDelay = Auto.prototype['_onDelay']
-Auto.prototype['_onDelay'] = function(update) {
-  onDelay.call(this, () => void act(update))
+const { render } = batch
+batch.render = (depth, effect) => {
+  render(depth, () => act(effect))
 }
