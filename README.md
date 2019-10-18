@@ -18,7 +18,7 @@ Bring your React components to the next level. ⚛️
 - **Support for deep observation** (see the `watch` function)
 - **Memoized derivations** (see the `o/useDerived` functions)
 - **Prevent unnecessary renders**
-- **20x less SLOC than MobX**
+- **80% less SLOC than MobX**
 
 &nbsp;
 
