@@ -1,17 +1,9 @@
 import React from 'react'
-import {
-  forwardRef,
-  ReactElement,
-  Ref,
-  RefAttributes,
-  useContext,
-  useEffect,
-} from 'react'
+import { forwardRef, ReactElement, Ref, RefAttributes, useEffect } from 'react'
 import { Auto } from '../auto'
 import { batch } from '../batch'
+import { AutoContext, useAutoContext } from './AutoContext'
 import { useConstant, useDispose, useForceUpdate } from './common'
-
-const AutoParent = React.createContext({ depth: 0 })
 
 interface Component<P = any> {
   (props: P): ReactElement | null
@@ -39,7 +31,7 @@ export function withAuto<T extends RefForwardingComponent>(
 /** @internal */
 export function withAuto(render: any) {
   const component = (props: object, ref?: any) => {
-    const { depth } = useContext(AutoParent)
+    const { depth } = useAutoContext()
     const forceUpdate = useForceUpdate()
     const auto = useConstant(
       () =>
@@ -69,11 +61,11 @@ export function withAuto(render: any) {
       }
     })
     return (
-      <AutoParent.Provider value={{ depth: depth + 1 }}>
+      <AutoContext depth={depth + 1}>
         {auto.run(() => {
           return render(props, ref)
         })}
-      </AutoParent.Provider>
+      </AutoContext>
     )
   }
   // prettier-ignore
