@@ -11,11 +11,22 @@ Observable state with ease. ⚡️
 
 Bring your React components to the next level. ⚛️
 
-- **Transparent proxies** (no special classes!)
-- **Implicit observation** (use your objects like normal!)
-- **Observable arrays, sets, and maps**
-- **Automatic effects**
-- **Small footprint**
+- **Transparent proxies** (no special classes)
+- **Implicit observation** (use your objects like normal)
+- **Observable objects, arrays, sets, and maps** (even custom classes)
+- **Automatic reactions to observable changes** (see the `auto/useAuto/withAuto` functions)
+- **Support for deep observation** (see the `watch` function)
+- **Memoized derivations** (see the `o/useO` functions)
+- **Prevent unnecessary renders**
+- **20x less SLOC than MobX**
+
+**Why build this?** The goal of this library is to explore the MobX approach of
+writing React components by designing a new API (along with a custom observable
+implementation) from the ground up with React in mind from the start. And stay
+lean while doing so!
+
+**Who built this?** [Alec Larson](https://twitter.com/alecdotbiz), the co-author of
+`react-spring` and `immer`. You can support his work by [becoming a patron](https://www.patreon.com/aleclarson).
 
 ## API Reference
 
