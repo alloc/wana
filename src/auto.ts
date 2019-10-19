@@ -38,7 +38,7 @@ export class Auto {
     this.onError = config.onError || rethrowError
   }
 
-  /** The nonce from the last run */
+  /** The nonce from the last commit */
   get nonce() {
     return this.lastObserver!.nonce
   }
