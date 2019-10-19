@@ -38,13 +38,11 @@ export function withAuto(render: any) {
         new Auto({
           lazy: true,
           onDirty() {
-            // The nonce only changes after a successful render.
-            // Skip updating when the parent component renders
-            // after our `Auto` object went dirty, but before
-            // the batch was flushed.
             const { nonce } = auto
             batch.render(depth, () => {
-              if (nonce == auto.nonce) {
+              // Trigger a render except when the latest render is pending
+              // or was committed before the batch was flushed.
+              if (!auto.nextObserver && nonce == auto.nonce) {
                 forceUpdate()
               }
             })
