@@ -60,6 +60,9 @@ function flush() {
       renderQueue.forEach(({ effect }) => effect())
       renderQueue.length = 0
       flushing = false
+      if (runQueue.length) {
+        flush()
+      }
     })
   }
 }
