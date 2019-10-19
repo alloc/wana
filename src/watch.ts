@@ -8,9 +8,6 @@ type WatchedState = ObservedState & {
 
 /** Watch an observable tree for changes */
 export function watch(root: object, onChange: (change: Change) => void) {
-  if (!root[$O]) {
-    throw Error('Expected an observable object')
-  }
   return new Watcher(root, onChange)
 }
 
