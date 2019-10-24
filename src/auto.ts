@@ -40,7 +40,7 @@ export class Auto {
 
   /** The nonce from the last commit */
   get nonce() {
-    return this.lastObserver!.nonce
+    return this.lastObserver && this.lastObserver.nonce
   }
 
   run<T>(effect: () => T): T | undefined {
@@ -67,7 +67,8 @@ export class Auto {
 
   /** Rerun the last effect and commit its observer */
   rerun() {
-    return this.run(this.lastObserver!.effect)
+    const { lastObserver } = this
+    return lastObserver && this.run(lastObserver.effect)
   }
 
   /** Commit the observer from the last run, except when the observer is dirty */
