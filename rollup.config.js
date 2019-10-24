@@ -82,6 +82,7 @@ const getBabelOptions = ({ useESModules }, targets) => ({
   comments: false,
   presets: [['@babel/preset-env', { loose: true, modules: false, targets }]],
   plugins: [
+    ['@babel/plugin-proposal-optional-chaining'],
     ['@babel/plugin-transform-runtime', { regenerator: false, useESModules }],
   ],
 })
