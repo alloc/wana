@@ -16,7 +16,7 @@ export interface AutoConfig {
   lazy?: boolean
   /** When true, react to changes immediately. By default, changes are delayed until the next microtask loop */
   sync?: boolean
-  /** By default, rerun the last effect */
+  /** By default, rerun the last effect (after any delay) */
   onDirty?: Auto['onDirty']
   /** By default, errors are rethrown */
   onError?: Auto['onError']
@@ -80,7 +80,7 @@ export class Auto {
         this.lastObserver.dispose()
       }
 
-      // Check for changes between run and commit.
+      // Stop observing when changes occur between run and commit.
       if (observer.dirty) {
         this.lastObserver = null
         return false
