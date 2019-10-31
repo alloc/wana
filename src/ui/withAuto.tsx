@@ -9,6 +9,7 @@ import { Auto } from '../auto'
 import { batch } from '../batch'
 import { AutoContext, useAutoContext } from './AutoContext'
 import { useConstant, useDispose, useForceUpdate } from './common'
+import { useAutoValue } from './useAutoValue'
 
 interface Component<P = any> {
   (props: P): ReactElement | null
@@ -65,9 +66,7 @@ export function withAuto(render: any) {
     })
     return (
       <AutoContext depth={depth + 1}>
-        {auto.run(() => {
-          return render(props, ref)
-        })}
+        {useAutoValue(auto, render, props, ref)}
       </AutoContext>
     )
   }

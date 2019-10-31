@@ -1,8 +1,9 @@
 import { batch } from './batch'
 import { rethrowError } from './common'
-import { track } from './global'
+import { global } from './global'
 import { ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
+import { useAutoValue } from './ui/useAutoValue'
 
 /** Run an effect when its tracked values change. */
 export function auto(effect: () => void, config?: AutoConfig) {
@@ -43,26 +44,10 @@ export class Auto {
     return this.lastObserver && this.lastObserver.nonce
   }
 
-  run<T>(effect: () => T): T | undefined {
-    const observer = new AutoObserver(effect)
-    let result: T | undefined
-    try {
-      result = track(effect, (target, key) => {
-        observer.observe(target, key)
-      })
-      this.nextObserver = observer
-      this.dirty = false
-      if (!this.lazy) {
-        this.commit()
-      }
-    } catch (error) {
-      if (!this.lazy) {
-        observer.dispose()
-      }
-      this.dirty = false
-      this.onError(error)
-    }
-    return result
+  run<T>(effect: () => T) {
+    // The "run" implementation was extracted into a React hook
+    // so that "withAuto" can avoid unnecessary indirection.
+    return useAutoValue(this, effect)
   }
 
   /** Rerun the last effect and commit its observer */
@@ -71,7 +56,54 @@ export class Auto {
     return lastObserver && this.run(lastObserver.effect)
   }
 
-  /** Commit the observer from the last run, except when the observer is dirty */
+  /**
+   * @internal
+   * Create an observer that tracks any observable properties that are
+   * accessed before the `stop` method is called.
+   * The given `effect` is never called, except in `rerun` calls when
+   * the observer has been committed.
+   */
+  start(effect: () => any) {
+    if (global.observe) {
+      throw Error('Nested tracking is forbidden')
+    }
+    const observer = new AutoObserver(effect)
+    global.observe = (target, key) => {
+      observer.observe(target, key)
+    }
+    return observer
+  }
+
+  /**
+   * @internal
+   * Once tracking is done, mark our observer as "ready to commit".
+   * Commit the observer immediately when `this.lazy` is false.
+   */
+  finish(observer: AutoObserver) {
+    this.dirty = false
+    this.nextObserver = observer
+
+    global.observe = null
+    if (!this.lazy) {
+      this.commit()
+    }
+  }
+
+  /**
+   * @internal
+   * Stop tracking since an effect threw an error.
+   */
+  catch(error: Error) {
+    global.observe = null
+
+    this.dirty = false
+    this.onError(error)
+  }
+
+  /**
+   * Commit the last observer passed to `finish`, unless an observed value
+   * changed since then.
+   */
   commit() {
     const observer = this.nextObserver
     if (observer) {
@@ -124,7 +156,7 @@ export class AutoObserver extends Observer {
   observed = new Set<ObservedValue>()
   nonce = 0
 
-  constructor(readonly effect: () => void) {
+  constructor(readonly effect: () => any) {
     super()
   }
 
