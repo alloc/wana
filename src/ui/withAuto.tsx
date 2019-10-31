@@ -1,5 +1,10 @@
-import React from 'react'
-import { forwardRef, ReactElement, Ref, RefAttributes, useEffect } from 'react'
+import React, {
+  forwardRef,
+  ReactElement,
+  Ref,
+  RefAttributes,
+  useEffect,
+} from 'react'
 import { Auto } from '../auto'
 import { batch } from '../batch'
 import { AutoContext, useAutoContext } from './AutoContext'
