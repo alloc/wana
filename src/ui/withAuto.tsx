@@ -21,18 +21,20 @@ interface RefForwardingComponent<T = any, P = any> {
   displayName?: string
 }
 
+type RefForwardingAuto<T extends RefForwardingComponent> = T &
+  ((
+    props: T extends RefForwardingComponent<infer U, infer P>
+      ? P & RefAttributes<U>
+      : never
+  ) => ReactElement | null)
+
 /** Wrap a component with magic observable tracking */
 export function withAuto<T extends Component>(component: T): T
 
 /** Wrap a component with `forwardRef` and magic observable tracking */
 export function withAuto<T extends RefForwardingComponent>(
   component: T
-): T &
-  ((
-    props: T extends RefForwardingComponent<infer U, infer P>
-      ? P & RefAttributes<U>
-      : never
-  ) => ReactElement | null)
+): RefForwardingAuto<T>
 
 /** @internal */
 export function withAuto(render: any) {
