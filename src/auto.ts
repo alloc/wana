@@ -69,6 +69,7 @@ export class Auto {
       throw Error('Nested tracking is forbidden')
     }
     const observer = new AutoObserver(effect)
+    global.auto = this
     global.observe = (target, key) => {
       observer.observe(target, key)
     }
@@ -84,7 +85,9 @@ export class Auto {
     this.dirty = false
     this.nextObserver = observer
 
+    global.auto = null
     global.observe = null
+
     if (!this.lazy) {
       this.commit()
     }
@@ -95,6 +98,7 @@ export class Auto {
    * Stop tracking since an effect threw an error.
    */
   catch(error: Error) {
+    global.auto = null
     global.observe = null
 
     this.dirty = false
