@@ -38,32 +38,7 @@ export function withAuto<T extends RefForwardingComponent>(
 export function withAuto(render: any) {
   const component = (props: object, ref?: any) => {
     const { depth } = useAutoContext()
-    const forceUpdate = useForceUpdate()
-    const auto = useConstant(
-      () =>
-        new Auto({
-          lazy: true,
-          onDirty() {
-            const { nonce } = auto
-            batch.render(depth, () => {
-              // Trigger a render except when the latest render is pending
-              // or was committed before the batch was flushed.
-              if (!auto.nextObserver && nonce == auto.nonce) {
-                forceUpdate()
-              }
-            })
-          },
-        })
-    )
-    useDispose(() => auto.dispose())
-    useEffect(() => {
-      // The commit fails to subscribe to observed values
-      // that changed between the render and commit phases.
-      // In that case, re-render immediately.
-      if (!auto.commit()) {
-        forceUpdate()
-      }
-    })
+    const auto = useAutoRender(component, depth)
     return (
       <AutoContext depth={depth + 1}>
         {useAutoValue(auto, render, props, ref)}
@@ -74,4 +49,34 @@ export function withAuto(render: any) {
   return render.length > 1
     ? forwardRef(component as any)
     : component
+}
+
+function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
+  const forceUpdate = useForceUpdate()
+  const auto = useConstant(
+    () =>
+      new Auto({
+        lazy: true,
+        onDirty() {
+          const { nonce } = auto
+          batch.render(depth, () => {
+            // Trigger a render except when the latest render is pending
+            // or was committed before the batch was flushed.
+            if (!auto.nextObserver && nonce == auto.nonce) {
+              forceUpdate()
+            }
+          })
+        },
+      })
+  )
+  useDispose(() => auto.dispose())
+  useEffect(() => {
+    // The commit fails to subscribe to observed values
+    // that changed between the render and commit phases.
+    // In that case, re-render immediately.
+    if (!auto.commit()) {
+      forceUpdate()
+    }
+  })
+  return auto
 }
