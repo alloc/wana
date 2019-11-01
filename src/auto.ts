@@ -1,7 +1,7 @@
 import { batch } from './batch'
 import { rethrowError } from './common'
 import { global } from './global'
-import { ObservedState, ObservedValue, Observer } from './observable'
+import { Change, ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
 import { useAutoValue } from './ui/useAutoValue'
 
@@ -180,7 +180,7 @@ export class AutoObserver extends Observer {
     }
   }
 
-  commit(onChange: () => void) {
+  commit(onChange: (change: Change) => void) {
     this.onChange = onChange
     this.observed.forEach(observable => observable.add(this))
   }
