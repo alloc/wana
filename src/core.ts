@@ -12,3 +12,4 @@ export { noto } from './noto'
 
 // Internals
 export { $O, $$ } from './symbols'
+export { global } from './global'
