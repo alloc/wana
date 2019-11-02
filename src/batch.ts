@@ -1,5 +1,6 @@
 import queueMicrotask from 'queue-microtask'
 import { Auto, AutoObserver } from './auto'
+import { global } from './global'
 
 type Effect = () => void
 
@@ -51,14 +52,22 @@ function flush() {
     queueMicrotask(() => {
       let runs = 0
       for (const { auto, observer } of runQueue) {
-        if (++runs > 1e5) break // Break infinite loops.
+        if (++runs > 1e5) {
+          break // Limit to 100k runs per flush.
+        }
         if (auto.lastObserver == observer) {
           auto.rerun()
         }
       }
+
+      // Postpone remaining runs until next flush.
       runQueue = runQueue.slice(runs)
-      renderQueue.forEach(({ effect }) => effect())
-      renderQueue.length = 0
+
+      global.batchedUpdates(() => {
+        renderQueue.forEach(({ effect }) => effect())
+        renderQueue.length = 0
+      })
+
       flushing = false
       if (runQueue.length) {
         flush()

@@ -1,8 +1,14 @@
 import { ObservedState } from './observable'
 
-export const global: {
+interface Global {
+  /** React-managed render batching. Defaults to no-op. */
+  batchedUpdates: (effect: () => void) => void
+  /** Notify the current observer. */
   observe: ((obj: ObservedState, key: any) => void) | null
-} = {
+}
+
+export const global: Global = {
+  batchedUpdates: effect => effect(),
   observe: null,
 }
 
