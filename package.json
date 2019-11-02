@@ -20,6 +20,14 @@
     "test": "jest",
     "test:cov": "jest --coverage && codecov"
   },
+  "peerDependencies": {
+    "react": ">=16.9"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.5.5",
+    "queue-microtask": "^1.1.2",
+    "use-memo-one": "^1.1.1"
+  },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/plugin-transform-runtime": "^7.5.5",
@@ -32,8 +40,8 @@
     "jest": "^24.8.0",
     "prettier": "^1.18.2",
     "prettier-tslint": "^0.4.2",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "~16.9.0",
+    "react-dom": "~16.9.0",
     "rollup": "^1.17.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-dts": "^1.1.5",
@@ -45,11 +53,6 @@
     "tslint-mango": "^0.1.12",
     "typescript": "^3.5.3",
     "typescript-snapshots-plugin": "^1.7.0"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.5.5",
-    "queue-microtask": "^1.1.2",
-    "use-memo-one": "^1.1.1"
   },
   "keywords": [
     "transparent",
