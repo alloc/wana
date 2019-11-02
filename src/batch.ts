@@ -43,13 +43,14 @@ export const batch: Batch = {
   },
 }
 
-/** Equals true when `queueMicrotask` has been called */
-let flushing = false
-
+let isQueued = false
 function flush() {
-  if (!flushing) {
-    flushing = true
+  if (!isQueued) {
+    isQueued = true
     queueMicrotask(() => {
+      isQueued = false
+
+      // Run any pending reactions.
       let runs = 0
       for (const { auto, observer } of runQueue) {
         if (++runs > 1e5) {
@@ -68,8 +69,8 @@ function flush() {
         renderQueue.length = 0
       })
 
-      flushing = false
-      if (runQueue.length) {
+      // Spread the flush across multiple microtasks if necessary.
+      if (runQueue.length || renderQueue.length) {
         flush()
       }
     })
