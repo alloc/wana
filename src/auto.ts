@@ -59,7 +59,8 @@ export class Auto {
   /**
    * @internal
    * Create an observer that tracks any observable properties that are
-   * accessed before the `stop` method is called.
+   * accessed before the `finish` method is called.
+   *
    * The given `effect` is never called, except in `rerun` calls when
    * the observer has been committed.
    */
