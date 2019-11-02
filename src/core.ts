@@ -10,6 +10,9 @@ export { Derived } from './derive'
 export { no } from './no'
 export { noto } from './noto'
 
+// Debugging
+export * from './debug'
+
 // Internals
 export { $O, $$ } from './symbols'
 export { global } from './global'

@@ -1,3 +1,4 @@
+import { isDev } from 'is-dev'
 import React, {
   forwardRef,
   ReactElement,
@@ -7,6 +8,7 @@ import React, {
 } from 'react'
 import { Auto } from '../auto'
 import { batch } from '../batch'
+import { getDebug, setDebug } from '../debug'
 import { AutoContext, useAutoContext } from './AutoContext'
 import { useConstant, useDispose, useForceUpdate } from './common'
 import { useAutoValue } from './useAutoValue'
@@ -38,46 +40,86 @@ export function withAuto<T extends RefForwardingComponent>(
 
 /** @internal */
 export function withAuto(render: any) {
-  const component = (props: object, ref?: any) => {
+  let component: React.FunctionComponent<any> = (props, ref) => {
     const { depth } = useAutoContext()
     const auto = useAutoRender(component, depth)
+
+    if (isDev) {
+      const debug = getDebug(auto)
+      console.debug(
+        '%s<%s /> [%s]',
+        ' '.repeat(depth),
+        debug.name,
+        ++debug.renders,
+        debug.actions
+      )
+      if (!component.displayName) {
+        console.warn('Anonymous components are hard to debug:', render)
+      }
+    }
+
     return (
       <AutoContext depth={depth + 1}>
         {useAutoValue(auto, render, props, ref)}
       </AutoContext>
     )
   }
-  // prettier-ignore
-  return render.length > 1
-    ? forwardRef(component as any)
-    : component
+  if (render.length > 1) {
+    // Bind its component name to the ref forwarder.
+    Object.defineProperty(component, 'displayName', {
+      get: () => component.displayName,
+    })
+    component = forwardRef(component)
+  }
+  return component
 }
 
 function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
   const forceUpdate = useForceUpdate()
-  const auto = useConstant(
-    () =>
-      new Auto({
-        lazy: true,
-        onDirty() {
-          const { nonce } = auto
-          batch.render(depth, () => {
-            // Trigger a render except when the latest render is pending
-            // or was committed before the batch was flushed.
-            if (!auto.nextObserver && nonce == auto.nonce) {
-              forceUpdate()
+  const auto = useConstant(() => {
+    const auto = new Auto({
+      lazy: true,
+      onDirty() {
+        if (isDev) {
+          getDebug(auto).actions.push('dirty')
+        }
+        const { nonce } = auto
+        batch.render(depth, () => {
+          // Trigger a render except when the latest render is pending
+          // or was committed before the batch was flushed.
+          if (!auto.nextObserver && nonce == auto.nonce) {
+            if (isDev) {
+              getDebug(auto).actions.push('batch')
             }
-          })
-        },
+            forceUpdate()
+          }
+        })
+      },
+    })
+    if (isDev) {
+      setDebug(auto, {
+        name: component.displayName || 'Anonymous',
+        actions: ['init'],
+        renders: 0,
       })
-  )
+    }
+    return auto
+  })
   useDispose(() => auto.dispose())
   useEffect(() => {
+    if (isDev) {
+      getDebug(auto).actions = []
+    }
     // The commit fails to subscribe to observed values
     // that changed between the render and commit phases.
     // In that case, re-render immediately.
     if (!auto.commit()) {
+      if (isDev) {
+        getDebug(auto).actions.push('dirty')
+      }
       forceUpdate()
+    } else if (isDev) {
+      getDebug(auto).actions.push('observe')
     }
   })
   return auto
