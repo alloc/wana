@@ -11,8 +11,6 @@ import { $O } from './symbols'
 export interface Derived<T = any> extends Disposable {
   /** Get the current value */
   (): T
-  /** Recompute the value on next call */
-  clear(): void
 }
 
 /**
@@ -56,8 +54,6 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
   setHidden(derived, '_auto', auto)
   setHidden(derived, $O, observable)
 
-  derived.clear = () => auto['_onChange']()
   derived.dispose = () => auto.dispose()
-
   return derived
 }
