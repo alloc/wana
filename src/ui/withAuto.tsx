@@ -9,6 +9,7 @@ import React, {
 import { Auto } from '../auto'
 import { batch } from '../batch'
 import { getDebug, setDebug } from '../debug'
+import { global } from '../global'
 import { AutoContext, useAutoContext } from './AutoContext'
 import { useConstant, useDispose, useForceUpdate } from './common'
 import { useAutoValue } from './useAutoValue'
@@ -43,21 +44,9 @@ export function withAuto(render: any) {
   let component: React.FunctionComponent<any> = (props, ref) => {
     const { depth } = useAutoContext()
     const auto = useAutoRender(component, depth)
-
-    if (isDev) {
-      const debug = getDebug(auto)
-      console.debug(
-        '%s<%s /> [%s]',
-        ' '.repeat(depth),
-        debug.name,
-        ++debug.renders,
-        debug.actions
-      )
-      if (!component.displayName) {
-        console.warn('Anonymous components are hard to debug:', render)
-      }
+    if (isDev && global.onRender) {
+      global.onRender(auto, depth, component)
     }
-
     return (
       <AutoContext depth={depth + 1}>
         {useAutoValue(auto, render, props, ref)}
