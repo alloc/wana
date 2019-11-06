@@ -1,4 +1,6 @@
+import { isDev } from 'is-dev'
 import { Disposable, isMap } from './common'
+import { setDebug } from './debug'
 import { $O, SIZE } from './symbols'
 import { traps } from './traps'
 
@@ -26,6 +28,11 @@ export class Observable<T extends object = any> extends Map<
 
   constructor(readonly source?: T) {
     super()
+    if (isDev) {
+      setDebug(this, {
+        name: this.constructor.name || 'Unknown',
+      })
+    }
     if (source) {
       this.proxy = new Proxy(
         source,
