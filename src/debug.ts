@@ -6,8 +6,8 @@ const $D = Symbol.for('wana:debug')
 
 interface DebugState {
   name: string
-  renders: number
   actions?: any[]
+  renders?: number
 }
 
 /** Get the `Auto` object for the current `withAuto` component being rendered. */

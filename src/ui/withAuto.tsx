@@ -44,8 +44,11 @@ export function withAuto(render: any) {
   let component: React.FunctionComponent<any> = (props, ref) => {
     const { depth } = useAutoContext()
     const auto = useAutoRender(component, depth)
-    if (isDev && global.onRender) {
-      global.onRender(auto, depth, component)
+    if (isDev) {
+      getDebug(auto).renders!++
+      if (global.onRender) {
+        global.onRender(auto, depth, component)
+      }
     }
     return (
       <AutoContext depth={depth + 1}>
