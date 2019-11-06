@@ -15,11 +15,18 @@ export function getCurrentAuto() {
   return global.auto
 }
 
-/** Unsafely get the `DebugState` object for the given target. */
-export function getDebug(target: any): DebugState {
+/**
+ * Get the `DebugState` object of the `target` object.
+ *
+ * Returns `undefined` if target was never passed to `setDebug`.
+ */
+export function getDebug(target: object): DebugState {
   return target[$D]
 }
 
+/**
+ * Set the `DebugState` object of the `target` object.
+ */
 export function setDebug<T>(target: T, debug: DebugState) {
   debug.name += '#' + nextDebugId++
   target[$D] = debug
