@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import { Auto } from '../auto'
 import { batch } from '../batch'
-import { getDebug, setDebug } from '../debug'
+import { addDebugAction, getDebug, setDebug } from '../debug'
 import { global } from '../global'
 import { AutoContext, useAutoContext } from './AutoContext'
 import { useConstant, useDispose, useForceUpdate } from './common'
@@ -70,7 +70,7 @@ function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
       lazy: true,
       onDirty() {
         if (isDev) {
-          getDebug(auto).actions.push('dirty')
+          addDebugAction(auto, 'dirty')
         }
         const { nonce } = auto
         batch.render(depth, () => {
@@ -78,7 +78,7 @@ function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
           // or was committed before the batch was flushed.
           if (!auto.nextObserver && nonce == auto.nonce) {
             if (isDev) {
-              getDebug(auto).actions.push('batch')
+              addDebugAction(auto, 'batch')
             }
             forceUpdate()
           }
@@ -104,11 +104,11 @@ function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
     // In that case, re-render immediately.
     if (!auto.commit()) {
       if (isDev) {
-        getDebug(auto).actions.push('dirty')
+        addDebugAction(auto, 'dirty')
       }
       forceUpdate()
     } else if (isDev) {
-      getDebug(auto).actions.push('observe')
+      addDebugAction(auto, 'observe')
     }
   })
   return auto

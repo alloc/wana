@@ -1,7 +1,7 @@
 import { isDev } from 'is-dev'
 import { batch } from './batch'
 import { rethrowError } from './common'
-import { getDebug } from './debug'
+import { addDebugAction, getDebug } from './debug'
 import { global } from './global'
 import { Change, ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
@@ -145,7 +145,7 @@ export class Auto {
 
   protected _onChange(change: Change) {
     if (isDev && getDebug(this)) {
-      getDebug(this).actions.push(change)
+      addDebugAction(this, change)
     }
     if (!this.dirty) {
       this.dirty = true

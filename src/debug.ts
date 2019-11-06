@@ -6,8 +6,8 @@ const $D = Symbol.for('wana:debug')
 
 interface DebugState {
   name: string
-  actions: any[]
   renders: number
+  actions?: any[]
 }
 
 /** Get the `Auto` object for the current `withAuto` component being rendered. */
@@ -24,4 +24,12 @@ export function setDebug<T>(target: T, debug: DebugState) {
   debug.name += '#' + nextDebugId++
   target[$D] = debug
   return target
+}
+
+/** Safely add an action to a `DebugState` object */
+export function addDebugAction(target: any, action: any) {
+  const debug = getDebug(target)
+  if (debug && debug.actions) {
+    debug.actions.push(action)
+  }
 }
