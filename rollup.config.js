@@ -10,7 +10,7 @@ const extensions = ['.ts', '.tsx']
 
 const bundle = ({
   input = 'src/index.ts',
-  output = 'dist/index.js',
+  output = 'dist/wana.js',
   sourcemap = true,
   sourcemapExcludeSources = true,
   sourceRoot = path.dirname(input),

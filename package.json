@@ -5,9 +5,9 @@
   "author": "Alec Larson",
   "license": "MIT",
   "repository": "alloc/wana",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/wana.cjs.js",
+  "module": "dist/wana.js",
+  "types": "dist/wana.d.ts",
   "react-native": "src/index.ts",
   "files": [
     "src",
