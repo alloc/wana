@@ -13,4 +13,5 @@ export const AutoContext = ({ children, ...props }: AutoContextProps) => (
   <Provider value={React.useRef(props).current}>{children}</Provider>
 )
 
+/** @internal */
 export const useAutoContext = () => React.useContext(context)
