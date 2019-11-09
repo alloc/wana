@@ -64,13 +64,17 @@ export class Observable<T extends object = any> extends Map<
 
   private _notify(key: any, change: Change) {
     const observers = super.get(key)
-    if (observers && observers.size) {
+    if (observers) {
+      // Increase the nonce even if no observers exist, because there
+      // might be a pending observer (like a "withAuto" component).
       observers.nonce++
 
-      // Clone the "observers" in case they get mutated by an effect.
-      for (const observer of Array.from(observers)) {
-        if (observer.onChange) {
-          observer.onChange(change)
+      if (observers.size) {
+        // Clone the "observers" in case they get mutated by an effect.
+        for (const observer of Array.from(observers)) {
+          if (observer.onChange) {
+            observer.onChange(change)
+          }
         }
       }
     }
