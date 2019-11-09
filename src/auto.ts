@@ -126,7 +126,7 @@ export class Auto {
       }
 
       // Stop observing when changes occur between run and commit.
-      if (observer.dirty) {
+      if (this.lazy && observer.dirty) {
         this.lastObserver = null
         return false
       }
