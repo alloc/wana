@@ -3,7 +3,7 @@ import { batch } from './batch'
 import { rethrowError } from './common'
 import { addDebugAction, getDebug } from './debug'
 import { global } from './global'
-import { Change, ObservedState, ObservedValue, Observer } from './observable'
+import { Change, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
 import { useAutoValue } from './ui/useAutoValue'
 
@@ -73,7 +73,7 @@ export class Auto {
     const observer = new AutoObserver(effect)
     global.auto = this
     global.observe = (target, key) => {
-      observer.observe(target, key)
+      observer.observed.add(target[$O]!.get(key))
     }
     return observer
   }
@@ -89,6 +89,12 @@ export class Auto {
 
     global.auto = null
     global.observe = null
+
+    // Compute the observer nonce at the end, in case the observed
+    // effect mutates any of the observed values.
+    observer.observed.forEach(observable => {
+      observer.nonce += observable.nonce
+    })
 
     if (!this.lazy) {
       this.commit()
@@ -176,18 +182,6 @@ export class AutoObserver extends Observer {
       nonce += observable.nonce
     })
     return nonce != this.nonce
-  }
-
-  observe(state: ObservedState, key: keyof any) {
-    const { observed } = this
-    const { size } = observed
-
-    const observable = state[$O]!.get(key)
-    observed.add(observable)
-
-    if (observed.size > size) {
-      this.nonce += observable.nonce
-    }
   }
 
   commit(onChange: (change: Change) => void) {
