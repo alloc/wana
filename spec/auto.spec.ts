@@ -45,9 +45,14 @@ describe('auto()', () => {
         state.count++
       }
     })
+
     expect(state.count).toBe(1)
+    expect(getObservers(state, 'count').size).toBe(1)
+
     state.count += 1
+
     expect(state.count).toBe(3)
+    expect(getObservers(state, 'count').size).toBe(1)
   })
 
   it('unsubscribes from observables when an error is thrown', () => {
