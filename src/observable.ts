@@ -12,7 +12,7 @@ export type ObservedKey = any
 
 /** An observer set with metadata about what's being observed */
 export class ObservedValue extends Set<ChangeObserver> {
-  nonce = 0
+  nonce = 1
   constructor(readonly owner: Observable, readonly key: ObservedKey) {
     super()
   }
@@ -24,7 +24,7 @@ export class Observable<T extends object = any> extends Map<
   ObservedValue
 > {
   readonly proxy: T | undefined
-  nonce = 0
+  nonce = 1
 
   constructor(readonly source?: T) {
     super()
