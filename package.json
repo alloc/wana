@@ -8,7 +8,9 @@
   "main": "dist/wana.cjs.js",
   "module": "dist/wana.js",
   "types": "dist/wana.d.ts",
-  "react-native": "src/index.ts",
+  "react-native": {
+    "dist/wana.cjs.js": "src/index.ts"
+  },
   "files": [
     "src",
     "dist"
