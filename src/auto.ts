@@ -69,7 +69,8 @@ export class Auto {
     }
 
     // Attach to the observed values.
-    observer.commit(this._onChange.bind(this))
+    observer.onChange = this._onChange.bind(this)
+    observer.observed.forEach(observable => observable.add(observer))
     this.observer = observer
     return true
   }
@@ -143,13 +144,7 @@ export class Auto {
 
 export class AutoObserver extends Observer {
   observed = new Set<ObservedValue>()
-
   constructor(readonly effect: () => any) {
     super()
-  }
-
-  commit(onChange: (change: Change) => void) {
-    this.onChange = onChange
-    this.observed.forEach(observable => observable.add(this))
   }
 }
