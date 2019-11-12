@@ -6,13 +6,12 @@ import React, {
   RefAttributes,
   useEffect,
 } from 'react'
-import { Auto } from '../auto'
+import { Auto, AutoObserver } from '../auto'
 import { batch } from '../batch'
 import { addDebugAction, getDebug, setDebug } from '../debug'
 import { global } from '../global'
 import { AutoContext, useAutoContext } from './AutoContext'
-import { useConstant, useDispose, useForceUpdate } from './common'
-import { useAutoValue } from './useAutoValue'
+import { RenderAction, useConstant, useDispose, useForceUpdate } from './common'
 
 interface Component<P = any> {
   (props: P): ReactElement | null
@@ -32,27 +31,46 @@ type RefForwardingAuto<T extends RefForwardingComponent> = T &
   ) => ReactElement | null)
 
 /** Wrap a component with magic observable tracking */
-export function withAuto<T extends Component>(component: T): T
+export function withAuto<T extends Component>(render: T): T
 
 /** Wrap a component with `forwardRef` and magic observable tracking */
 export function withAuto<T extends RefForwardingComponent>(
-  component: T
+  render: T
 ): RefForwardingAuto<T>
 
 /** @internal */
 export function withAuto(render: any) {
   let component: React.FunctionComponent<any> = (props, ref) => {
-    const { depth } = useAutoContext()
-    const auto = useAutoRender(component, depth)
-    if (isDev) {
-      getDebug(auto).renders!++
-      if (global.onRender) {
-        global.onRender(auto, depth, component)
-      }
+    const { auto, depth, commit } = useAutoRender(component)
+
+    // Track which observable state is used during render.
+    const observer = auto.start(render)
+    try {
+      var content = render(props, ref)
+    } finally {
+      auto.stop()
     }
+
+    // Cache the nonce for cancellation purposes.
+    const { nonce } = observer
+    const recon = (
+      <RenderAction
+        useAction={() => {
+          // The nonce used to prevent unnecessary batched renders is not
+          // updated until children are reconciled.
+          auto.nonce = nonce
+
+          // Subscribe to observed values before child effects are flushed,
+          // so we can react to changes as soon as possible.
+          useEffect(() => commit(observer, nonce))
+        }}
+      />
+    )
+
     return (
       <AutoContext depth={depth + 1}>
-        {useAutoValue(auto, render, props, ref)}
+        {recon}
+        {content}
       </AutoContext>
     )
   }
@@ -66,20 +84,21 @@ export function withAuto(render: any) {
   return component
 }
 
-function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
+function useAutoRender(component: React.FunctionComponent<any>) {
+  const { depth } = useAutoContext()
+
   const forceUpdate = useForceUpdate()
   const auto = useConstant(() => {
     const auto = new Auto({
-      lazy: true,
       onDirty() {
         if (isDev) {
           addDebugAction(auto, 'dirty')
         }
         const { nonce } = auto
         batch.render(depth, () => {
-          // Trigger a render except when the latest render is pending
-          // or was committed before the batch was flushed.
-          if (!auto.nextObserver && nonce == auto.nonce) {
+          // Skip any update whose "component" was reconciled sometime
+          // between when it became dirty and when the batch was flushed.
+          if (nonce == auto.nonce) {
             if (isDev) {
               addDebugAction(auto, 'batch')
             }
@@ -97,22 +116,30 @@ function useAutoRender(component: React.FunctionComponent<any>, depth: number) {
     }
     return auto
   })
+
+  if (isDev) {
+    getDebug(auto).renders!++
+    if (global.onRender) {
+      global.onRender(auto, depth, component)
+    }
+  }
+
   useDispose(() => auto.dispose())
-  useEffect(() => {
-    if (isDev) {
-      getDebug(auto).actions = []
-    }
-    // The commit fails to subscribe to observed values
-    // that changed between the render and commit phases.
-    // In that case, re-render immediately.
-    if (!auto.commit()) {
+  return {
+    auto,
+    depth,
+    commit(observer: AutoObserver, nonce: number) {
       if (isDev) {
-        addDebugAction(auto, 'dirty')
+        getDebug(auto).actions = []
       }
-      forceUpdate()
-    } else if (isDev) {
-      addDebugAction(auto, 'observe')
-    }
-  })
-  return auto
+      if (!auto.commit(observer, nonce)) {
+        if (isDev) {
+          addDebugAction(auto, 'dirty')
+        }
+        forceUpdate()
+      } else if (isDev) {
+        addDebugAction(auto, 'observe')
+      }
+    },
+  }
 }

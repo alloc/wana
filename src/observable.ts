@@ -97,6 +97,15 @@ export abstract class Observer implements Disposable {
   observed!: ReadonlySet<ObservedValue>
   onChange: ((change: Change) => void) | null = null
 
+  /** The current nonce of our observed values combined */
+  get nonce() {
+    let nonce = 0
+    this.observed.forEach(observable => {
+      nonce += observable.nonce
+    })
+    return nonce
+  }
+
   dispose() {
     if (this.onChange) {
       this.onChange = null

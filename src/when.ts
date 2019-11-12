@@ -11,8 +11,6 @@ export const when = (condition: () => boolean): Promise<void> =>
         if (this.run(condition)) {
           this.dispose()
           resolve()
-        } else {
-          this.commit()
         }
       },
       onError(error) {

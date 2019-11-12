@@ -32,7 +32,8 @@ export interface Batch {
 
 export const batch: Batch = {
   run(auto) {
-    runQueue.push({ auto, observer: auto.lastObserver! })
+    // Cache the "observer" so we can abort extraneous runs.
+    runQueue.push({ auto, observer: auto.observer! })
     flush()
   },
   render(depth, effect) {
@@ -56,7 +57,7 @@ function flush() {
         if (++runs > 1e5) {
           break // Limit to 100k runs per flush.
         }
-        if (auto.lastObserver == observer) {
+        if (auto.observer == observer) {
           auto.rerun()
         }
       }
