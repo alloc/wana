@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
 import { Change, ChangeObserver, ObservedState } from '../observable'
@@ -20,11 +20,11 @@ export function useChanges(
     emptyArray
   )
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     observer.onChange = onChange
   }, deps)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const observers = observable.get($O)
     observers.add(observer)
     return () => {
