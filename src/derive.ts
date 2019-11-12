@@ -13,13 +13,8 @@ export interface Derived<T = any> extends Disposable {
   (): T
 }
 
-/**
- * Create an observable getter that memoizes its result.
- *
- * Values are observed on every memoization, which send events to observers
- * of the `Derived` function.
- */
-export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
+/** @internal */
+export function derive<T>(run: (auto: Auto) => T): Derived<T> {
   // The memoized result
   let memo: T | undefined
 
@@ -28,7 +23,6 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
 
   // For observing others
   const auto = new Auto({
-    lazy,
     onDirty() {
       observable.emit({
         op: 'clear',
@@ -43,16 +37,15 @@ export function derive<T>(fn: () => T, lazy?: boolean): Derived<T> {
   const derived: Derived<T> = () => {
     if (auto.dirty) {
       noto(() => {
-        memo = auto.run(fn)
+        memo = run(auto)
       })
     }
     observe(derived, $O)
     return memo!
   }
 
-  setHidden(derived, '_auto', auto)
-  setHidden(derived, $O, observable)
-
   derived.dispose = () => auto.dispose()
+
+  setHidden(derived, $O, observable)
   return derived
 }

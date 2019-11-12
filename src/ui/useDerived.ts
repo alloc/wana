@@ -1,22 +1,51 @@
-import { useEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
-import { Auto } from '../auto'
+import { Auto, AutoObserver } from '../auto'
 import { emptyArray } from '../common'
 import { derive } from '../derive'
-import { useDispose } from './common'
+
+type State = {
+  auto?: Auto
+  observer?: AutoObserver
+  nonce?: number
+  mounted?: boolean
+}
 
 /**
  * Create an observable getter that is managed by React.
  * This lets you memoize an expensive combination of observable values.
  */
-export function useDerived<T>(fn: () => T, deps?: readonly any[]) {
-  const derived = useMemo(() => derive(fn, true), deps || emptyArray)
-  useDispose(derived.dispose)
-  useEffect(() => {
-    const auto: Auto = derived['_auto']
-    // The first commit is lazy, but the rest are not.
-    auto.commit()
-    auto.lazy = false
-  }, [derived])
+export function useDerived<T>(compute: () => T, deps = emptyArray) {
+  const state = useMemo<State>(() => ({}), deps)
+  const derived = useMemo(
+    () =>
+      derive(auto => {
+        const observer = auto.start(compute)
+        try {
+          var result = compute()
+        } finally {
+          auto.stop()
+        }
+        if (state.mounted) {
+          auto.commit(observer)
+        } else {
+          state.auto = auto
+          state.observer = observer
+          state.nonce = observer.nonce
+        }
+        return result
+      }),
+    deps
+  )
+
+  useLayoutEffect(() => {
+    const { auto, observer, nonce } = state
+    if (auto && !auto.commit(observer!, nonce)) {
+      auto.clear()
+    }
+    state.mounted = true
+    return derived.dispose
+  }, deps)
+
   return derived
 }

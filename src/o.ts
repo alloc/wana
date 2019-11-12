@@ -12,15 +12,11 @@ export function o(fn: Function): Derived
 /** Get an observable proxy for an object. Non-objects are returned as-is. */
 export function o<T>(value: T): T
 
-/**
- * Get an observable proxy for the given value,
- * except for functions and primitives.
- */
 export function o(value: ObservedState) {
   let state = value && value[$O]
   if (!state || !getOwnDescriptor(value, $O)) {
     if (isFunction(value)) {
-      return derive(value as any)
+      return derive(auto => auto.run(value))
     }
     if (!isObject(value) || Object.isFrozen(value)) {
       return value

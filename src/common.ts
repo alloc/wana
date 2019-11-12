@@ -16,7 +16,7 @@ export const isMap = (value: unknown): value is Map<unknown, unknown> =>
 export const isObject = (value: unknown): value is object =>
   value && typeof value == 'object'
 
-export const isFunction = (value: unknown): value is Function =>
+export const isFunction = (value: unknown): value is (...args: any[]) => any =>
   typeof value == 'function'
 
 export const isUndefined = (value: unknown): value is undefined =>
