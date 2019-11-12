@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react-layout-effect'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
 import { Change, ChangeObserver, ObservedState } from '../observable'

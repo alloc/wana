@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react-layout-effect'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { Auto, AutoObserver } from '../auto'
 import { emptyArray } from '../common'
