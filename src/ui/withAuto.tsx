@@ -1,11 +1,6 @@
 import { isDev } from 'is-dev'
-import React, {
-  forwardRef,
-  ReactElement,
-  Ref,
-  RefAttributes,
-  useEffect,
-} from 'react'
+import React, { forwardRef, ReactElement, Ref, RefAttributes } from 'react'
+import { useLayoutEffect } from 'react-layout-effect'
 import { Auto, AutoObserver } from '../auto'
 import { batch } from '../batch'
 import { addDebugAction, getDebug, setDebug } from '../debug'
@@ -43,6 +38,10 @@ export function withAuto(render: any) {
   let component: React.FunctionComponent<any> = (props, ref) => {
     const { auto, depth, commit } = useAutoRender(component)
 
+    // Subscribe to observables as early as possible, because
+    // we don't want effects to trigger the previous observer.
+    useLayoutEffect(() => commit(observer, nonce))
+
     // Track which observable state is used during render.
     const observer = auto.start(render)
     try {
@@ -53,16 +52,13 @@ export function withAuto(render: any) {
 
     // Cache the nonce for cancellation purposes.
     const { nonce } = observer
+
+    // React might discard this render without telling us, but we can
+    // detect that with our first child's render phase.
     const recon = (
       <RenderAction
         useAction={() => {
-          // The nonce used to prevent unnecessary batched renders is not
-          // updated until children are reconciled.
           auto.nonce = nonce
-
-          // Subscribe to observed values before child effects are flushed,
-          // so we can react to changes as soon as possible.
-          useEffect(() => commit(observer, nonce))
         }}
       />
     )
