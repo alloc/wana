@@ -6,6 +6,7 @@ module.exports = {
   globals: {
     'ts-jest': {
       diagnostics: false,
+      packageJson: 'package.json',
     },
   },
 }
