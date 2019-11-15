@@ -1,6 +1,6 @@
 dependencies:
+  '@alloc/is-dev': 1.1.0
   '@babel/runtime': 7.7.2
-  is-dev: /@alloc/is-dev/1.1.0
   queue-microtask: 1.1.2
   react-layout-effect: 1.0.3_react@16.9.0
   use-memo-one: 1.1.1_react@16.9.0
@@ -1046,10 +1046,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-L7MBvwfNpe7yVPTXLn32df/EK+AMBFAFvZrRuArGs7npEWnlziUXK+5GMIUTI4NIuwok3XibsjXCs5HxviYXjg==
-  /@types/node/12.12.7:
+  /@types/node/12.12.8:
     dev: true
     resolution:
-      integrity: sha512-E6Zn0rffhgd130zbCbAr/JdXfXkoOUFAKNs/rF8qnafSJ8KYaA/j3oz7dcwal+lYjLA7xvdd5J4wdYpCTlP8+w==
+      integrity: sha512-XLla8N+iyfjvsa0KKV+BP/iGSoTmwxsu5Ci5sM33z9TjohF72DEz95iNvD6pPmemvbQgxAv/909G73gUn8QR7w==
   /@types/prop-types/15.7.3:
     dev: true
     resolution:
@@ -1063,7 +1063,7 @@ packages:
       integrity: sha512-UBT4GZ3PokTXSWmdgC/GeCGEJXE5ofWyibCcecRLUVN2ZBpXQGVgQGtG2foS7CrTKFKlQVVswLvf7Js6XA/CVQ==
   /@types/resolve/0.0.8:
     dependencies:
-      '@types/node': 12.12.7
+      '@types/node': 12.12.8
     dev: true
     resolution:
       integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==
@@ -1081,10 +1081,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-K8/LfZq2duW33XW/tFwEAfnZlqIfVsoyRB3kfXdPXYhl0nfM8mmh7GS0jg7WrX2Dgq/0Ha/pR1PaR+BvmWwjiQ==
-  /abab/2.0.2:
+  /abab/2.0.3:
     dev: true
     resolution:
-      integrity: sha512-2scffjvioEmNz0OyDSLGWDfKCVwaKc6l9Pm9kOIREU13ClXZvHpg/nRL5xyjSSSLhOnXqft2HpsAzNEEA8cFFg==
+      integrity: sha512-tsFzPpcttalNjFBCFMqsKYQcWxxen1pgJR56by//QwvJc4/OUS3kPOOttx2tSIfjsylB0pYu7f5D3K1RCxUnUg==
   /acorn-globals/4.3.4:
     dependencies:
       acorn: 6.3.0
@@ -1407,9 +1407,9 @@ packages:
       integrity: sha512-exDi1BYWB/6raKHmDTCicQfTkqwN5fioMFV4j8BsfMU4R2DK/QfZfK7kOVkmWCNANf0snkBzqGqAJBao9gZMdQ==
   /browserslist/4.7.2:
     dependencies:
-      caniuse-lite: 1.0.30001008
+      caniuse-lite: 1.0.30001010
       electron-to-chromium: 1.3.306
-      node-releases: 1.1.39
+      node-releases: 1.1.40
     dev: true
     hasBin: true
     resolution:
@@ -1482,10 +1482,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
-  /caniuse-lite/1.0.30001008:
+  /caniuse-lite/1.0.30001010:
     dev: true
     resolution:
-      integrity: sha512-b8DJyb+VVXZGRgJUa30cbk8gKHZ3LOZTBLaUEEVr2P4xpmFigOCc62CO4uzquW641Ouq1Rm9N+rWLWdSYDaDIw==
+      integrity: sha512-RA5GH9YjFNea4ZQszdWgh2SC+dpLiRAg4VDQS2b5JRI45OxmbGrYocYHTa9x0bKMQUE7uvHkNPNffUr+pCxSGw==
   /capture-exit/2.0.0:
     dependencies:
       rsvp: 4.8.5
@@ -1680,7 +1680,7 @@ packages:
       integrity: sha1-hTz6D3y+L+1d4gMmuN1YEDX24vA=
   /data-urls/1.1.0:
     dependencies:
-      abab: 2.0.2
+      abab: 2.0.3
       whatwg-mimetype: 2.3.0
       whatwg-url: 7.1.0
     dev: true
@@ -2208,7 +2208,7 @@ packages:
     dev: true
     resolution:
       integrity: sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
-  /handlebars/4.5.1:
+  /handlebars/4.5.2:
     dependencies:
       neo-async: 2.6.1
       optimist: 0.6.1
@@ -2220,7 +2220,7 @@ packages:
     optionalDependencies:
       uglify-js: 3.6.9
     resolution:
-      integrity: sha512-C29UoFzHe9yM61lOsIlCE5/mQVGrnIOrOq7maQl76L7tYPCgC1og0Ajt6uWnX4ZTxBPnjw+CUvawphwCfJgUnA==
+      integrity: sha512-29Zxv/cynYB7mkT1rVWQnV7mGX6v7H/miQ6dbEpYTKq5eJBN7PsRB+ViYJlcT6JINTSu4dVB9kOqEun78h6Exg==
   /har-schema/2.0.0:
     dev: true
     engines:
@@ -2647,7 +2647,7 @@ packages:
       integrity: sha512-R47KzMtDJH6X4/YW9XTx+jrLnZnscW4VpNN+1PViSYTejLVPWv7oov+Duf8YQSPyVRUvueQqz1TcsC6mooZTXw==
   /istanbul-reports/2.2.6:
     dependencies:
-      handlebars: 4.5.1
+      handlebars: 4.5.2
     dev: true
     engines:
       node: '>=6'
@@ -3067,7 +3067,7 @@ packages:
       integrity: sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
   /jsdom/11.12.0:
     dependencies:
-      abab: 2.0.2
+      abab: 2.0.3
       acorn: 5.7.3
       acorn-globals: 4.3.4
       array-equal: 1.0.0
@@ -3467,12 +3467,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-M4UBGcs4jeOK9CjTsYwkvH6/MzuUmGCyTW+kCY7uO+1ZVr0+FHGdPdIf5CCLqAaxnRrWidyoQlNkMIIVwbKB8Q==
-  /node-releases/1.1.39:
+  /node-releases/1.1.40:
     dependencies:
       semver: 6.3.0
     dev: true
     resolution:
-      integrity: sha512-8MRC/ErwNCHOlAFycy9OPca46fQYUjbJRDcZTHVWIGXIjYLM73k70vv3WkYutVnM4cCo4hE0MqBVVZjP6vjISA==
+      integrity: sha512-r4LPcC5b/bS8BdtWH1fbeK88ib/wg9aqmg6/s3ngNLn2Ewkn/8J6Iw3P9RTlfIAdSdvYvQl2thCY5Y+qTAQ2iQ==
   /normalize-package-data/2.5.0:
     dependencies:
       hosted-git-info: 2.8.5
@@ -3815,7 +3815,7 @@ packages:
       '@jest/types': 24.9.0
       ansi-regex: 4.1.0
       ansi-styles: 3.2.1
-      react-is: 16.11.0
+      react-is: 16.12.0
     dev: true
     engines:
       node: '>= 6'
@@ -3840,7 +3840,7 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-      react-is: 16.11.0
+      react-is: 16.12.0
     resolution:
       integrity: sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
   /psl/1.4.0:
@@ -3886,9 +3886,9 @@ packages:
       react: ^16.0.0
     resolution:
       integrity: sha512-YFT2rxO9hM70ewk9jq0y6sQk8cL02xm4+IzYBz75CQGlClQQ1Bxq0nhHF6OtSbit+AIahujJgb/CPRibFkMNJQ==
-  /react-is/16.11.0:
+  /react-is/16.12.0:
     resolution:
-      integrity: sha512-gbBVYR2p8mnriqAwWx9LbuUrShnAuSCNnuPGyc7GJrMVQtPDAh8iLpv7FRuMPFb56KkaVZIYSz1PrjI9q0QPCw==
+      integrity: sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
   /react-layout-effect/1.0.3_react@16.9.0:
     dependencies:
       react: 16.9.0
@@ -4195,7 +4195,7 @@ packages:
   /rollup/1.27.0:
     dependencies:
       '@types/estree': 0.0.39
-      '@types/node': 12.12.7
+      '@types/node': 12.12.8
       acorn: 7.1.0
     dev: true
     hasBin: true
@@ -5181,6 +5181,7 @@ packages:
     resolution:
       integrity: sha512-2eehun/8ALW8TLoIl7MVaRUrg+yCnenu8B4kBlRxj3GJGDKU1Og7sMXPNm1BYyM1DOJmTZ4YeN/Nwxv+8XJsUA==
 specifiers:
+  '@alloc/is-dev': ^1.1.0
   '@babel/core': ^7.5.5
   '@babel/plugin-transform-runtime': ^7.5.5
   '@babel/preset-env': ^7.5.5
@@ -5190,14 +5191,13 @@ specifiers:
   '@types/react': ^16.8.23
   codecov: ^3.5.0
   concurrently: ^4.1.1
-  is-dev: 'npm:@alloc/is-dev@^1.1.0'
   jest: ^24.8.0
   prettier: ^1.18.2
   prettier-tslint: ^0.4.2
   queue-microtask: ^1.1.2
   react: ~16.9.0
   react-dom: ~16.9.0
-  react-layout-effect: ^1.0.2
+  react-layout-effect: ^1.0.1
   rollup: ^1.17.0
   rollup-plugin-babel: ^4.3.3
   rollup-plugin-dts: ^1.1.5
