@@ -1,4 +1,4 @@
-import { isDev } from 'is-dev'
+import { isDev } from '@alloc/is-dev'
 import { Disposable, isMap } from './common'
 import { setDebug } from './debug'
 import { $O, SIZE } from './symbols'

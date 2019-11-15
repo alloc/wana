@@ -1,4 +1,4 @@
-import { isDev } from 'is-dev'
+import { isDev } from '@alloc/is-dev'
 import { batch } from './batch'
 import { rethrowError } from './common'
 import { addDebugAction, getDebug } from './debug'

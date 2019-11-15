@@ -26,8 +26,8 @@
     "react": ">=16.9"
   },
   "dependencies": {
+    "@alloc/is-dev": "^1.1.0",
     "@babel/runtime": "^7.5.5",
-    "is-dev": "npm:@alloc/is-dev@^1.1.0",
     "queue-microtask": "^1.1.2",
     "react-layout-effect": "^1.0.1",
     "use-memo-one": "^1.1.1"

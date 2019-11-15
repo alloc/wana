@@ -1,4 +1,4 @@
-import { isDev } from 'is-dev'
+import { isDev } from '@alloc/is-dev'
 import React, { forwardRef, ReactElement, Ref, RefAttributes } from 'react'
 import { useLayoutEffect } from 'react-layout-effect'
 import { Auto, AutoObserver } from '../auto'
