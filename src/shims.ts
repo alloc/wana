@@ -11,7 +11,7 @@ shims.forEach(([namespace, keys]) =>
   keys.forEach(key => {
     const fn = namespace[key]
     const shim = (namespace[key] = (...args: any[]) => {
-      const target = args[0][$$]
+      const target = args[0] && args[0][$$]
       if (target) {
         observe(target, $O)
         args[0] = target
