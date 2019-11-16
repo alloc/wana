@@ -479,6 +479,6 @@ function withEffect(effect: () => void) {
   prevRuns = runs = 0
 }
 
-function getObservers(state: ObservedState, key: string) {
+export function getObservers(state: ObservedState, key: string | typeof $O) {
   return state[$O]!.get(key)
 }

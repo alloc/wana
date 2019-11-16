@@ -2,7 +2,7 @@ import { setHidden } from './common'
 import { global, observe } from './global'
 import { $$, $O } from './symbols'
 
-const shims: Array<[object, string[]]> = [
+export const shims: Array<[Function, string[]]> = [
   [Object, ['keys', 'values', 'entries']],
   [Array, ['from']],
 ]
