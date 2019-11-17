@@ -34,46 +34,55 @@ export const batch: Batch = {
   run(auto) {
     // Cache the "observer" so we can abort extraneous runs.
     runQueue.push({ auto, observer: auto.observer! })
-    flush()
+    flushAsync()
   },
   render(depth, effect) {
     let i = renderQueue.findIndex(other => other.depth > depth)
     if (i < 0) i = renderQueue.length
     renderQueue.splice(i, 0, { depth, effect })
-    flush()
+    flushAsync()
   },
 }
 
 let isQueued = false
-function flush() {
+function flushAsync() {
   if (!isQueued) {
     isQueued = true
     queueMicrotask(() => {
       isQueued = false
-
-      // Run any pending reactions.
-      let runs = 0
-      for (const { auto, observer } of runQueue) {
-        if (++runs > 1e5) {
-          break // Limit to 100k runs per flush.
-        }
-        if (auto.observer == observer) {
-          auto.rerun()
-        }
-      }
-
-      // Postpone remaining runs until next flush.
-      runQueue = runQueue.slice(runs)
-
-      global.batchedUpdates(() => {
-        renderQueue.forEach(({ effect }) => effect())
-        renderQueue.length = 0
-      })
-
-      // Spread the flush across multiple microtasks if necessary.
-      if (runQueue.length || renderQueue.length) {
-        flush()
+      if (flushSync()) {
+        flushAsync()
       }
     })
   }
+}
+
+/**
+ * Flush the queue of delayed reactions.
+ *
+ * Returns `true` if the queue wasn't flushed entirely.
+ *
+ * Useful when testing `wana`-integrated components/hooks.
+ */
+export function flushSync() {
+  // Run any pending reactions.
+  let runs = 0
+  for (const { auto, observer } of runQueue) {
+    if (++runs > 1e5) {
+      break // Limit to 100k runs per flush.
+    }
+    if (auto.observer == observer) {
+      auto.rerun()
+    }
+  }
+
+  // Postpone remaining runs until next flush.
+  runQueue = runQueue.slice(runs)
+
+  global.batchedUpdates(() => {
+    renderQueue.forEach(({ effect }) => effect())
+    renderQueue.length = 0
+  })
+
+  return !!(runQueue.length || renderQueue.length)
 }

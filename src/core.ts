@@ -16,3 +16,4 @@ export * from './debug'
 // Internals
 export { $O, $$ } from './symbols'
 export { global } from './global'
+export { flushSync } from './batch'
