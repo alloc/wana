@@ -16,10 +16,13 @@ export function o<T>(value: T): T
 export function o(value: ObservedState) {
   let state = value && value[$O]
   if (!state || !getOwnDescriptor(value, $O)) {
+    if (!canMakeObservable(value)) {
+      return value
+    }
     if (is.function_(value)) {
       return derive(auto => auto.run(value))
     }
-    if (!canMakeObservable(value) || Object.isFrozen(value)) {
+    if (Object.isFrozen(value)) {
       return value
     }
     setHidden(value, $O, (state = new Observable(value)))
