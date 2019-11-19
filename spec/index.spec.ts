@@ -33,6 +33,31 @@ describe('o()', () => {
     expect(o(null)).toBe(null)
     expect(o(undefined)).toBe(undefined)
   })
+  it('is a no-op for certain built-in types', () => {
+    const date = new Date()
+    expect(o(date)).toBe(date)
+
+    const regExp = /./g
+    expect(o(regExp)).toBe(regExp)
+
+    const nativePromise = Promise.resolve()
+    expect(o(nativePromise)).toBe(nativePromise)
+
+    const generatorFn = function*() {}
+    expect(o(generatorFn)).toBe(generatorFn)
+
+    const generator = generatorFn()
+    expect(o(generator)).toBe(generator)
+
+    const asyncFn = async () => {}
+    expect(o(asyncFn)).toBe(asyncFn)
+
+    const weakMap = new WeakMap()
+    expect(o(weakMap)).toBe(weakMap)
+
+    const weakSet = new WeakSet()
+    expect(o(weakSet)).toBe(weakSet)
+  })
   it('is a no-op for frozen objects', () => {
     const obj = Object.freeze({})
     expect(o(obj)).toBe(obj)
