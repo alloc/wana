@@ -36,7 +36,7 @@ export class Auto {
     this.onError = config.onError || rethrowError
   }
 
-  run<T>(compute: () => T) {
+  run<T extends Function>(compute: T) {
     const observer = this.start(compute)
     try {
       const result = compute()
@@ -91,7 +91,7 @@ export class Auto {
    * The given `effect` is used by `rerun` calls made after
    * the new observer is committed.
    */
-  start(effect: () => any) {
+  start(effect: Function) {
     if (global.observe) {
       throw Error('Nested tracking is forbidden')
     }
@@ -144,7 +144,7 @@ export class Auto {
 
 export class AutoObserver extends Observer {
   observed = new Set<ObservedValue>()
-  constructor(readonly effect: () => any) {
+  constructor(readonly effect: Function) {
     super()
   }
 }

@@ -1,5 +1,6 @@
 import { isDev } from '@alloc/is-dev'
-import { Disposable, isMap } from './common'
+import is from '@sindresorhus/is'
+import { Disposable } from './common'
 import { setDebug } from './debug'
 import { $O, SIZE } from './symbols'
 import { traps } from './traps'
@@ -17,6 +18,18 @@ export class ObservedValue extends Set<ChangeObserver> {
     super()
   }
 }
+
+/** Return true if `value` could be made observable or is already observable */
+export const canMakeObservable = (value: unknown): boolean =>
+  is.object(value) &&
+  !is.date(value) &&
+  !is.regExp(value) &&
+  !is.nativePromise(value) &&
+  !is.generator(value) &&
+  !is.generatorFunction(value) &&
+  !is.asyncFunction(value) &&
+  !is.weakMap(value) &&
+  !is.weakSet(value)
 
 /** Glorified event emitter */
 export class Observable<T extends object = any> extends Map<
@@ -53,7 +66,7 @@ export class Observable<T extends object = any> extends Map<
   emit(change: Change) {
     if (change.op !== 'clear') {
       this._notify(change.key, change)
-    } else if (isMap(change.oldValue)) {
+    } else if (is.map(change.oldValue)) {
       change.oldValue.forEach((_, key) => this._notify(key, change))
     }
     if (change.key !== SIZE) {

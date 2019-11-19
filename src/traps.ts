@@ -1,11 +1,5 @@
-import {
-  emptyArray,
-  flop,
-  getDescriptor,
-  hasOwn,
-  isArray,
-  nope,
-} from './common'
+import is from '@sindresorhus/is'
+import { emptyArray, flop, getDescriptor, hasOwn, nope } from './common'
 import { observe } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
@@ -115,7 +109,7 @@ const ArrayOverrides: any = {
     observe(self, $O)
     args.forEach(arg => {
       arg = arg && arg[$$]
-      if (isArray(arg)) {
+      if (is.array(arg)) {
         observe(arg, $O)
       }
     })

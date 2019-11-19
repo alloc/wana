@@ -1,5 +1,6 @@
+import is from '@sindresorhus/is'
 import { useMemoOne as useMemo } from 'use-memo-one'
-import { emptyArray, isFunction } from '../common'
+import { emptyArray } from '../common'
 import { Derived } from '../derive'
 import { noto } from '../noto'
 import { o } from '../o'
@@ -26,9 +27,9 @@ export function useO<T>(
 /** @internal */
 export function useO(state: any, deps?: readonly any[]) {
   const result = useMemo<any>(
-    () => (isFunction(state) ? noto(state) : state),
+    () => (is.function_(state) ? noto(state) : state),
     deps || emptyArray
   )
   // Beware: Never switch between observable getter and observable object.
-  return isFunction(result) ? useDerived(result, [result]) : o(result)
+  return is.function_(result) ? useDerived(result, [result]) : o(result)
 }

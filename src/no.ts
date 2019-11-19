@@ -1,4 +1,5 @@
-import { isFunction, setHidden } from './common'
+import is from '@sindresorhus/is'
+import { setHidden } from './common'
 import { noto } from './noto'
 import { $$ } from './symbols'
 
@@ -9,7 +10,7 @@ import { $$ } from './symbols'
  * Read `no` as "non-observable", essentially the reverse of the `o` function.
  */
 export function no<T>(value: T): T {
-  if (isFunction(value)) {
+  if (is.function_(value)) {
     const fn = (...args: any[]) => noto(() => value(...args))
     setHidden(fn, 'name', value.name)
     return fn as any

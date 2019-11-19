@@ -1,4 +1,4 @@
-import { isMap, isObject, isUndefined } from './common'
+import is from '@sindresorhus/is'
 import { Change, ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
 
@@ -22,7 +22,7 @@ export class Watcher extends Observer {
       const { op, target, key, value, oldValue } = change
       switch (op) {
         case 'replace':
-          if (isObject(oldValue)) this._unwatch(oldValue)
+          if (canWatch(oldValue)) this._unwatch(oldValue)
         case 'add':
           this.watch(value, key, target)
           break
@@ -40,13 +40,13 @@ export class Watcher extends Observer {
   }
 
   watch = (value: any, key?: any, ctx?: any) => {
-    if (isObject(key) && isMap(ctx)) this._watch(key)
-    if (isObject(value)) this._watch(value)
+    if (canWatch(key) && is.map(ctx)) this._watch(key)
+    if (canWatch(value)) this._watch(value)
   }
 
   unwatch = (value: any, key?: any, ctx?: any) => {
-    if (isObject(key) && isMap(ctx)) this._unwatch(key)
-    if (isObject(value)) this._unwatch(value)
+    if (canWatch(key) && is.map(ctx)) this._unwatch(key)
+    if (canWatch(value)) this._unwatch(value)
   }
 
   dispose() {
@@ -76,7 +76,7 @@ export class Watcher extends Observer {
   protected _unwatch(target: WatchedState) {
     const { counts } = this
     const count = counts.get(target)
-    if (isUndefined(count)) return
+    if (is.undefined(count)) return
     if (count > 1) {
       counts.set(target, count - 1)
     } else {
@@ -93,3 +93,6 @@ export class Watcher extends Observer {
     }
   }
 }
+
+export const canWatch = (value: unknown): value is object =>
+  value && typeof value == 'object'

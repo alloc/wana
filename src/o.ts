@@ -1,6 +1,7 @@
-import { getOwnDescriptor, isFunction, isObject, setHidden } from './common'
+import is from '@sindresorhus/is'
+import { getOwnDescriptor, setHidden } from './common'
 import { derive, Derived } from './derive'
-import { Observable, ObservedState } from './observable'
+import { canMakeObservable, Observable, ObservedState } from './observable'
 import { $O } from './symbols'
 
 /** Create an observable getter that memoizes its result. */
@@ -15,10 +16,10 @@ export function o<T>(value: T): T
 export function o(value: ObservedState) {
   let state = value && value[$O]
   if (!state || !getOwnDescriptor(value, $O)) {
-    if (isFunction(value)) {
+    if (is.function_(value)) {
       return derive(auto => auto.run(value))
     }
-    if (!isObject(value) || Object.isFrozen(value)) {
+    if (!canMakeObservable(value) || Object.isFrozen(value)) {
       return value
     }
     setHidden(value, $O, (state = new Observable(value)))
