@@ -1,4 +1,4 @@
-import is from '@sindresorhus/is'
+import is from '@alloc/is'
 import { getOwnDescriptor, setHidden } from './common'
 import { derive, Derived } from './derive'
 import { canMakeObservable, Observable, ObservedState } from './observable'

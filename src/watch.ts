@@ -1,4 +1,4 @@
-import is from '@sindresorhus/is'
+import is from '@alloc/is'
 import { Change, ObservedState, ObservedValue, Observer } from './observable'
 import { $O } from './symbols'
 

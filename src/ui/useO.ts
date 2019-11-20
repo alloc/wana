@@ -1,4 +1,4 @@
-import is from '@sindresorhus/is'
+import is from '@alloc/is'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
 import { Derived } from '../derive'

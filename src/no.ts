@@ -1,4 +1,4 @@
-import is from '@sindresorhus/is'
+import is from '@alloc/is'
 import { setHidden } from './common'
 import { noto } from './noto'
 import { $$ } from './symbols'

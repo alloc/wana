@@ -1,4 +1,4 @@
-import is from '@sindresorhus/is'
+import is from '@alloc/is'
 import { emptyArray, flop, getDescriptor, hasOwn, nope } from './common'
 import { observe } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'

@@ -1,5 +1,5 @@
+import is from '@alloc/is'
 import { isDev } from '@alloc/is-dev'
-import is from '@sindresorhus/is'
 import { Disposable } from './common'
 import { setDebug } from './debug'
 import { $O, SIZE } from './symbols'
