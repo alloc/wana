@@ -1,4 +1,4 @@
-import { o, when } from '../src'
+import { auto, o, when } from '../src'
 
 // Sleep for `n` microtask queue flushes.
 const sleep = (n = 1) => {
@@ -96,5 +96,15 @@ describe('when()', () => {
 
   describe('rejected promise', () => {
     it.todo('stops observing every value')
+  })
+
+  describe('reaction to change made by an observer', () => {
+    it('does not throw', () => {
+      const a = o({ b: 0 })
+      expect(() => {
+        when(() => a.b > 0)
+        auto(() => a.b++)
+      }).not.toThrow()
+    })
   })
 })

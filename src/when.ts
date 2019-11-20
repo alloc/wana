@@ -1,4 +1,5 @@
 import { Auto } from './auto'
+import { noto } from './noto'
 
 /**
  * Create a promise to resolve when the given condition returns true.
@@ -8,7 +9,7 @@ export const when = (condition: () => boolean): Promise<void> =>
   new Promise((resolve, reject) => {
     const auto = new Auto({
       onDirty() {
-        if (this.run(condition)) {
+        if (noto(() => this.run(condition))) {
           this.dispose()
           resolve()
         }
