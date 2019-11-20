@@ -38,10 +38,9 @@ const esmBundle = config => ({
     resolve({ extensions }),
     ts({ check: false }),
     babel(
-      getBabelOptions(
-        { useESModules: true },
-        '>1%, not dead, not ie 11, not op_mini all'
-      )
+      getBabelOptions({
+        useESModules: true,
+      })
     ),
   ],
 })
@@ -58,7 +57,11 @@ const cjsBundle = config => ({
   plugins: [
     resolve({ extensions }),
     ts({ check: false }),
-    babel(getBabelOptions({ useESModules: false })),
+    babel(
+      getBabelOptions({
+        useESModules: false,
+      })
+    ),
   ],
 })
 
@@ -80,7 +83,7 @@ const getBabelOptions = ({ useESModules }, targets) => ({
   extensions: ['ts'],
   runtimeHelpers: true,
   comments: false,
-  presets: [['@babel/preset-env', { loose: true, modules: false, targets }]],
+  presets: ['@babel/preset-modules'],
   plugins: [
     ['@babel/plugin-transform-runtime', { regenerator: false, useESModules }],
   ],
