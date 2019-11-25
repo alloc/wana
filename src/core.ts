@@ -3,8 +3,14 @@ export { o } from './o'
 export { auto, Auto } from './auto'
 export { when } from './when'
 export { watch, Watcher } from './watch'
-export { Observable, Observer, ObservedState, Change } from './observable'
 export { Derived } from './derive'
+export {
+  Observable,
+  Observer,
+  ObservedState,
+  Change,
+  ChangeObserver,
+} from './observable'
 
 // Escape hatches
 export { no } from './no'
