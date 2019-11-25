@@ -94,12 +94,12 @@ export class Observable<T extends object = any> extends Map<
   }
 }
 
-export interface Change {
+export interface Change<T = any> {
   op: 'add' | 'replace' | 'remove' | 'splice' | 'clear'
   target: object
   key?: any
-  value?: any
-  oldValue?: any
+  value?: T
+  oldValue?: T
 }
 
 export interface ChangeObserver extends Disposable {
