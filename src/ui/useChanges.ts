@@ -30,5 +30,5 @@ export function useChanges(
     return () => {
       observers.delete(observer)
     }
-  }, emptyArray)
+  }, [observable])
 }
