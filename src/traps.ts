@@ -1,7 +1,7 @@
 import is from '@alloc/is'
 import { emptyArray, flop, getDescriptor, hasOwn, nope } from './common'
-import { observe } from './global'
 import { emitAdd, emitClear, emitRemove, emitReplace, emitSplice } from './emit'
+import { global, observe } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
@@ -33,36 +33,6 @@ const ObjectTraps: ProxyHandler<object> = {
         ? (desc.set.call(self[$O].proxy, value), true)
         : false
       : setProperty(self, key, value)
-  },
-  deleteProperty,
-  preventExtensions: nope,
-}
-
-const ArrayTraps: ProxyHandler<any[]> = {
-  has: ObjectTraps.has,
-  get: (self, key) => (
-    key === 'length' && observe(self, SIZE),
-    ArrayOverrides[key] || (key === $$ ? self : self[key])
-  ),
-  set(self, key, value) {
-    if (key === 'length') {
-      const oldLength = self.length
-      if (value !== oldLength) {
-        const oldValues = self.slice(value)
-        self.length = value
-        emitReplace(self, SIZE, value, oldLength)
-        if (value < oldLength) {
-          emitSplice(self, value, emptyArray, oldValues)
-        }
-      }
-    } else {
-      const oldLength = self.length
-      setProperty(self, key, value)
-      if (oldLength !== self.length) {
-        emitReplace(self, SIZE, self.length, oldLength)
-      }
-    }
-    return true
   },
   deleteProperty,
   preventExtensions: nope,
@@ -162,13 +132,6 @@ const ArrayOverrides: any = {
   },
 }
 
-const MapTraps: ProxyHandler<any> = {
-  get: (self, key) => (
-    key === 'size' && observe(self, SIZE),
-    MapOverrides[key] || (key === $$ ? self : self[key])
-  ),
-}
-
 const MapOverrides: any = {
   ...MapIterators,
   has(key: any) {
@@ -220,13 +183,6 @@ const MapOverrides: any = {
   },
 }
 
-const SetTraps: ProxyHandler<any> = {
-  get: (obj, key) => (
-    key === 'size' && observe(obj, SIZE),
-    SetOverrides[key] || (key === $$ ? obj : obj[key])
-  ),
-}
-
 const SetOverrides: any = {
   ...SetIterators,
   has(value: any) {
@@ -265,6 +221,41 @@ const SetOverrides: any = {
   },
 }
 
+const ArrayTraps: ProxyHandler<any[]> = {
+  has: ObjectTraps.has,
+  get: withOverrides(ArrayOverrides, 'length'),
+  set(self, key, value) {
+    if (key === 'length') {
+      const oldLength = self.length
+      if (value !== oldLength) {
+        const oldValues = self.slice(value)
+        self.length = value
+        emitReplace(self, SIZE, value, oldLength)
+        if (value < oldLength) {
+          emitSplice(self, value, emptyArray, oldValues)
+        }
+      }
+    } else {
+      const oldLength = self.length
+      setProperty(self, key, value)
+      if (oldLength !== self.length) {
+        emitReplace(self, SIZE, self.length, oldLength)
+      }
+    }
+    return true
+  },
+  deleteProperty,
+  preventExtensions: nope,
+}
+
+const MapTraps: ProxyHandler<any> = {
+  get: withOverrides(MapOverrides, 'size'),
+}
+
+const SetTraps: ProxyHandler<any> = {
+  get: withOverrides(SetOverrides, 'size'),
+}
+
 export const traps = {
   Object: ObjectTraps,
   Array: ArrayTraps,
@@ -286,4 +277,14 @@ function deleteProperty(self: object, key: any) {
   const oldValue = self[key]
   delete self[key]
   return emitRemove(self, key, oldValue)
+}
+
+// All collection types have an observable size and a bunch of method overrides.
+function withOverrides(overrides: any, sizeKey: string) {
+  return (self: any, key: keyof any) =>
+    key === $$
+      ? self
+      : (global.observe &&
+          (key === sizeKey && observe(self, SIZE), overrides[key])) ||
+        self[key]
 }
