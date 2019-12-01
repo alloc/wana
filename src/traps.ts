@@ -1,28 +1,10 @@
 import is from '@alloc/is'
 import { emptyArray, flop, getDescriptor, hasOwn, nope } from './common'
 import { observe } from './global'
+import { emitAdd, emitClear, emitRemove, emitReplace, emitSplice } from './emit'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
-import { Change } from './observable'
 import { $$, $O, SIZE } from './symbols'
-
-const emit = (target: object, change: Change) => (target[$O].emit(change), true)
-const emitAdd = (target: object, key: any, value: any) =>
-  emit(target, { op: 'add', target, key, value })
-const emitRemove = (target: object, key: any, oldValue: any) =>
-  emit(target, { op: 'remove', target, key, oldValue })
-const emitReplace = (target: object, key: any, value: any, oldValue: any) =>
-  emit(target, { op: 'replace', target, key, value, oldValue })
-const emitSplice = (
-  target: any[],
-  key: number,
-  value: readonly any[],
-  oldValue: readonly any[]
-) => emit(target, { op: 'splice', target, key, value, oldValue })
-const emitClear = <T extends Set<any> | Map<any, any>>(
-  target: T,
-  oldValue: T
-) => emit(target, { op: 'clear', target, oldValue })
 
 function setProperty(self: object, key: any, value: any) {
   const exists = hasOwn(self, key)
