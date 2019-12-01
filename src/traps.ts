@@ -6,22 +6,6 @@ import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
 
-function setProperty(self: object, key: any, value: any) {
-  const exists = hasOwn(self, key)
-  const oldValue = self[key]
-  self[key] = value
-  return exists
-    ? value === oldValue || emitReplace(self, key, value, oldValue)
-    : emitAdd(self, key, value)
-}
-
-function deleteProperty(self: object, key: any) {
-  if (!hasOwn(self, key)) return true
-  const oldValue = self[key]
-  delete self[key]
-  return emitRemove(self, key, oldValue)
-}
-
 const ObjectTraps: ProxyHandler<object> = {
   has: (self, key) => (
     // TODO: Avoid observing "replace" events here.
@@ -286,4 +270,20 @@ export const traps = {
   Array: ArrayTraps,
   Map: MapTraps,
   Set: SetTraps,
+}
+
+function setProperty(self: object, key: any, value: any) {
+  const exists = hasOwn(self, key)
+  const oldValue = self[key]
+  self[key] = value
+  return exists
+    ? value === oldValue || emitReplace(self, key, value, oldValue)
+    : emitAdd(self, key, value)
+}
+
+function deleteProperty(self: object, key: any) {
+  if (!hasOwn(self, key)) return true
+  const oldValue = self[key]
+  delete self[key]
+  return emitRemove(self, key, oldValue)
 }
