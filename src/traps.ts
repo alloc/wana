@@ -6,38 +6,6 @@ import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
 
-const ObjectTraps: ProxyHandler<object> = {
-  has: (self, key) => (
-    // TODO: Avoid observing "replace" events here.
-    observe(self, key), Reflect.has(self, key)
-  ),
-  get(self, key) {
-    if (key === $$) return self
-    if (key !== $O) {
-      const desc = getDescriptor(self, key)
-      const get = desc && desc.get
-      if (get) {
-        return get.call(self[$O].proxy)
-      }
-      // Observe unknown keys and own keys only.
-      if (!desc || hasOwn(self, key)) {
-        observe(self, key)
-      }
-    }
-    return self[key]
-  },
-  set(self, key, value) {
-    const desc = getDescriptor(self, key)
-    return desc && desc.get
-      ? desc.set
-        ? (desc.set.call(self[$O].proxy, value), true)
-        : false
-      : setProperty(self, key, value)
-  },
-  deleteProperty,
-  preventExtensions: nope,
-}
-
 const ArrayOverrides: any = {
   ...ArrayIterators,
   concat(...args: any[]) {
@@ -219,6 +187,38 @@ const SetOverrides: any = {
       emitReplace(self, SIZE, 0, oldSize)
     }
   },
+}
+
+const ObjectTraps: ProxyHandler<object> = {
+  has: (self, key) => (
+    // TODO: Avoid observing "replace" events here.
+    observe(self, key), Reflect.has(self, key)
+  ),
+  get(self, key) {
+    if (key === $$) return self
+    if (key !== $O) {
+      const desc = getDescriptor(self, key)
+      const get = desc && desc.get
+      if (get) {
+        return get.call(self[$O].proxy)
+      }
+      // Observe unknown keys and own keys only.
+      if (!desc || hasOwn(self, key)) {
+        observe(self, key)
+      }
+    }
+    return self[key]
+  },
+  set(self, key, value) {
+    const desc = getDescriptor(self, key)
+    return desc && desc.get
+      ? desc.set
+        ? (desc.set.call(self[$O].proxy, value), true)
+        : false
+      : setProperty(self, key, value)
+  },
+  deleteProperty,
+  preventExtensions: nope,
 }
 
 const ArrayTraps: ProxyHandler<any[]> = {
