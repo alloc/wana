@@ -6,6 +6,8 @@
 
 - Even though `Array`, `Set`, and `Map` instances are objects, their properties are *not* observable (except the special `length` and `size` properties)
 
+- The `Array`, `Set`, and `Map` classes should never be sub-classed
+
 ## `Change` events
 
 - The `target` property is always the original object, instead of its observable proxy
