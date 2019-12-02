@@ -1,5 +1,5 @@
 import is from '@alloc/is'
-import { Change, ObservedValue, Observer, ObserverTarget } from './observable'
+import { Change, ObservedSlot, Observer, ObserverTarget } from './observable'
 import { $O } from './symbols'
 
 type WatchedState = ObserverTarget & {
@@ -13,7 +13,7 @@ export function watch(root: object, onChange: (change: Change) => void) {
 
 /** An observer of deep changes */
 export class Watcher extends Observer {
-  observed = new Set<ObservedValue>()
+  observed = new Set<ObservedSlot>()
   counts = new Map<object, number>()
 
   constructor(readonly root: object, onChange: (change: Change) => void) {

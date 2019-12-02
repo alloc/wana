@@ -3,7 +3,7 @@ import { batch } from './batch'
 import { rethrowError } from './common'
 import { addDebugAction, getDebug } from './debug'
 import { global } from './global'
-import { Change, ObservedValue, Observer } from './observable'
+import { Change, ObservedSlot, Observer } from './observable'
 import { $O } from './symbols'
 
 /** Run an effect when its tracked values change. */
@@ -143,7 +143,7 @@ export class Auto {
 }
 
 export class AutoObserver extends Observer {
-  observed = new Set<ObservedValue>()
+  observed = new Set<ObservedSlot>()
   constructor(readonly effect: Function) {
     super()
   }

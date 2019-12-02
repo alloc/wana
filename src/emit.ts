@@ -1,11 +1,11 @@
 import is from '@alloc/is'
-import { Change, Observable, ObservedValue } from './observable'
+import { Change, Observable, ObservedSlot } from './observable'
 import { $O, SIZE } from './symbols'
 
 const { get } = Map.prototype
 
 function onChange(observable: Observable, key: any, change: Change) {
-  const observers: ObservedValue = get.call(observable, key)
+  const observers: ObservedSlot = get.call(observable, key)
   if (observers) {
     // Increase the nonce even if no observers exist, because there
     // might be a pending observer (like a "withAuto" component).

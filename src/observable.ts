@@ -12,7 +12,7 @@ export type ObserverTarget = object & { [$O]?: Observable }
 export type ObservedKey = any
 
 /** An observer set with metadata about what's being observed */
-export class ObservedValue extends Set<ChangeObserver> {
+export class ObservedSlot extends Set<ChangeObserver> {
   nonce = 1
   constructor(readonly owner: Observable, readonly key: ObservedKey) {
     super()
@@ -34,7 +34,7 @@ export const canMakeObservable = (value: unknown): boolean =>
 /** Glorified event emitter */
 export class Observable<T extends object = any> extends Map<
   ObservedKey,
-  ObservedValue
+  ObservedSlot
 > {
   readonly proxy: T | undefined
   nonce = 1
@@ -51,10 +51,10 @@ export class Observable<T extends object = any> extends Map<
     }
   }
 
-  get(key: ObservedKey): ObservedValue {
+  get(key: ObservedKey): ObservedSlot {
     let observers = super.get(key)
     if (!observers) {
-      observers = new ObservedValue(this, key)
+      observers = new ObservedSlot(this, key)
       this.set(key, observers)
     }
     return observers
@@ -74,7 +74,7 @@ export interface ChangeObserver extends Disposable {
 }
 
 export abstract class Observer implements Disposable {
-  observed!: ReadonlySet<ObservedValue>
+  observed!: ReadonlySet<ObservedSlot>
   onChange: ((change: Change) => void) | null = null
 
   /** The current nonce of our observed values combined */
