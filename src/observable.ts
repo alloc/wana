@@ -2,8 +2,8 @@ import is from '@alloc/is'
 import { isDev } from '@alloc/is-dev'
 import { Disposable } from './common'
 import { setDebug } from './debug'
+import { createProxy } from './proxy'
 import { $O, SIZE } from './symbols'
-import { createProxy } from './traps'
 
 /** Mutable state with an associated observable */
 export type ObservedState = object & { [$O]?: Observable }
