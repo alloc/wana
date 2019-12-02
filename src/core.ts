@@ -4,13 +4,7 @@ export { auto, Auto } from './auto'
 export { when } from './when'
 export { watch, Watcher } from './watch'
 export { Derived } from './derive'
-export {
-  Observable,
-  Observer,
-  ObserverTarget,
-  Change,
-  ChangeObserver,
-} from './observable'
+export { Change, ChangeObserver, Observer } from './observable'
 
 // Escape hatches
 export { no } from './no'
@@ -23,3 +17,4 @@ export * from './debug'
 export { $O, $$ } from './symbols'
 export { global } from './global'
 export { flushSync } from './batch'
+export { Observable, ObserverTarget } from './observable'
