@@ -5,20 +5,6 @@ import { setDebug } from './debug'
 import { createProxy } from './proxy'
 import { $O } from './symbols'
 
-/** Mutable state with an associated observable */
-export type ObserverTarget = object & { [$O]?: Observable }
-
-/** Any value acting as an object key */
-export type ObservedKey = any
-
-/** An observer set with metadata about what's being observed */
-export class ObservedSlot extends Set<ChangeObserver> {
-  nonce = 1
-  constructor(readonly owner: Observable, readonly key: ObservedKey) {
-    super()
-  }
-}
-
 /** Return true if `value` could be made observable or is already observable */
 export const canMakeObservable = (value: unknown): boolean =>
   is.object(value) &&
@@ -30,6 +16,28 @@ export const canMakeObservable = (value: unknown): boolean =>
   !is.asyncFunction(value) &&
   !is.weakMap(value) &&
   !is.weakSet(value)
+
+/** A function that can subscribe to observable objects. */
+export abstract class Observer implements Disposable {
+  observed!: ReadonlySet<ObservedSlot>
+  onChange: ((change: Change) => void) | null = null
+
+  /** The current nonce of our observed values combined */
+  get nonce() {
+    let nonce = 0
+    this.observed.forEach(observable => {
+      nonce += observable.nonce
+    })
+    return nonce
+  }
+
+  dispose() {
+    if (this.onChange) {
+      this.onChange = null
+      this.observed.forEach(value => value.delete(this))
+    }
+  }
+}
 
 /** @internal */
 export class Observable<T extends object = any> extends Map<
@@ -61,6 +69,20 @@ export class Observable<T extends object = any> extends Map<
   }
 }
 
+/** Mutable state with an associated observable */
+export type ObserverTarget = object & { [$O]?: Observable }
+
+/** Any value acting as an object key */
+export type ObservedKey = any
+
+/** An observer set with metadata about what's being observed */
+export class ObservedSlot extends Set<ChangeObserver> {
+  nonce = 1
+  constructor(readonly owner: Observable, readonly key: ObservedKey) {
+    super()
+  }
+}
+
 /** An observed mutation of an observable object. */
 export interface Change<T = any> {
   op: 'add' | 'replace' | 'remove' | 'splice' | 'clear'
@@ -73,26 +95,4 @@ export interface Change<T = any> {
 /** The most basic observer of changes. */
 export interface ChangeObserver extends Disposable {
   onChange: ((change: Change) => void) | null
-}
-
-/** A function that can subscribe to observable objects. */
-export abstract class Observer implements Disposable {
-  observed!: ReadonlySet<ObservedSlot>
-  onChange: ((change: Change) => void) | null = null
-
-  /** The current nonce of our observed values combined */
-  get nonce() {
-    let nonce = 0
-    this.observed.forEach(observable => {
-      nonce += observable.nonce
-    })
-    return nonce
-  }
-
-  dispose() {
-    if (this.onChange) {
-      this.onChange = null
-      this.observed.forEach(value => value.delete(this))
-    }
-  }
 }
