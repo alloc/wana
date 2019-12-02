@@ -13,13 +13,12 @@ import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
 
-export function createProxy(source: any) {
-  return is.map(source)
+export const createProxy = (source: any) =>
+  is.map(source)
     ? new ObservableMap(source)
     : is.set(source)
     ? new ObservableSet(source)
     : new Proxy(source, is.array(source) ? ArrayTraps : ObjectTraps)
-}
 
 const ArrayOverrides: any = {
   ...ArrayIterators,
