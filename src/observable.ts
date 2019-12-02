@@ -3,7 +3,7 @@ import { isDev } from '@alloc/is-dev'
 import { Disposable } from './common'
 import { setDebug } from './debug'
 import { $O, SIZE } from './symbols'
-import { traps } from './traps'
+import { createProxy } from './traps'
 
 /** Mutable state with an associated observable */
 export type ObservedState = object & { [$O]?: Observable }
@@ -47,10 +47,7 @@ export class Observable<T extends object = any> extends Map<
       })
     }
     if (source) {
-      this.proxy = new Proxy(
-        source,
-        traps[source.constructor.name] || traps.Object
-      )
+      this.proxy = createProxy(source)
     }
   }
 

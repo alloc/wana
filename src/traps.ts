@@ -1,10 +1,25 @@
 import is from '@alloc/is'
-import { emptyArray, flop, getDescriptor, hasOwn, nope } from './common'
+import {
+  emptyArray,
+  flop,
+  getDescriptor,
+  hasOwn,
+  nope,
+  setHidden,
+} from './common'
 import { emitAdd, emitClear, emitRemove, emitReplace, emitSplice } from './emit'
 import { global, observe } from './global'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
+
+export function createProxy(source: any) {
+  return is.map(source)
+    ? new ObservableMap(source)
+    : is.set(source)
+    ? new ObservableSet(source)
+    : new Proxy(source, is.array(source) ? ArrayTraps : ObjectTraps)
+}
 
 const ArrayOverrides: any = {
   ...ArrayIterators,
@@ -100,95 +115,6 @@ const ArrayOverrides: any = {
   },
 }
 
-const MapOverrides: any = {
-  ...MapIterators,
-  has(key: any) {
-    const self: Map<any, any> = this[$$]
-    // TODO: Avoid observing "replace" events here.
-    observe(self, key)
-    return self.has(key)
-  },
-  get(key: any) {
-    const self: Map<any, any> = this[$$]
-    observe(self, key)
-    return self.get(key)
-  },
-  set(key: any, value: any) {
-    const self: Map<any, any> = this[$$]
-    const exists = self.has(key)
-    const oldValue = exists ? self.get(key) : void 0
-    if (!exists || value !== oldValue) {
-      self.set(key, value)
-      if (exists) {
-        emitReplace(self, key, value, oldValue)
-      } else {
-        const oldSize = self.size
-        emitAdd(self, key, value)
-        emitReplace(self, SIZE, oldSize + 1, oldSize)
-      }
-    }
-    return this
-  },
-  delete(key: any) {
-    const self: Map<any, any> = this[$$]
-    const oldSize = self.size
-    const oldValue = self.get(key)
-    return (
-      self.delete(key) &&
-      emitRemove(self, key, oldValue) &&
-      emitReplace(self, SIZE, oldSize - 1, oldSize)
-    )
-  },
-  clear() {
-    const self: Map<any, any> = this[$$]
-    const oldSize = self.size
-    if (oldSize) {
-      const oldValues = new Map(self)
-      self.clear()
-      emitClear(self, oldValues)
-      emitReplace(self, SIZE, 0, oldSize)
-    }
-  },
-}
-
-const SetOverrides: any = {
-  ...SetIterators,
-  has(value: any) {
-    const self: Set<any> = this[$$]
-    observe(self, SIZE)
-    return self.has(value)
-  },
-  add(value: any) {
-    const self: Set<any> = this[$$]
-    const oldSize = self.size
-    self.add(value)
-    if (oldSize !== self.size) {
-      emitAdd(self, void 0, value)
-      emitReplace(self, SIZE, oldSize + 1, oldSize)
-    }
-    return this
-  },
-  delete(value: any) {
-    const self: Set<any> = this[$$]
-    const oldSize = self.size
-    return (
-      self.delete(value) &&
-      emitRemove(self, void 0, value) &&
-      emitReplace(self, SIZE, oldSize - 1, oldSize)
-    )
-  },
-  clear() {
-    const self: Set<any> = this[$$]
-    const oldSize = self.size
-    if (oldSize) {
-      const oldValues = new Set(self)
-      self.clear()
-      emitClear(self, oldValues)
-      emitReplace(self, SIZE, 0, oldSize)
-    }
-  },
-}
-
 const ObjectTraps: ProxyHandler<object> = {
   has: (self, key) => (
     // TODO: Avoid observing "replace" events here.
@@ -223,7 +149,12 @@ const ObjectTraps: ProxyHandler<object> = {
 
 const ArrayTraps: ProxyHandler<any[]> = {
   has: ObjectTraps.has,
-  get: withOverrides(ArrayOverrides, 'length'),
+  get: (self: any, key: keyof any) =>
+    key == $$
+      ? self
+      : (global.observe &&
+          (key == 'length' ? observe(self, SIZE) : ArrayOverrides[key])) ||
+        self[key],
   set(self, key, value) {
     if (key === 'length') {
       const oldLength = self.length
@@ -248,19 +179,126 @@ const ArrayTraps: ProxyHandler<any[]> = {
   preventExtensions: nope,
 }
 
-const MapTraps: ProxyHandler<any> = {
-  get: withOverrides(MapOverrides, 'size'),
+class ObservableMap<K, V> extends Map<K, V> {
+  [$$]!: Map<K, V>
+
+  constructor(source: Map<K, V>) {
+    super()
+    setHidden(this, $$, source)
+  }
+
+  get size() {
+    observe(this[$$], SIZE)
+    return this[$$].size
+  }
+
+  has(key: K) {
+    // TODO: Avoid observing "replace" events here.
+    observe(this[$$], key)
+    return this[$$].has(key)
+  }
+
+  get(key: K) {
+    observe(this[$$], key)
+    return this[$$].get(key)
+  }
+
+  set(key: K, value: V) {
+    const exists = this[$$].has(key)
+    const oldValue = exists ? this[$$].get(key) : void 0
+    if (!exists || value !== oldValue) {
+      this[$$].set(key, value)
+      if (exists) {
+        emitReplace(this[$$], key, value, oldValue)
+      } else {
+        const oldSize = this[$$].size
+        emitAdd(this[$$], key, value)
+        emitReplace(this[$$], SIZE, oldSize + 1, oldSize)
+      }
+    }
+    return this
+  }
+
+  delete(key: K) {
+    const oldSize = this[$$].size
+    const oldValue = this[$$].get(key)
+    return (
+      this[$$].delete(key) &&
+      emitRemove(this[$$], key, oldValue) &&
+      emitReplace(this[$$], SIZE, oldSize - 1, oldSize)
+    )
+  }
+
+  clear() {
+    const oldSize = this[$$].size
+    if (oldSize) {
+      const oldValues = new Map(this[$$])
+      this[$$].clear()
+      emitClear(this[$$], oldValues)
+      emitReplace(this[$$], SIZE, 0, oldSize)
+    }
+  }
 }
 
-const SetTraps: ProxyHandler<any> = {
-  get: withOverrides(SetOverrides, 'size'),
+class ObservableSet<T> extends Set<T> {
+  [$$]!: Set<T>
+
+  constructor(source: Set<T>) {
+    super()
+    setHidden(this, $$, source)
+  }
+
+  get size() {
+    observe(this, SIZE)
+    return this[$$].size
+  }
+
+  has(value: T) {
+    observe(this[$$], SIZE)
+    return this[$$].has(value)
+  }
+
+  add(value: T) {
+    const oldSize = this[$$].size
+    this[$$].add(value)
+    if (oldSize !== this[$$].size) {
+      emitAdd(this[$$], void 0, value)
+      emitReplace(this[$$], SIZE, oldSize + 1, oldSize)
+    }
+    return this
+  }
+
+  delete(value: T) {
+    const oldSize = this[$$].size
+    return (
+      this[$$].delete(value) &&
+      emitRemove(this[$$], void 0, value) &&
+      emitReplace(this[$$], SIZE, oldSize - 1, oldSize)
+    )
+  }
+
+  clear() {
+    const oldSize = this[$$].size
+    if (oldSize) {
+      const oldValues = new Set(this[$$])
+      this[$$].clear()
+      emitClear(this[$$], oldValues)
+      emitReplace(this[$$], SIZE, 0, oldSize)
+    }
+  }
 }
 
-export const traps = {
-  Object: ObjectTraps,
-  Array: ArrayTraps,
-  Map: MapTraps,
-  Set: SetTraps,
+defineMethods(ObservableMap, MapIterators)
+defineMethods(ObservableSet, SetIterators)
+
+function defineMethods(Class: any, overrides: { [key: string]: any }) {
+  Object.defineProperties(
+    Class.prototype,
+    Object.keys(overrides).reduce((props, key) => {
+      props[key] = { value: overrides[key] }
+      return props
+    }, {})
+  )
 }
 
 function setProperty(self: object, key: any, value: any) {
@@ -277,14 +315,4 @@ function deleteProperty(self: object, key: any) {
   const oldValue = self[key]
   delete self[key]
   return emitRemove(self, key, oldValue)
-}
-
-// All collection types have an observable size and a bunch of method overrides.
-function withOverrides(overrides: any, sizeKey: string) {
-  return (self: any, key: keyof any) =>
-    key === $$
-      ? self
-      : (global.observe &&
-          (key === sizeKey && observe(self, SIZE), overrides[key])) ||
-        self[key]
 }
