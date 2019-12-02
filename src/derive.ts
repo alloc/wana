@@ -1,5 +1,6 @@
 import { Auto } from './auto'
 import { Disposable, setHidden } from './common'
+import { emitClear } from './emit'
 import { observe } from './global'
 import { noto } from './noto'
 import { Observable } from './observable'
@@ -24,11 +25,7 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
   // For observing others
   const auto = new Auto({
     onDirty() {
-      observable.emit({
-        op: 'clear',
-        target: derived,
-        oldValue: memo,
-      })
+      emitClear(derived, memo)
       memo = undefined
     },
   })

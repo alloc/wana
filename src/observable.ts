@@ -3,7 +3,7 @@ import { isDev } from '@alloc/is-dev'
 import { Disposable } from './common'
 import { setDebug } from './debug'
 import { createProxy } from './proxy'
-import { $O, SIZE } from './symbols'
+import { $O } from './symbols'
 
 /** Mutable state with an associated observable */
 export type ObservedState = object & { [$O]?: Observable }
@@ -52,42 +52,12 @@ export class Observable<T extends object = any> extends Map<
   }
 
   get(key: ObservedKey): ObservedValue {
-    let observers = super.get(key)!
+    let observers = super.get(key)
     if (!observers) {
       observers = new ObservedValue(this, key)
       this.set(key, observers)
     }
     return observers
-  }
-
-  emit(change: Change) {
-    if (change.op !== 'clear') {
-      this._notify(change.key, change)
-    } else if (is.map(change.oldValue)) {
-      change.oldValue.forEach((_, key) => this._notify(key, change))
-    }
-    if (change.key !== SIZE) {
-      this.nonce++
-      this._notify($O, change)
-    }
-  }
-
-  private _notify(key: any, change: Change) {
-    const observers = super.get(key)
-    if (observers) {
-      // Increase the nonce even if no observers exist, because there
-      // might be a pending observer (like a "withAuto" component).
-      observers.nonce++
-
-      if (observers.size) {
-        // Clone the "observers" in case they get mutated by an effect.
-        for (const observer of Array.from(observers)) {
-          if (observer.onChange) {
-            observer.onChange(change)
-          }
-        }
-      }
-    }
   }
 }
 
