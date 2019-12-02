@@ -186,6 +186,10 @@ class ObservableMap<K, V> extends Map<K, V> {
     setHidden(this, $$, source)
   }
 
+  get [$O]() {
+    return this[$$][$O]
+  }
+
   get size() {
     observe(this[$$], SIZE)
     return this[$$].size
@@ -245,6 +249,10 @@ class ObservableSet<T> extends Set<T> {
   constructor(source: Set<T>) {
     super()
     setHidden(this, $$, source)
+  }
+
+  get [$O]() {
+    return this[$$][$O]
   }
 
   get size() {
