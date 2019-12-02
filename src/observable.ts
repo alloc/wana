@@ -31,7 +31,7 @@ export const canMakeObservable = (value: unknown): boolean =>
   !is.weakMap(value) &&
   !is.weakSet(value)
 
-/** Glorified event emitter */
+/** @internal */
 export class Observable<T extends object = any> extends Map<
   ObservedKey,
   ObservedSlot
@@ -61,6 +61,7 @@ export class Observable<T extends object = any> extends Map<
   }
 }
 
+/** An observed mutation of an observable object. */
 export interface Change<T = any> {
   op: 'add' | 'replace' | 'remove' | 'splice' | 'clear'
   target: object
@@ -69,10 +70,12 @@ export interface Change<T = any> {
   oldValue?: T
 }
 
+/** The most basic observer of changes. */
 export interface ChangeObserver extends Disposable {
   onChange: ((change: Change) => void) | null
 }
 
+/** A function that can subscribe to observable objects. */
 export abstract class Observer implements Disposable {
   observed!: ReadonlySet<ObservedSlot>
   onChange: ((change: Change) => void) | null = null
