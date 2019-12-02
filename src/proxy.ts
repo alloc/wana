@@ -21,7 +21,6 @@ export const createProxy = (source: any) =>
     : new Proxy(source, is.array(source) ? ArrayTraps : ObjectTraps)
 
 const ArrayOverrides: any = {
-  ...ArrayIterators,
   concat(...args: any[]) {
     const self: any[] = this[$$]
     observe(self, $O)
@@ -148,12 +147,18 @@ const ObjectTraps: ProxyHandler<object> = {
 
 const ArrayTraps: ProxyHandler<any[]> = {
   has: ObjectTraps.has,
-  get: (self: any, key: keyof any) =>
-    key == $$
-      ? self
-      : (global.observe &&
-          (key == 'length' ? observe(self, SIZE) : ArrayOverrides[key])) ||
-        self[key],
+  get(self: any, key: keyof any) {
+    if (key === $$) return self
+    if (key === 'length') {
+      observe(self, SIZE)
+      return self[key]
+    }
+    return (
+      ArrayOverrides[key] ||
+      (global.observe && ArrayIterators[key]) ||
+      self[key]
+    )
+  },
   set(self, key, value) {
     if (key === 'length') {
       const oldLength = self.length
