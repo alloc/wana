@@ -6,7 +6,7 @@ import { createProxy } from './proxy'
 import { $O } from './symbols'
 
 /** Mutable state with an associated observable */
-export type ObservedState = object & { [$O]?: Observable }
+export type ObserverTarget = object & { [$O]?: Observable }
 
 /** Any value acting as an object key */
 export type ObservedKey = any

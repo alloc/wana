@@ -7,7 +7,7 @@ export { Derived } from './derive'
 export {
   Observable,
   Observer,
-  ObservedState,
+  ObserverTarget,
   Change,
   ChangeObserver,
 } from './observable'

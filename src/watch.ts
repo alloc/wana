@@ -1,8 +1,8 @@
 import is from '@alloc/is'
-import { Change, ObservedState, ObservedValue, Observer } from './observable'
+import { Change, ObservedValue, Observer, ObserverTarget } from './observable'
 import { $O } from './symbols'
 
-type WatchedState = ObservedState & {
+type WatchedState = ObserverTarget & {
   forEach?: (cb: (value: any, key: any, ctx: any) => void) => void
 }
 

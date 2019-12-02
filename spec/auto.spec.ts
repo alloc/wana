@@ -1,5 +1,5 @@
 import { auto, Auto, o } from '../src'
-import { ObservedState } from '../src/observable'
+import { ObserverTarget } from '../src/observable'
 import { $O } from '../src/symbols'
 
 let runs: number
@@ -479,6 +479,6 @@ function withEffect(effect: () => void) {
   prevRuns = runs = 0
 }
 
-export function getObservers(state: ObservedState, key: string | typeof $O) {
+export function getObservers(state: ObserverTarget, key: string | typeof $O) {
   return state[$O]!.get(key)
 }
