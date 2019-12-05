@@ -2,4 +2,5 @@ dist/
 coverage/
 node_modules/
 packages/debug/
+packages/babel-plugin-add-react-displayname/
 .rpt2_cache/
