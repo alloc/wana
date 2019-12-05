@@ -1,0 +1,8 @@
+{
+  "repos": {
+    "packages/debug": {
+      "url": "git@github.com:alloc/wana-debug.git",
+      "head": "master"
+    }
+  }
+}

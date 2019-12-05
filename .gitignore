@@ -1,4 +1,5 @@
 dist/
 coverage/
 node_modules/
+packages/debug/
 .rpt2_cache/
