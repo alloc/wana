@@ -11,6 +11,7 @@ import { $$ } from './symbols'
  */
 export function no<T>(value: T): T {
   if (is.function_(value)) {
+    if (value[$$]) return value
     const fn = (...args: any[]) => noto(() => value(...args))
     setHidden(fn, 'name', value.name)
     setHidden(fn, $$, value)
