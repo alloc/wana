@@ -3,6 +3,7 @@ import { batch } from './batch'
 import { rethrowError } from './common'
 import { addDebugAction, getDebug } from './debug'
 import { global } from './global'
+import { noto } from './noto'
 import { Change, ObservedSlot, Observer } from './observable'
 import { $O } from './symbols'
 
@@ -49,7 +50,8 @@ export class Auto {
 
   /** Rerun the last effect and commit its observer */
   rerun() {
-    return this.observer && this.run(this.observer.effect)
+    const { observer } = this
+    return observer && noto(() => this.run(observer.effect))
   }
 
   /**
