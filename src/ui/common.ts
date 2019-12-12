@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
 
@@ -7,7 +7,17 @@ export const RenderAction = ({ useAction }: { useAction: () => void }) => (
   useAction(), null
 )
 
-export const useForceUpdate = () => useReducer(() => ({}), {})[1] as () => void
+/** Return a function that re-renders this component, if still mounted */
+export const useForceUpdate = () => {
+  const update = useState<any>(0)[1]
+  const unmounted = useRef(false)
+  useDispose(() => (unmounted.current = true))
+  return () => {
+    if (!unmounted.current) {
+      update({})
+    }
+  }
+}
 
 export const useConstant = <T>(create: () => T) => useMemo(create, emptyArray)
 
