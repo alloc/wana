@@ -1,3 +1,4 @@
+import is from '@alloc/is'
 import { Auto } from './auto'
 import { Disposable, setHidden } from './common'
 import { emitClear } from './emit'
@@ -8,8 +9,13 @@ import { $O } from './symbols'
 
 /**
  * An observable getter that memoizes its result.
+ *
+ * The memoization is observed, so when a dependency changes,
+ * the memoized value is released and observers are notified.
  */
 export interface Derived<T = any> extends Disposable {
+  /** The underlying observable */
+  [$O]?: Observable
   /** Get the current value */
   (): T
 }
@@ -45,4 +51,13 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
 
   setHidden(derived, $O, observable)
   return derived
+}
+
+export function isDerived(value: unknown): value is Derived {
+  return is.function_(value) && !!value[$O]
+}
+
+/** Convert all `Derived<T>` property types into `T` */
+export type WithDerived<T extends object> = {
+  [P in keyof T]: T[P] extends Derived<infer U> ? U : T[P]
 }
