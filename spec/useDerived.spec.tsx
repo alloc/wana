@@ -81,7 +81,7 @@ describe('useDerived', () => {
     render(<Test />)
 
     // The "derived" is observed by "useAuto"
-    expect(derived[$O].get($O).size).toBe(1)
+    expect(derived[$O]!.get($O).size).toBe(1)
 
     // The "state" is observed by "derived"
     expect(state[$O].get('a').size).toBe(1)
