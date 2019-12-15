@@ -1,4 +1,4 @@
-import is from '@alloc/is'
+import { is } from '@alloc/is'
 import { Change, Observable, ObservedSlot } from './observable'
 import { $O, SIZE } from './symbols'
 

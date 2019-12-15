@@ -23,7 +23,7 @@
     "react": ">=16.9"
   },
   "dependencies": {
-    "@alloc/is": "^1.2.0",
+    "@alloc/is": "^2.0.0",
     "@alloc/is-dev": "^1.1.0",
     "@babel/runtime": "^7.5.5",
     "queue-microtask": "^1.1.2",

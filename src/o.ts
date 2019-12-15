@@ -1,4 +1,4 @@
-import is from '@alloc/is'
+import { is } from '@alloc/is'
 import { getOwnDescriptor, setHidden } from './common'
 import { derive, Derived } from './derive'
 import { canMakeObservable, Observable, ObserverTarget } from './observable'
@@ -19,7 +19,7 @@ export function o(value: ObserverTarget) {
     if (!canMakeObservable(value)) {
       return value
     }
-    if (is.function_(value)) {
+    if (is.function(value)) {
       return derive(auto => auto.run(value))
     }
     if (Object.isFrozen(value)) {

@@ -1,4 +1,4 @@
-import is from '@alloc/is'
+import { is } from '@alloc/is'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
 import { Derived, isDerived, WithDerived } from '../derive'
@@ -32,11 +32,11 @@ export function useO<T>(state: T, deps?: readonly any[]): T
 /** @internal */
 export function useO(state: any, deps?: readonly any[]) {
   const result = useMemo<any>(
-    () => (is.function_(state) ? noto(state) : convertDerived(state)),
+    () => (is.function(state) ? noto(state) : convertDerived(state)),
     deps || emptyArray
   )
   // Beware: Never switch between observable getter and observable object.
-  return is.function_(result) ? useDerived(result, [result]) : o(result)
+  return is.function(result) ? useDerived(result, [result]) : o(result)
 }
 
 // Convert observable getters into property getters.

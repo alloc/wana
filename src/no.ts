@@ -1,4 +1,4 @@
-import is from '@alloc/is'
+import { is } from '@alloc/is'
 import { setHidden } from './common'
 import { noto } from './noto'
 import { $$ } from './symbols'
@@ -10,7 +10,7 @@ import { $$ } from './symbols'
  * Read `no` as "non-observable", essentially the reverse of the `o` function.
  */
 export function no<T>(value: T): T {
-  if (is.function_(value)) {
+  if (is.function(value)) {
     if (value[$$]) return value
     const fn = (...args: any[]) => noto(() => value(...args))
     setHidden(fn, 'name', value.name)

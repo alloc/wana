@@ -1,4 +1,4 @@
-import is from '@alloc/is'
+import { is } from '@alloc/is'
 import { isDev } from '@alloc/is-dev'
 import { Disposable } from './common'
 import { setDebug } from './debug'
@@ -10,7 +10,7 @@ export const canMakeObservable = (value: unknown): boolean =>
   is.object(value) &&
   !is.date(value) &&
   !is.regExp(value) &&
-  !is.nativePromise(value) &&
+  !is.promise(value) &&
   !is.generator(value) &&
   !is.generatorFunction(value) &&
   !is.asyncFunction(value) &&

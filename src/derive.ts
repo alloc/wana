@@ -1,4 +1,4 @@
-import is from '@alloc/is'
+import { is } from '@alloc/is'
 import { Auto } from './auto'
 import { Disposable, setHidden } from './common'
 import { emitClear } from './emit'
@@ -54,7 +54,7 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
 }
 
 export function isDerived(value: unknown): value is Derived {
-  return is.function_(value) && !!value[$O]
+  return is.function(value) && !!value[$O]
 }
 
 /** Convert all `Derived<T>` property types into `T` */
