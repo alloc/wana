@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react'
-import queueMicrotask from 'queue-microtask'
+import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
 import { o, withAuto } from '../src'
 
@@ -33,7 +33,7 @@ describe('withAuto', () => {
       state.count++
       expectRenders([])
 
-      await tick()
+      await flushMicroTasks()
       expectRenders([Parent, Child])
     })
 
@@ -60,7 +60,7 @@ describe('withAuto', () => {
       state.count++
       expectRenders([])
 
-      await tick()
+      await flushMicroTasks()
       expectRenders([Parent, Child])
     })
   })
@@ -78,15 +78,3 @@ describe('withAuto', () => {
     it.todo('works when observing the size of a Set object')
   })
 })
-
-function tick(ticks = 1) {
-  return new Promise(resolve => {
-    const next = () =>
-      queueMicrotask(() => {
-        if (--ticks) next()
-        else resolve()
-      })
-
-    next()
-  })
-}

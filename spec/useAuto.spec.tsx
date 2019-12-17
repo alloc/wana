@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react'
+import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
 import { o, useAuto, withAuto } from '../src'
 
@@ -49,7 +50,7 @@ describe('useAuto', () => {
 
     state.count++
     state.count++
-    await Promise.resolve()
+    await flushMicroTasks()
     expect(calls).toEqual([0, 2])
   })
   it.todo('stops observing on dismount')
@@ -68,7 +69,7 @@ describe('useAuto', () => {
 
     state.count++
     state.count++
-    await Promise.resolve()
+    await flushMicroTasks()
     expect(calls).toEqual([0, 2])
   })
 })

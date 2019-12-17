@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react'
+import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
 import { $O, o, useAuto, useDerived } from '../src'
 import { Derived } from '../src/derive'
@@ -62,7 +63,7 @@ describe('useDerived', () => {
 
     state.a = 2
     state.b = 2
-    await Promise.resolve()
+    await flushMicroTasks()
     expect(spy).toHaveBeenCalledTimes(2)
 
     expect.assertions(4)
