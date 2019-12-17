@@ -65,21 +65,22 @@ function flushAsync() {
  * Useful when testing `wana`-integrated components/hooks.
  */
 export function flushSync() {
-  // Run any pending reactions.
-  let runs = 0
-  for (const { auto, observer } of runQueue) {
-    if (++runs > 1e5) {
-      break // Limit to 100k runs per flush.
-    }
-    if (auto.observer == observer) {
-      auto.rerun()
-    }
-  }
-
-  // Postpone remaining runs until next flush.
-  runQueue = runQueue.slice(runs)
-
   global.batchedUpdates(() => {
+    // Run any pending reactions.
+    let runs = 0
+    for (const { auto, observer } of runQueue) {
+      if (++runs > 1e5) {
+        break // Limit to 100k runs per flush.
+      }
+      if (auto.observer == observer) {
+        auto.rerun()
+      }
+    }
+
+    // Postpone remaining runs until next flush.
+    runQueue = runQueue.slice(runs)
+
+    // Stale components always rerender after reactions.
     renderQueue.forEach(({ effect }) => effect())
     renderQueue.length = 0
   })
