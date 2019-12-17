@@ -170,7 +170,7 @@ auto(() => {
   increment(1) // Nothing will be observed in here.
 })
 
-state.count == 2 // => true
+assert(state.count == 2)
 ```
 
 Pass anything else and you get the same value back.
@@ -286,20 +286,40 @@ user.name = 'Yoko Ono' // logs "Yoko Ono"
 
 ### useO ⚛️
 
-The `useO` hook is very similar to `React.useMemo`, except the returned object is observable, the deps array is optional, and you can pass an object or a function (instead of only a function).
+The `useO` hook memoizes an observable object. When a non-observable object is passed, it gets wrapped with the `o` function.
 
 ```ts
 import { useO } from 'wana'
 
-const MyView = props => {
-  const state = useO({ a: 1 })
-  const state = useO(new Set(), deps)
-  const state = useO(() => [1, 2, 3])
-  const state = useO(() => new Map(), deps)
-}
+const state = useO({ a: 1 })
+
+assert(state.a == 1)
 ```
 
-When you pass a function that returns a function, you get an observable getter, which is disposed of automatically on dismount. You can even pass a deps array as the last argument if you want to mix non-observable props into the memoized value.
+When a `deps` array is passed, its values are compared with the previous render. If any values have changed, the memoized state is replaced with whatever object you passed in. When no `deps` array is passed, the state is never replaced.
+
+```ts
+const state = useO(new Set(), deps)
+```
+
+When a function is passed, the function is called as if it were passed to `React.useMemo`, which means it will only be called again if any values in the `deps` array are changed.
+
+```ts
+const state = useO(() => [1, 2, 3], deps)
+
+assert(state[0] == 1)
+```
+
+When a plain object is passed, its properties are scanned for "observable getters" (created with `useDerived` or `o`). In this case, these functions are converted into actual getters.
+
+```ts
+const state = useO({
+  a: 1,
+  b: useDerived(() => state.a + 1)
+})
+
+assert(state.b == 2)
+```
 
 &nbsp;
 
