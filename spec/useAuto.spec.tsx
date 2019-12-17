@@ -19,6 +19,7 @@ describe('useAuto', () => {
 
     expect(calls).toEqual([0, 0])
   })
+
   it('can be given a deps array', () => {
     const calls: any[] = []
     const state = o({ count: 0 })
@@ -35,6 +36,7 @@ describe('useAuto', () => {
 
     expect(calls).toEqual([0, 0])
   })
+
   it('reacts to observable changes', async () => {
     const calls: any[] = []
     const state = o({ count: 0 })
@@ -53,7 +55,9 @@ describe('useAuto', () => {
     await flushMicroTasks()
     expect(calls).toEqual([0, 2])
   })
+
   it.todo('stops observing on dismount')
+
   it('can be used inside a "withAuto" component', async () => {
     const calls: any[] = []
     const state = o({ count: 0 })
@@ -71,5 +75,26 @@ describe('useAuto', () => {
     state.count++
     await flushMicroTasks()
     expect(calls).toEqual([0, 2])
+  })
+
+  it('can set component state inside "withAuto"', async () => {
+    const calls: any[] = []
+
+    const state = o({ count: 0 })
+    const Test = withAuto(() => {
+      const [count, setCount] = React.useState(state.count)
+      useAuto(() => {
+        setCount(state.count)
+      }, [])
+      calls.push(count)
+      return null
+    })
+
+    render(<Test />)
+    expect(calls).toEqual([0])
+
+    state.count++
+    await flushMicroTasks()
+    expect(calls).toEqual([0, 1])
   })
 })
