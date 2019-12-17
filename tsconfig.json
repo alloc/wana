@@ -3,7 +3,7 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2018", "dom"],
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "plugins": [{ "name": "typescript-snapshots-plugin" }],
