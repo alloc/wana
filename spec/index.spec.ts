@@ -27,12 +27,14 @@ describe('o()', () => {
     expect(o(obj)).toBe(o(obj))
     expect(o(obj)).not.toBe(obj)
   })
+
   it('is a no-op for primitives', () => {
     expect(o(0)).toBe(0)
     expect(o(true)).toBe(true)
     expect(o(null)).toBe(null)
     expect(o(undefined)).toBe(undefined)
   })
+
   it('is a no-op for certain built-in types', () => {
     const date = new Date()
     expect(o(date)).toBe(date)
@@ -58,10 +60,12 @@ describe('o()', () => {
     const weakSet = new WeakSet()
     expect(o(weakSet)).toBe(weakSet)
   })
+
   it('is a no-op for frozen objects', () => {
     const obj = Object.freeze({})
     expect(o(obj)).toBe(obj)
   })
+
   describe('property getter', () => {
     it('is called with the proxy as its "this" value', () => {
       class Foo {
@@ -73,6 +77,7 @@ describe('o()', () => {
       expect(foo.foo).toBe(foo)
     })
   })
+
   describe('property setter', () => {
     it('is called with the proxy as its "this" value', () => {
       class Foo {
@@ -89,6 +94,7 @@ describe('o()', () => {
       expect(foo.this).toBe(foo)
     })
   })
+
   // Note: See "useDerived.spec.tsx" for more tests.
   describe('observable function', () => {
     it.todo('wraps a normal function')
@@ -103,6 +109,7 @@ describe('o(Object)', () => {
       expect(obj.a).toBe(1)
       expect(obj.b).toBeUndefined()
     })
+
     it('tracks known keys', () => {
       const obj: any = o({ a: 1 })
       track(() => obj.a)
@@ -116,6 +123,7 @@ describe('o(Object)', () => {
       expect(observed[1][0]).toBe(obj[$$])
       expect(observed[1][1]).toBe('b')
     })
+
     it('tracks unknown keys', () => {
       const obj: any = o({})
       track(() => obj.a)
@@ -123,6 +131,7 @@ describe('o(Object)', () => {
       expect(observed[0][0]).toBe(obj[$$])
       expect(observed[0][1]).toBe('a')
     })
+
     it('ignores inherited keys', () => {
       const obj: any = o({})
       track(() => obj.toString)
@@ -130,6 +139,7 @@ describe('o(Object)', () => {
       expect(observed).toEqual([])
     })
   })
+
   describe('[[Set]]', () => {
     it('emits for new keys', () => {
       const obj: any = o({})
@@ -138,6 +148,7 @@ describe('o(Object)', () => {
       expect(calls[0][0].target).toBe(obj[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('emits for new values', () => {
       const obj: any = o({ a: 0 })
       const calls = watch(obj)
@@ -145,6 +156,7 @@ describe('o(Object)', () => {
       expect(calls[0][0].target).toBe(obj[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('skips emit for old values', () => {
       const obj: any = o({ a: 1 })
       const calls = watch(obj)
@@ -152,6 +164,7 @@ describe('o(Object)', () => {
       expect(calls).toEqual([])
     })
   })
+
   describe('[[Delete]]', () => {
     it('emits for known keys', () => {
       const obj: any = o({ a: 1 })
@@ -160,6 +173,7 @@ describe('o(Object)', () => {
       expect(calls[0][0].target).toBe(obj[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('skips emit for unknown keys', () => {
       const obj: any = o({})
       const calls = watch(obj)
@@ -167,6 +181,7 @@ describe('o(Object)', () => {
       expect(calls).toEqual([])
     })
   })
+
   describe('"in" operator', () => {
     it.todo('tracks known keys')
     it.todo('tracks unknown keys')
@@ -179,6 +194,7 @@ describe('o(Array)', () => {
     const arr = o([])
     expect(Array.isArray(arr)).toBeTruthy()
   })
+
   describe('[[Get]]', () => {
     it('ignores known indices', () => {
       const arr = o([0])
@@ -189,12 +205,14 @@ describe('o(Array)', () => {
       track(() => arr[2])
       expect(observed).toEqual([])
     })
+
     it('ignores unknown indices', () => {
       const arr = o([])
       track(() => arr[0])
       expect(observed).toEqual([])
     })
   })
+
   describe('[[Set]]', () => {
     it('emits for new indices', () => {
       const arr: any[] = o([])
@@ -203,6 +221,7 @@ describe('o(Array)', () => {
       expect(calls[0][0].target).toBe(arr[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('emits for new values', () => {
       const arr: any[] = o([0])
       const calls = watch(arr)
@@ -210,6 +229,7 @@ describe('o(Array)', () => {
       expect(calls[0][0].target).toBe(arr[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('skips emit for old values', () => {
       const arr: any[] = o([1])
       const calls = watch(arr)
@@ -217,6 +237,7 @@ describe('o(Array)', () => {
       expect(calls).toEqual([])
     })
   })
+
   describe('.length', () => {
     it('can be tracked', () => {
       const arr = o([])
@@ -225,6 +246,7 @@ describe('o(Array)', () => {
       expect(observed[0][0]).toBe(arr[$$])
       expect(observed[0][1]).toBe(SIZE)
     })
+
     it('emits when set directly', () => {
       const arr = o([])
       const calls = watch(arr)
@@ -238,6 +260,7 @@ describe('o(Array)', () => {
       expect(calls[0][0].target).toBe(arr[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('skips emit when set to same length', () => {
       const arr = o([1])
       const calls = watch(arr)
@@ -245,6 +268,7 @@ describe('o(Array)', () => {
       expect(calls).toEqual([])
     })
   })
+
   describe('.splice()', () => {
     describe('removal', () => {
       it('can splice the start', () => {
@@ -253,12 +277,14 @@ describe('o(Array)', () => {
         arr.splice(0, 2)
         expect(calls).toMatchSnapshot()
       })
+
       it('can splice the middle', () => {
         const arr = o([1, 2, 3, 4])
         const calls = watch(arr)
         arr.splice(1, 2)
         expect(calls).toMatchSnapshot()
       })
+
       it('can splice the end', () => {
         const arr = o([1, 2, 3])
         const calls = watch(arr)
@@ -266,6 +292,7 @@ describe('o(Array)', () => {
         expect(calls).toMatchSnapshot()
       })
     })
+
     describe('insertion', () => {
       it('can insert at the start', () => {
         const arr = o([1])
@@ -273,12 +300,14 @@ describe('o(Array)', () => {
         arr.splice(0, 0, 3, 2)
         expect(calls).toMatchSnapshot()
       })
+
       it('can insert into the middle', () => {
         const arr = o([1, 2])
         const calls = watch(arr)
         arr.splice(1, 0, 0, 0)
         expect(calls).toMatchSnapshot()
       })
+
       it('can insert at the end', () => {
         const arr = o([1])
         const calls = watch(arr)
@@ -286,6 +315,7 @@ describe('o(Array)', () => {
         expect(calls).toMatchSnapshot()
       })
     })
+
     describe('remove count', () => {
       it('removes nothing when zero or less', () => {
         const arr = o([1, 2])
@@ -294,6 +324,7 @@ describe('o(Array)', () => {
         arr.splice(1, -1)
         expect(calls).toEqual([])
       })
+
       it('can exceed the last index', () => {
         const arr = o([1, 2])
         const calls = watch(arr)
@@ -301,6 +332,7 @@ describe('o(Array)', () => {
         expect(calls).toMatchSnapshot()
       })
     })
+
     describe('negative start index', () => {
       it('starts from the end', () => {
         const arr = o([1, 2, 3])
@@ -308,6 +340,7 @@ describe('o(Array)', () => {
         arr.splice(-2, 1)
         expect(calls).toMatchSnapshot()
       })
+
       it('stops at zero', () => {
         const arr = o([1, 2])
         const calls = watch(arr)
@@ -315,6 +348,7 @@ describe('o(Array)', () => {
         expect(calls).toMatchSnapshot()
       })
     })
+
     it('can insert and remove at the same time', () => {
       const arr = o([1, 2, 3])
       const calls = watch(arr)
@@ -330,6 +364,7 @@ describe('o(Array)', () => {
       arr.splice(1, 1, 0)
       expect(calls).toMatchSnapshot()
     })
+
     // To avoid extra logic for rare edge cases:
     it('emits even if values did not change', () => {
       const arr = o([1, 2, 3])
@@ -338,27 +373,33 @@ describe('o(Array)', () => {
       expect(calls).toMatchSnapshot()
     })
   })
+
   describe('.push()', () => {
     it.todo('emits any changes')
     it.todo('skips emit when nothing is added')
   })
+
   describe('.unshift()', () => {
     it.todo('emits any changes')
     it.todo('skips emit when nothing is added')
   })
+
   describe('.shift()', () => {
     it.todo('emits any changes')
     it.todo('skips emit if empty')
   })
+
   describe('.pop()', () => {
     it.todo('emits any changes')
     it.todo('skips emit if empty')
   })
+
   describe('.reverse()', () => {
     it.todo('emits any changes')
     // To avoid extra logic for rare edge cases:
     it.todo('emits even if nothing changes')
   })
+
   describe('.sort()', () => {
     it.todo('emits any changes')
     // To avoid extra logic for rare edge cases:
@@ -370,6 +411,7 @@ describe('o(Set)', () => {
   describe('.has()', () => {
     it.todo('observes the entire set')
   })
+
   describe('.add()', () => {
     it('emits for new values', () => {
       const set = o(new Set())
@@ -378,6 +420,7 @@ describe('o(Set)', () => {
       expect(calls[0][0].target).toBe(set[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('skips emit for old values', () => {
       const set = o(new Set([1]))
       const calls = watch(set)
@@ -385,6 +428,7 @@ describe('o(Set)', () => {
       expect(calls).toEqual([])
     })
   })
+
   describe('.delete()', () => {
     it('emits for known values', () => {
       const set = o(new Set([1]))
@@ -393,6 +437,7 @@ describe('o(Set)', () => {
       expect(calls[0][0].target).toBe(set[$$])
       expect(calls).toMatchSnapshot()
     })
+
     it('skips emit for unknown values', () => {
       const set = o(new Set())
       const calls = watch(set)
@@ -400,6 +445,7 @@ describe('o(Set)', () => {
       expect(calls).toEqual([])
     })
   })
+
   describe('.clear()', () => {
     it('emits only when not empty', () => {
       const set = o(new Set())
@@ -420,20 +466,24 @@ describe('o(Map)', () => {
     it.todo('tracks known keys')
     it.todo('tracks unknown keys')
   })
+
   describe('.get()', () => {
     it.todo('works with no observer')
     it.todo('tracks known keys')
     it.todo('tracks unknown keys')
   })
+
   describe('.set()', () => {
     it.todo('emits for known keys')
     it.todo('emits for unknown keys')
     it.todo('skips emit if unchanged')
   })
+
   describe('.delete()', () => {
     it.todo('emits for known keys')
     it.todo('skips emit for unknown keys')
   })
+
   describe('.clear()', () => {
     it.todo('emits only when not empty')
   })
@@ -450,6 +500,7 @@ describe('no()', () => {
     orig = new Map()
     expect(no(o(orig))).toBe(orig)
   })
+
   it('wraps functions to disable implicit observation for future calls', () => {
     const state = o({ a: 1 })
     const increment = no(() => ++state.a)

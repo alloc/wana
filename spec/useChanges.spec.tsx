@@ -19,6 +19,7 @@ describe('useChanges', () => {
 
     expect(spy.mock.calls).toMatchSnapshot()
   })
+
   it('uses the callback from the last render by default', () => {
     const state = o({ count: 0 })
     const Test = (props: { onChange: (change: Change) => void }) => {
@@ -36,6 +37,7 @@ describe('useChanges', () => {
     expect(spy1).not.toHaveBeenCalled()
     expect(spy2).toHaveBeenCalled()
   })
+
   it('has a deps argument for conditionally replacing the callback', () => {
     const state = o({ count: 0 })
     const Test = (props: { onChange: (change: Change) => void }) => {
@@ -53,6 +55,7 @@ describe('useChanges', () => {
     expect(spy1).toHaveBeenCalled()
     expect(spy2).not.toHaveBeenCalled()
   })
+
   it('stops observing on dismount', () => {
     const state = o({ count: 0 })
     const Test = () => {
@@ -66,7 +69,10 @@ describe('useChanges', () => {
     elem.unmount()
     expect(state[$O].get($O).size).toBe(0)
   })
+
   it.todo('works with arrays')
+
   it.todo('works with Set objects')
+
   it.todo('works with Map objects')
 })

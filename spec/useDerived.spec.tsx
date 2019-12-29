@@ -24,6 +24,7 @@ describe('useDerived', () => {
     elem.rerender(<Test />)
     expect(spy).toHaveBeenCalledTimes(2)
   })
+
   it('can be called outside the render phase', () => {
     const state = o({ a: 1, b: 1 })
     const spy = jest.fn(() => state.a + state.b)
@@ -47,6 +48,7 @@ describe('useDerived', () => {
 
     expect.assertions(6)
   })
+
   it('lets you observe its memoization', async () => {
     const state = o({ a: 1, b: 1 })
     const spy = jest.fn(() => state.a + state.b)
@@ -68,6 +70,7 @@ describe('useDerived', () => {
 
     expect.assertions(4)
   })
+
   it('does not let you observe its computation', () => {
     const state = o({ a: 1, b: 1 })
     const spy = jest.fn(() => state.a + state.b)
@@ -88,6 +91,7 @@ describe('useDerived', () => {
     expect(state[$O].get('a').size).toBe(1)
     expect(state[$O].get('b').size).toBe(1)
   })
+
   it('has a deps argument for using props in the computation', () => {
     let prevN: number | undefined
     let prevFn: Function | undefined
@@ -111,7 +115,9 @@ describe('useDerived', () => {
 
     expect.assertions(6)
   })
+
   it.todo('avoids subscribing to observed values until commit phase')
+
   it('stops observing on dismount', () => {
     const state = o({ a: 1 })
     const Test = () => {
