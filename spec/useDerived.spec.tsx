@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { $O, o, useAuto, useDerived } from '../src'
+import { $O, noto, o, useAuto, useDerived } from '../src'
 import { Derived } from '../src/derive'
 
 describe('useDerived', () => {
@@ -55,7 +55,7 @@ describe('useDerived', () => {
     const Test = () => {
       const fn = useDerived(spy)
       useAuto(() => {
-        expect(fn()).toBe(state.a + state.b)
+        expect(fn()).toBe(noto(() => state.a + state.b))
       })
       return null
     }
