@@ -1,7 +1,8 @@
 import { is } from '@alloc/is'
 import { Auto } from './auto'
+import { batch } from './batch'
 import { Disposable, setHidden } from './common'
-import { emitClear } from './emit'
+import { emitReplace } from './emit'
 import { observe } from './global'
 import { noto } from './noto'
 import { Observable } from './observable'
@@ -31,8 +32,9 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
   // For observing others
   const auto = new Auto({
     onDirty() {
-      emitClear(derived, memo)
-      memo = undefined
+      if (observable.has($O)) {
+        batch.run(derived)
+      }
     },
   })
 
@@ -40,7 +42,11 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
   const derived: Derived<T> = () => {
     if (auto.dirty) {
       noto(() => {
+        const oldMemo = memo
         memo = run(auto)
+        if (memo !== oldMemo) {
+          emitReplace(derived, null, memo, oldMemo)
+        }
       })
     }
     observe(derived, $O)

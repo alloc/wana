@@ -116,6 +116,85 @@ describe('useDerived', () => {
     expect.assertions(6)
   })
 
+  // Note: In this context, "eager" means "in the next microtask"
+  it('eagerly computes its value when observed', async () => {
+    const state = o({ a: 1, b: 1 })
+    const spy = jest.fn(() => state.a + state.b)
+
+    // In the 1st "useAuto" call, no memoized value will exist,
+    // because the first derivation is always lazy.
+    let beforeRun = () => expect(spy).toHaveBeenCalledTimes(0)
+
+    const Test = () => {
+      const run = useDerived(spy)
+      useAuto(() => {
+        beforeRun()
+        run()
+      })
+      return null
+    }
+
+    render(<Test />)
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    state.a = 2
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    // In the 2nd "useAuto" call, the memoized value should be
+    // updated *before* an explicit "run" call.
+    beforeRun = () => expect(spy).toHaveBeenCalledTimes(2)
+    await flushMicroTasks()
+  })
+
+  // Note: In this context, "lazy" means "when called next"
+  it('lazily computes its value when not observed', async () => {
+    const state = o({ a: 1, b: 1 })
+    const spy = jest.fn(() => state.a + state.b)
+
+    let fn!: () => number
+    const Test = () => {
+      fn = useDerived(spy)
+      return null
+    }
+
+    render(<Test />)
+    expect(spy).toHaveBeenCalledTimes(0)
+
+    expect(fn()).toBe(2)
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    state.a = 2
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    await flushMicroTasks()
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    expect(fn()).toBe(3)
+    expect(spy).toHaveBeenCalledTimes(2)
+  })
+
+  it('only tells observers if its memoized value has changed', async () => {
+    const state = o({ a: 1, b: 1 })
+
+    let fn: () => number
+    const spy = jest.fn(() => void fn())
+
+    const Test = () => {
+      fn = useDerived(() => state.a + state.b)
+      useAuto(spy)
+      return null
+    }
+
+    render(<Test />)
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    state.a += state.b
+    state.b = 0
+
+    await flushMicroTasks()
+    expect(spy).toHaveBeenCalledTimes(1)
+  })
+
   it.todo('avoids subscribing to observed values until commit phase')
 
   it('stops observing on dismount', () => {

@@ -59,6 +59,13 @@ export class Observable<T extends object = any> extends Map<
     }
   }
 
+  /** Return true if at least one observer exists for the given key. */
+  has(key: ObservedKey) {
+    const observers = super.get(key)
+    return !!(observers && observers.size)
+  }
+
+  /** Return a `Set` of observers for the given key, even if not observed. */
   get(key: ObservedKey): ObservedSlot {
     let observers = super.get(key)
     if (!observers) {
