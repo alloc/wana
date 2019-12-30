@@ -1,12 +1,10 @@
 import queueMicrotask from 'queue-microtask'
-import { Auto, AutoObserver } from './auto'
 import { global } from './global'
 
 type Effect = () => void
 
 /** The FIFO queue of async `Auto` updates */
-let runQueue: RunConfig[] = []
-type RunConfig = { auto: Auto; observer: AutoObserver }
+let runQueue: Effect[] = []
 
 /** The queue of `withAuto` updates. Sorted by deepest child last */
 const renderQueue: RenderConfig[] = []
@@ -14,14 +12,14 @@ type RenderConfig = { depth: number; effect: Effect }
 
 export interface Batch {
   /**
-   * The "run" step only works with async `Auto` objects.
-   * The `rerun` method is called on the next microtask.
+   * Run the given effect in the next microtask, immediately before
+   * rendering any components with stale observations.
    *
-   * While running, derived `Auto` objects may be added to the batch.
-   * The "run" step lasts until all derived `Auto` objects are updated,
-   * or the run count exceeds 100k.
+   * To avoid infinite loops, the "run" step only runs the first 100,000
+   * effects in any given microtask. Any remaining effects are scheduled
+   * for the next microtask.
    */
-  run(auto: Auto): void
+  run(effect: Effect): void
   /**
    * The "render" step is sorted by `withAuto` depth.
    * After the "run" step, all `Auto` objects are updated, and `withAuto`
@@ -31,9 +29,8 @@ export interface Batch {
 }
 
 export const batch: Batch = {
-  run(auto) {
-    // Cache the "observer" so we can abort extraneous runs.
-    runQueue.push({ auto, observer: auto.observer! })
+  run(effect) {
+    runQueue.push(effect)
     flushAsync()
   },
   render(depth, effect) {
@@ -68,13 +65,9 @@ export function flushSync() {
   global.batchedUpdates(() => {
     // Run any pending reactions.
     let runs = 0
-    for (const { auto, observer } of runQueue) {
-      if (++runs > 1e5) {
-        break // Limit to 100k runs per flush.
-      }
-      if (auto.observer == observer) {
-        auto.rerun()
-      }
+    for (const effect of runQueue) {
+      if (++runs > 1e5) break
+      effect()
     }
 
     // Postpone remaining runs until next flush.

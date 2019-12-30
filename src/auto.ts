@@ -139,7 +139,12 @@ export class Auto {
     if (this.sync) {
       this.rerun()
     } else {
-      batch.run(this)
+      const { observer } = this
+      batch.run(() => {
+        if (observer == this.observer) {
+          this.rerun()
+        }
+      })
     }
   }
 }
