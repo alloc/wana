@@ -49,7 +49,7 @@ describe('useDerived', () => {
     expect.assertions(6)
   })
 
-  it('lets you observe its memoization', async () => {
+  it('can be observed', async () => {
     const state = o({ a: 1, b: 1 })
     const spy = jest.fn(() => state.a + state.b)
     const Test = () => {
@@ -71,7 +71,7 @@ describe('useDerived', () => {
     expect.assertions(4)
   })
 
-  it('does not let you observe its computation', () => {
+  it('prevents callers from observing its dependencies', () => {
     const state = o({ a: 1, b: 1 })
     const spy = jest.fn(() => state.a + state.b)
 
