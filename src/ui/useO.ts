@@ -32,7 +32,7 @@ export function useO<T>(state: T, deps?: readonly any[]): T
 /** @internal */
 export function useO(state: any, deps?: readonly any[]) {
   const result = useMemo<any>(
-    () => (is.function(state) ? noto(state) : convertDerived(state)),
+    () => (convertDerived(is.function(state) ? noto(state) : state)),
     deps || emptyArray
   )
   // Beware: Never switch between observable getter and observable object.
