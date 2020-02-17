@@ -1,6 +1,7 @@
 import { useLayoutEffect } from 'react-layout-effect'
 import { useMemoOne as useMemo } from 'use-memo-one'
 import { emptyArray } from '../common'
+import { no } from '../no'
 import { Change, ChangeObserver, ObserverTarget } from '../observable'
 import { $O } from '../symbols'
 
@@ -21,7 +22,7 @@ export function useChanges(
   )
 
   useLayoutEffect(() => {
-    observer.onChange = onChange
+    observer.onChange = no(onChange)
   }, deps)
 
   useLayoutEffect(() => {
