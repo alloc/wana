@@ -1,5 +1,5 @@
 import { isDev } from '@alloc/is-dev'
-import React, { forwardRef, ReactNode, Ref, RefAttributes } from 'react'
+import React, { forwardRef, ReactElement, Ref, RefAttributes } from 'react'
 import { useLayoutEffect } from 'react-layout-effect'
 import { Auto, AutoObserver } from '../auto'
 import { batch } from '../batch'
@@ -9,12 +9,12 @@ import { AutoContext, useAutoContext } from './AutoContext'
 import { RenderAction, useConstant, useDispose, useForceUpdate } from './common'
 
 interface Component<P = any> {
-  (props: P): ReactNode
+  (props: P): ReactElement | null
   displayName?: string
 }
 
 interface RefForwardingComponent<T = any, P = any> {
-  (props: P, ref: Ref<T>): ReactNode
+  (props: P, ref: Ref<T>): ReactElement | null
   displayName?: string
 }
 
@@ -23,7 +23,7 @@ type RefForwardingAuto<T extends RefForwardingComponent> = T &
     props: T extends RefForwardingComponent<infer U, infer P>
       ? P & RefAttributes<U>
       : never
-  ) => ReactNode)
+  ) => ReactElement | null)
 
 /** Wrap a component with magic observable tracking */
 export function withAuto<T extends Component>(render: T): T
