@@ -1,4 +1,5 @@
 import { is } from '@alloc/is'
+import { global } from './global'
 import { Change, Observable, ObservedSlot } from './observable'
 import { $O, SIZE } from './symbols'
 
@@ -19,6 +20,9 @@ function onChange(observable: Observable, key: any, change: Change) {
         }
       }
     }
+  }
+  if (global.onChange) {
+    global.onChange(change)
   }
 }
 
