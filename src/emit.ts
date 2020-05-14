@@ -21,9 +21,6 @@ function onChange(observable: Observable, key: any, change: Change) {
       }
     }
   }
-  if (global.onChange) {
-    global.onChange(change)
-  }
 }
 
 function emit(target: object, change: Change) {
@@ -43,6 +40,10 @@ function emit(target: object, change: Change) {
   if (change.key !== SIZE) {
     observable.nonce++
     onChange(observable, $O, change)
+  }
+
+  if (global.onChange) {
+    global.onChange(change)
   }
 
   return true
