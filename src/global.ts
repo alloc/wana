@@ -1,5 +1,5 @@
 import { Auto } from './auto'
-import { ObserverTarget } from './observable'
+import { Change, ObserverTarget } from './observable'
 
 type OnRender = (
   auto: Auto,
@@ -16,13 +16,16 @@ interface Global {
   auto: Auto | null
   /** For debugging re-renders. Only called in development. */
   onRender: OnRender | null
+  /** For spying on every change event. */
+  onChange: ((change: Change) => void) | null
 }
 
 export const global: Global = {
-  onRender: () => {},
   batchedUpdates: effect => effect(),
   observe: null,
   auto: null,
+  onRender: null,
+  onChange: null,
 }
 
 /** Tell the current observer to track the given object/key pair  */
