@@ -29,12 +29,17 @@ function onChange(observable: Observable, key: any, change: Change) {
 function emit(target: object, change: Change) {
   const observable = target[$O]
 
+  // The "clear" op never has a key.
   if (change.op !== 'clear') {
     onChange(observable, change.key, change)
-  } else if (is.map(change.oldValue)) {
+  }
+  // When a `Map` object is cleared, notify every key observer.
+  else if (is.map(change.oldValue)) {
     change.oldValue.forEach((_, key) => onChange(observable, key, change))
   }
 
+  // Size changes always come after a related change,
+  // so avoid notifying `$O` observers more than once.
   if (change.key !== SIZE) {
     observable.nonce++
     onChange(observable, $O, change)
