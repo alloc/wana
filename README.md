@@ -88,7 +88,7 @@ import { o, auto } from 'wana'
 const state = o({ count: 0 })
 
 const observer = auto(() => {
-  console.log(state.count % 2 ? 'even' : 'odd')
+  console.log(state.count % 2 ? 'odd' : 'even')
 }) // logs "even"
 
 state.count++ // logs "odd"
