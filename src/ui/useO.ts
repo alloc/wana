@@ -1,6 +1,6 @@
 import { is } from '@alloc/is'
 import { useMemoOne as useMemo } from 'use-memo-one'
-import { emptyArray } from '../common'
+import { emptyArray, getOwnDescriptor } from '../common'
 import { Derived, isDerived, WithDerived } from '../derive'
 import { noto } from '../noto'
 import { o } from '../o'
@@ -32,7 +32,7 @@ export function useO<T>(state: T, deps?: readonly any[]): T
 /** @internal */
 export function useO(state: any, deps?: readonly any[]) {
   const result = useMemo<any>(
-    () => (convertDerived(is.function(state) ? noto(state) : state)),
+    () => convertDerived(is.function(state) ? noto(state) : state),
     deps || emptyArray
   )
   // Beware: Never switch between observable getter and observable object.
@@ -44,7 +44,7 @@ export function useO(state: any, deps?: readonly any[]) {
 function convertDerived(state: any) {
   if (is.plainObject(state)) {
     for (const key in state) {
-      const desc = Object.getOwnPropertyDescriptor(state, key)!
+      const desc = getOwnDescriptor(state, key)!
       if (isDerived(desc.value) && desc.configurable) {
         Object.defineProperty(state, key, {
           get: desc.value,
