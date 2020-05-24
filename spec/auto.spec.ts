@@ -424,6 +424,33 @@ describe('auto()', () => {
       map.clear() // clear our value
       expectRuns(1)
     })
+    test('[Symbol.iterator]()', () => {
+      withEffect(() => {
+        for (const _entry of map) {
+          break
+        }
+      })
+
+      map.set(key, 1) // add a key
+      expectRuns(1)
+
+      map.set(key, 1) // set a key (no change)
+      expectRuns(0)
+
+      map.set(key, 2) // set a key
+      expectRuns(1)
+
+      map.delete(key) // delete a key
+      expectRuns(1)
+
+      expect(map.size).not.toBe(0)
+      map.clear() // clear all values
+      expectRuns(1)
+
+      expect(map.size).toBe(0)
+      map.clear() // clear when empty
+      expectRuns(0)
+    })
     test('.forEach()', () => {
       withEffect(() => map.forEach(() => {}))
 
