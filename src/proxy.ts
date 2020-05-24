@@ -304,13 +304,11 @@ defineMethods(ObservableMap, MapIterators)
 defineMethods(ObservableSet, SetIterators)
 
 function defineMethods(Class: any, overrides: { [key: string]: any }) {
-  Object.defineProperties(
-    Class.prototype,
-    Object.keys(overrides).reduce((props, key) => {
-      props[key] = { value: overrides[key] }
-      return props
-    }, {})
-  )
+  const props = {}
+  for (const key in overrides) {
+    props[key] = { value: overrides[key] }
+  }
+  Object.defineProperties(Class.prototype, props)
 }
 
 function setProperty(self: object, key: any, value: any) {
