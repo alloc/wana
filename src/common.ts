@@ -3,6 +3,8 @@ export interface Disposable {
   dispose: () => void
 }
 
+export type Falsy = false | null | undefined
+
 export const emptyArray: readonly any[] = Object.freeze([])
 
 export const setHidden = (obj: any, key: any, value: any) =>
