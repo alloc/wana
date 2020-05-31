@@ -2,7 +2,7 @@ import { isDev } from '@alloc/is-dev'
 import { batch } from './batch'
 import { rethrowError } from './common'
 import { addDebugAction, getDebug } from './debug'
-import { global } from './global'
+import { globals } from './globals'
 import { noto } from './noto'
 import { Change, ObservedSlot, Observer } from './observable'
 import { $O } from './symbols'
@@ -94,12 +94,12 @@ export class Auto {
    * the new observer is committed.
    */
   start(effect: Function) {
-    if (global.observe) {
+    if (globals.observe) {
       throw Error('Nested tracking is forbidden')
     }
     const observer = new AutoObserver(effect)
-    global.auto = this
-    global.observe = (target, key) => {
+    globals.auto = this
+    globals.observe = (target, key) => {
       observer.observed.add(target[$O]!.get(key))
     }
     return observer
@@ -110,8 +110,8 @@ export class Auto {
    * Stop observing and reset the `dirty` flag.
    */
   stop() {
-    if (global.auto == this) {
-      global.auto = global.observe = null
+    if (globals.auto == this) {
+      globals.auto = globals.observe = null
     }
     this.dirty = false
     return this

@@ -1,5 +1,5 @@
 import { no, o } from '../src'
-import { global } from '../src/global'
+import { globals } from '../src/globals'
 
 describe('no()', () => {
   it('returns the original object when given an observable proxy', () => {
@@ -13,7 +13,7 @@ describe('no()', () => {
     const obj = o({ a: 1 })
     const fn = jest.fn((inc = 0) => inc + obj.a)
     const wrap = no(fn)
-    const observe = (global.observe = jest.fn())
+    const observe = (globals.observe = jest.fn())
     expect(wrap(1)).toBe(2)
     expect(observe).not.toHaveBeenCalled()
     expect(fn).toHaveBeenCalled()

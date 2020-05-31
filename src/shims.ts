@@ -1,5 +1,5 @@
 import { setHidden } from './common'
-import { global, observe } from './global'
+import { globals, observe } from './globals'
 import { $$, $O } from './symbols'
 
 export const shims: Array<[Function, string[]]> = [
@@ -20,7 +20,7 @@ shims.forEach(([namespace, keys]) =>
     }
     setHidden(shim, 'name', fn.name)
     Object.defineProperty(namespace, key, {
-      get: () => (global.observe ? shim : fn),
+      get: () => (globals.observe ? shim : fn),
     })
   })
 )

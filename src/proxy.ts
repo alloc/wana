@@ -8,7 +8,7 @@ import {
   setHidden,
 } from './common'
 import { emitAdd, emitClear, emitRemove, emitReplace, emitSplice } from './emit'
-import { global, observe } from './global'
+import { globals, observe } from './globals'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
@@ -155,7 +155,7 @@ const ArrayTraps: ProxyHandler<any[]> = {
     }
     return (
       ArrayOverrides[key] ||
-      (global.observe && ArrayIterators[key]) ||
+      (globals.observe && ArrayIterators[key]) ||
       self[key]
     )
   },

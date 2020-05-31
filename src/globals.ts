@@ -20,7 +20,7 @@ interface Global {
   onChange: ((change: Change) => void) | null
 }
 
-export const global: Global = {
+export const globals: Global = {
   batchedUpdates: effect => effect(),
   observe: null,
   auto: null,
@@ -30,4 +30,4 @@ export const global: Global = {
 
 /** Tell the current observer to track the given object/key pair  */
 export const observe = (target: ObserverTarget, key: any) =>
-  !!global.observe && (global.observe(target, key), true)
+  !!globals.observe && (globals.observe(target, key), true)

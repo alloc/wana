@@ -1,4 +1,4 @@
-import { global } from './global'
+import { globals } from './globals'
 
 let nextDebugId = 1
 
@@ -12,7 +12,7 @@ interface DebugState {
 
 /** Get the `Auto` object for the current `withAuto` component being rendered. */
 export function getCurrentAuto() {
-  return global.auto
+  return globals.auto
 }
 
 /**

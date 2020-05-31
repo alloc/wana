@@ -1,5 +1,5 @@
 import { is } from '@alloc/is'
-import { global } from './global'
+import { globals } from './globals'
 import { Change, Observable, ObservedSlot } from './observable'
 import { $O, SIZE } from './symbols'
 
@@ -42,8 +42,8 @@ function emit(target: object, change: Change) {
     onChange(observable, $O, change)
   }
 
-  if (global.onChange) {
-    global.onChange(change)
+  if (globals.onChange) {
+    globals.onChange(change)
   }
 
   return true

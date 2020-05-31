@@ -1,14 +1,14 @@
-import { global } from './global'
+import { globals } from './globals'
 
 /** Run an effect without any observable tracking */
 export function noto<T>(effect: () => T): T {
-  const { auto, observe } = global
-  global.auto = null
-  global.observe = null
+  const { auto, observe } = globals
+  globals.auto = null
+  globals.observe = null
   try {
     return effect()
   } finally {
-    global.auto = auto
-    global.observe = observe
+    globals.auto = auto
+    globals.observe = observe
   }
 }

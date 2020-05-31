@@ -4,7 +4,7 @@ import { useLayoutEffect } from 'react-layout-effect'
 import { Auto, AutoObserver } from '../auto'
 import { batch } from '../batch'
 import { addDebugAction, getDebug, setDebug } from '../debug'
-import { global } from '../global'
+import { globals } from '../globals'
 import { AutoContext, useAutoContext } from './AutoContext'
 import { RenderAction, useConstant, useDispose, useForceUpdate } from './common'
 
@@ -115,8 +115,8 @@ function useAutoRender(component: React.FunctionComponent<any>) {
 
   if (isDev) {
     getDebug(auto).renders!++
-    if (global.onRender) {
-      global.onRender(auto, depth, component)
+    if (globals.onRender) {
+      globals.onRender(auto, depth, component)
     }
   }
 

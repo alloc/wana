@@ -15,6 +15,6 @@ export * from './debug'
 
 // Internals
 export { $O, $$ } from './symbols'
-export { global } from './global'
+export { globals } from './globals'
 export { flushSync } from './batch'
 export { Observable, ObserverTarget, ObservedSlot } from './observable'

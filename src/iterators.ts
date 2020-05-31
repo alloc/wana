@@ -1,4 +1,4 @@
-import { observe } from './global'
+import { observe } from './globals'
 import { $$, $O } from './symbols'
 
 // These methods observe everything.

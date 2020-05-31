@@ -1,5 +1,5 @@
 import queueMicrotask from 'queue-microtask'
-import { global } from './global'
+import { globals } from './globals'
 
 type Effect = () => void
 
@@ -62,7 +62,7 @@ function flushAsync() {
  * Useful when testing `wana`-integrated components/hooks.
  */
 export function flushSync() {
-  global.batchedUpdates(() => {
+  globals.batchedUpdates(() => {
     // Run any pending reactions.
     let runs = 0
     for (const effect of runQueue) {

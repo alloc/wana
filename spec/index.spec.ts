@@ -1,5 +1,5 @@
 import { no, o } from '../src'
-import { global } from '../src/global'
+import { globals } from '../src/globals'
 import { $$, $O, SIZE } from '../src/symbols'
 
 const observed: any[] = []
@@ -8,9 +8,9 @@ afterEach(() => {
 })
 
 const track = (effect: () => void) => {
-  global.observe = (target, key) => observed.push([target, key])
+  globals.observe = (target, key) => observed.push([target, key])
   effect()
-  global.observe = null
+  globals.observe = null
 }
 
 const watch = (obj: object) => {

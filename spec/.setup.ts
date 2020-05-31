@@ -2,9 +2,9 @@ import { act } from '@testing-library/react'
 import { unstable_batchedUpdates } from 'react-dom'
 import { Auto } from '../src/auto'
 import { batch } from '../src/batch'
-import { global } from '../src/global'
+import { globals } from '../src/globals'
 
-global.batchedUpdates = unstable_batchedUpdates
+globals.batchedUpdates = unstable_batchedUpdates
 
 const { render } = batch
 batch.render = (depth, effect) => {
