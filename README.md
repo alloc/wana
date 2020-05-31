@@ -282,6 +282,23 @@ const view = <MyView user={user} /> // logs "John Lennon"
 user.name = 'Yoko Ono' // logs "Yoko Ono"
 ```
 
+By passing two functions, the 1st function will be observed and the 2nd function will run whenever the 1st function's result is a new value. The 2nd function is **never** observed.
+
+```tsx
+// Usually, you will ignore the returned `Auto` instance, but it can be useful in some cases.
+const auto = useAuto(
+  // Derive a value from 1+ observables.
+  () => props.user.name,
+  // Run an effect when the derived value is changed.
+  name => {
+    console.log(name)
+  },
+  // Pass dependencies to avoid running on rerender.
+  // The memoized value is reset when a dependency changes.
+  [props.user]
+)
+```
+
 &nbsp;
 
 ### useO ⚛️
