@@ -9,7 +9,7 @@ import { $O } from './symbols'
 
 /** Run an effect when its tracked values change. */
 export function auto(effect: () => void, config?: AutoConfig) {
-  const auto = new Auto(config || {})
+  const auto = new Auto(config)
   auto.run(effect)
   return auto
 }
