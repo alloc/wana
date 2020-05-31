@@ -75,7 +75,7 @@ export function withAuto(render: any) {
     Object.defineProperty(component, 'displayName', {
       get: () => component.displayName,
     })
-    component = forwardRef(component)
+    component = forwardRef(component as any)
   }
   return component
 }
