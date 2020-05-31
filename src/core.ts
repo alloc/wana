@@ -1,6 +1,6 @@
 // Observation
 export { o } from './o'
-export { auto, Auto } from './auto'
+export { auto, Auto, AutoConfig } from './auto'
 export { when } from './when'
 export { watch, Watcher } from './watch'
 export { Derived } from './derive'
