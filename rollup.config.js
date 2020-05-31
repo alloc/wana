@@ -2,8 +2,8 @@ import path from 'path'
 
 import ts from 'rollup-plugin-typescript2'
 import dts from 'rollup-plugin-dts'
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
+import babel from '@rollup/plugin-babel'
+import resolve from '@rollup/plugin-node-resolve'
 
 const external = id => !id.startsWith('.')
 const extensions = ['.ts', '.tsx']
@@ -81,7 +81,7 @@ const getBabelOptions = ({ useESModules }, targets) => ({
   babelrc: false,
   exclude: '**/node_modules/**',
   extensions: ['ts'],
-  runtimeHelpers: true,
+  babelHelpers: 'runtime',
   comments: false,
   presets: ['@babel/preset-modules'],
   plugins: [
