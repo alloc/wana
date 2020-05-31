@@ -13,7 +13,7 @@ export function no<T>(value: T): T {
   if (is.function(value)) {
     if (value[$$]) return value
     const fn = function(this: any, ...args: any[]) {
-      return noto(value.bind(this, args))
+      return noto(value.bind(this, ...args))
     }
     setHidden(fn, 'name', value.name)
     setHidden(fn, $$, value)
