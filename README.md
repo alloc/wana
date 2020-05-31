@@ -156,6 +156,7 @@ obj.a = 2
 ```
 
 Pass a function to wrap it with a new function that disables implicit observation for each call.
+If the wrapped function is used as a method, it has its `this` value preserved.
 
 ```ts
 const state = o({
