@@ -1,6 +1,6 @@
 import { isDev } from '@alloc/is-dev'
 import { batch } from './batch'
-import { rethrowError } from './common'
+import { noop, rethrowError } from './common'
 import { addDebugAction, getDebug } from './debug'
 import { globals } from './globals'
 import { noto } from './noto'
@@ -21,6 +21,8 @@ export interface AutoConfig {
   onDirty?: Auto['onDirty']
   /** By default, errors are rethrown */
   onError?: Auto['onError']
+  /** Run an effect after being disposed */
+  onDispose?: Auto['onDispose']
 }
 
 export class Auto {
@@ -30,11 +32,13 @@ export class Auto {
   observer: AutoObserver | null = null
   onDirty: (this: Auto) => void
   onError: (this: Auto, error: Error) => void
+  onDispose: () => void
 
   constructor(config: AutoConfig = {}) {
     this.sync = !!config.sync
     this.onDirty = config.onDirty || this._onDirty
     this.onError = config.onError || rethrowError
+    this.onDispose = config.onDispose || noop
   }
 
   run<T extends Function>(compute: T) {
@@ -83,6 +87,8 @@ export class Auto {
       this.observer.dispose()
       // Cancel batched effects.
       this.observer = null
+      // Run any side effects.
+      this.onDispose()
     }
   }
 
