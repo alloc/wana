@@ -1,12 +1,18 @@
 import { isDev } from '@alloc/is-dev'
-import React, { forwardRef, ReactElement, Ref, RefAttributes } from 'react'
+import React, {
+  forwardRef,
+  ReactElement,
+  Ref,
+  RefAttributes,
+  useMemo,
+} from 'react'
 import { useLayoutEffect } from 'react-layout-effect'
 import { Auto, AutoObserver } from '../auto'
 import { batch } from '../batch'
 import { addDebugAction, getDebug, setDebug } from '../debug'
 import { globals } from '../globals'
 import { AutoContext, useAutoContext } from './AutoContext'
-import { RenderAction, useConstant, useDispose, useForceUpdate } from './common'
+import { RenderAction, useDispose, useForceUpdate } from './common'
 
 interface Component<P = any> {
   (props: P): ReactElement | null
@@ -84,7 +90,7 @@ function useAutoRender(component: React.FunctionComponent<any>) {
   const { depth } = useAutoContext()
 
   const forceUpdate = useForceUpdate()
-  const auto = useConstant(() => {
+  const auto = useMemo(() => {
     const auto = new Auto({
       onDirty() {
         if (isDev) {
@@ -111,7 +117,7 @@ function useAutoRender(component: React.FunctionComponent<any>) {
       })
     }
     return auto
-  })
+  }, [])
 
   if (isDev) {
     getDebug(auto).renders!++
