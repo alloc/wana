@@ -21,6 +21,8 @@ export interface AutoConfig {
   onDirty?: Auto['onDirty']
   /** By default, errors are rethrown */
   onError?: Auto['onError']
+  /** Run an effect after an `observer` is activated */
+  onCommit?: Auto['onCommit']
   /** Run an effect after being disposed */
   onDispose?: Auto['onDispose']
 }
@@ -32,12 +34,14 @@ export class Auto {
   observer: AutoObserver | null = null
   onDirty: (this: Auto) => void
   onError: (this: Auto, error: Error) => void
+  onCommit: (observer: AutoObserver) => void
   onDispose: () => void
 
   constructor(config: AutoConfig = {}) {
     this.sync = !!config.sync
     this.onDirty = config.onDirty || this._onDirty
     this.onError = config.onError || rethrowError
+    this.onCommit = config.onCommit || noop
     this.onDispose = config.onDispose || noop
   }
 
@@ -78,6 +82,7 @@ export class Auto {
     observer.onChange = this._onChange.bind(this)
     observer.observed.forEach(observable => observable.add(observer))
     this.observer = observer
+    this.onCommit(observer)
     return true
   }
 
