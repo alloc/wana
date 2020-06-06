@@ -1,17 +1,8 @@
 import { useMemo } from 'react'
 import { useLayoutEffect } from 'react-layout-effect'
-import { Auto, AutoObserver } from '../auto'
 import { emptyArray, Falsy } from '../common'
 import { derive, Derived } from '../derive'
-
-type State = {
-  auto?: Auto
-  observer?: AutoObserver
-  nonce?: number
-  mounted?: boolean
-}
-
-const getInitialState = (): State => ({})
+import { mountAuto } from '../mountAuto'
 
 /**
  * Create an observable getter that is managed by React.
@@ -34,38 +25,28 @@ export function useDerived<T>(
 ): Derived<T> | null
 
 export function useDerived<T>(compute: (() => T) | Falsy, deps = emptyArray) {
-  const state = useMemo(getInitialState, deps)
-  const derived = useMemo(
-    () =>
-      compute
-        ? derive(auto => {
-            const observer = auto.start(compute)
-            try {
-              var result = compute()
-            } finally {
-              auto.stop()
-            }
-            if (state.mounted) {
-              auto.commit(observer)
-            } else {
-              state.auto = auto
-              state.observer = observer
-              state.nonce = observer.nonce
-            }
-            return result
-          })
-        : null,
-    deps
-  )
+  const [derived, setState] = useMemo(() => {
+    if (!compute) {
+      return [null, null]
+    }
+    const derived = derive(auto => {
+      const observer = auto.start(compute)
+      try {
+        var result = compute()
+      } finally {
+        auto.stop()
+      }
+      setState({ observer })
+      return result
+    })
+    const setState = mountAuto(derived.auto)
+    return [derived, setState]
+  }, deps)
 
   useLayoutEffect(() => {
-    if (derived) {
-      const { auto, observer, nonce } = state
-      if (auto && !auto.commit(observer!, nonce)) {
-        auto.clear()
-      }
-      state.mounted = true
-      return derived.dispose
+    if (setState) {
+      setState({ mounted: true })
+      return () => setState({ mounted: false })
     }
   }, deps)
 
