@@ -17,6 +17,8 @@ import { $O } from './symbols'
 export interface Derived<T = any> extends Disposable {
   /** The underlying observable */
   [$O]?: Observable
+  /** The underlying observer */
+  auto: Auto
   /** Get the current value */
   (): T
 }
@@ -39,7 +41,7 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
   })
 
   // The observable getter
-  const derived: Derived<T> = () => {
+  const derived = () => {
     if (auto.dirty) {
       noto(() => {
         const oldMemo = memo
@@ -53,6 +55,7 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
     return memo!
   }
 
+  derived.auto = auto
   derived.dispose = () => auto.dispose()
 
   setHidden(derived, $O, observable)
