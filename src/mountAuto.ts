@@ -24,15 +24,15 @@ export function mountAuto(auto: Auto) {
       }
     } else {
       mounted = props.mounted!
-      if (!mounted) {
-        if (observer) {
+      if (observer) {
+        if (!mounted) {
           nonce = observer.nonce
+          auto.dispose()
         }
-        auto.dispose()
-      }
-      // Reuse the observer if no dependencies have changed.
-      else if (observer && !auto.commit(observer, nonce)) {
-        auto.clear()
+        // Reuse the observer if no dependencies have changed.
+        else if (!auto.commit(observer, nonce)) {
+          auto.clear()
+        }
       }
     }
   }
