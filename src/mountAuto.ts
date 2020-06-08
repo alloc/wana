@@ -25,7 +25,9 @@ export function mountAuto(auto: Auto) {
     } else {
       mounted = props.mounted!
       if (!mounted) {
-        nonce = observer.nonce
+        if (observer) {
+          nonce = observer.nonce
+        }
         auto.dispose()
       }
       // Reuse the observer if no dependencies have changed.
