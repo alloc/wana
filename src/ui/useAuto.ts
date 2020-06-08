@@ -1,6 +1,7 @@
 import { is } from '@alloc/is'
 import { useEffect } from 'react'
 import { Auto } from '../auto'
+import { globals } from '../globals'
 import { no } from '../no'
 import { useConstant, useDispose } from './common'
 import { useDerived } from './useDerived'
@@ -39,6 +40,12 @@ export function useAuto(
     deps = effectOrDeps as any
   }
 
-  useEffect(() => auto.run(effect), deps)
+  useEffect(
+    () =>
+      globals.batchedUpdates(() => {
+        auto.run(effect)
+      }),
+    deps
+  )
   return auto
 }
