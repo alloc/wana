@@ -3,5 +3,6 @@ vendor/
 coverage/
 node_modules/
 packages/debug/
+packages/test-utils/
 packages/babel-plugin-add-react-displayname/
 .rpt2_cache/

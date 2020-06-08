@@ -40,6 +40,7 @@
     "@types/jest": "^24.0.15",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.9.4",
+    "@wana/test-utils": "^0.1.1",
     "codecov": "^3.5.0",
     "concurrently": "^4.1.1",
     "flush-microtasks": "^1.0.1",

@@ -15,6 +15,7 @@ devDependencies:
   '@types/jest': 24.9.1
   '@types/react': 16.9.35
   '@types/react-dom': 16.9.8
+  '@wana/test-utils': 0.1.1_react@16.9.0
   codecov: 3.7.0
   concurrently: 4.1.2
   flush-microtasks: 1.0.1
@@ -661,6 +662,15 @@ packages:
     dev: true
     resolution:
       integrity: sha512-xrvhZ4DZewMDhoH1utLtOAwYQy60eYFoXeje30TzM3VOvQlBwQaEpKFq5m34k1wOw2AKIi2pwtiAjdmhvlBUzg==
+  /@wana/test-utils/0.1.1_react@16.9.0:
+    dependencies:
+      react: 16.9.0
+    dev: true
+    peerDependencies:
+      react: '*'
+      wana: '>=0.12'
+    resolution:
+      integrity: sha512-kY8KsFljNcCeT37eDthVVHC3j3mkMXAs9RYwLCVKLyKuOLwrq1F7Mf1Z60mIHLvMrfIKARm7fG7uNlpribi0qw==
   /abab/2.0.3:
     dev: true
     resolution:
@@ -4756,6 +4766,7 @@ specifiers:
   '@types/jest': ^24.0.15
   '@types/react': ^16.8.23
   '@types/react-dom': ^16.9.4
+  '@wana/test-utils': ^0.1.1
   codecov: ^3.5.0
   concurrently: ^4.1.1
   flush-microtasks: ^1.0.1
