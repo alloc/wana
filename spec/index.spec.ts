@@ -550,6 +550,31 @@ describe('o(Function)', () => {
     flushSync()
     expectCalls(effect, 1)
   })
+
+  describe('observing another observable getter', () => {
+    it('can rerun synchronously if needed', () => {
+      const state = o({ count: 1 })
+
+      const dub = jest.fn(() => state.count * 2)
+      const dubMemo = o(dub)
+
+      const quad = jest.fn(() => dubMemo() * 2)
+      const quadMemo = o(quad)
+
+      // First run
+      expect(quadMemo()).toBe(4)
+
+      // Change a dependency
+      state.count += 1
+
+      // The affected getter is not called immediately
+      expect(dub).toBeCalledTimes(1)
+
+      // Synchronous rerun
+      expect(quadMemo()).toBe(8)
+      expect(dub).toBeCalledTimes(2)
+    })
+  })
 })
 
 describe('no()', () => {
