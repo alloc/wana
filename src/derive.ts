@@ -36,6 +36,16 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
     onDirty() {
       if (observable.has($O)) {
         batch.run(derived)
+
+        // Tell our observers to join the next batch to see if our `memo`
+        // value has changed.
+        // Avoid mutating the `nonce` of our observers until our getter
+        // produces a new value (which may never happen).
+        observable.get($O).emit({
+          op: 'clear',
+          target: derived,
+          oldValue: memo,
+        })
       }
     },
   })
