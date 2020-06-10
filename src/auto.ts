@@ -30,7 +30,7 @@ export interface AutoConfig {
 export class Auto {
   sync: boolean
   dirty = true
-  nonce?: number
+  nonce = 0
   observer: AutoObserver | null = null
   onDirty: (this: Auto) => void
   onError: (this: Auto, error: Error) => void
@@ -50,6 +50,7 @@ export class Auto {
     try {
       const result = compute()
       this.stop().commit(observer)
+      this.nonce = observer.nonce
       return result
     } catch (error) {
       this.stop().onError(error)
@@ -147,15 +148,21 @@ export class Auto {
   }
 
   protected _onDirty() {
-    if (this.sync) {
-      this.rerun()
-    } else {
-      const { observer } = this
+    const { observer, nonce } = this
+    if (!this.sync) {
       batch.run(() => {
+        // The observer must be equal, or the Auto was likely disposed.
         if (observer == this.observer) {
-          this.rerun()
+          // The observer must have a higher nonce than the previous run.
+          if (observer!.nonce > nonce) {
+            this.rerun()
+          } else {
+            this.dirty = false
+          }
         }
       })
+    } else if (observer!.nonce > nonce) {
+      this.rerun()
     }
   }
 }
