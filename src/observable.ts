@@ -25,8 +25,8 @@ export abstract class Observer implements Disposable {
   /** The current nonce of our observed values combined */
   get nonce() {
     let nonce = 0
-    this.observed.forEach(observable => {
-      nonce += observable.nonce
+    this.observed.forEach(slot => {
+      nonce += slot.nonce
     })
     return nonce
   }
