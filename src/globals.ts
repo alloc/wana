@@ -18,8 +18,6 @@ interface Global {
   onRender: OnRender | null
   /** For spying on every change event. */
   onChange: ((change: Change) => void) | null
-  /** For spying *before* every change event. */
-  beforeChange: ((change: Change) => void) | null
 }
 
 export const globals: Global = {
@@ -28,7 +26,6 @@ export const globals: Global = {
   auto: null,
   onRender: null,
   onChange: null,
-  beforeChange: null,
 }
 
 /** Tell the current observer to track the given object/key pair  */
