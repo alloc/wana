@@ -38,7 +38,6 @@ function emit(target: object, change: Change) {
   // Size changes always come after a related change,
   // so avoid notifying `$O` observers more than once.
   if (change.key !== SIZE) {
-    observable.nonce++
     onChange(observable, $O, change)
   }
 

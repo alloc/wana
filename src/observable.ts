@@ -45,7 +45,6 @@ export class Observable<T extends object = any> extends Map<
   ObservedSlot
 > {
   readonly proxy: T | undefined
-  nonce = 1
 
   constructor(readonly source?: T) {
     super()
