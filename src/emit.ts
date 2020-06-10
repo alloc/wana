@@ -11,15 +11,7 @@ function onChange(observable: Observable, key: any, change: Change) {
     // Increase the nonce even if no observers exist, because there
     // might be a pending observer (like a "withAuto" component).
     observers.nonce++
-
-    if (observers.size) {
-      // Clone the "observers" in case they get mutated by an effect.
-      for (const observer of Array.from(observers)) {
-        if (observer.onChange) {
-          observer.onChange(change)
-        }
-      }
-    }
+    observers.emit(change)
   }
 }
 

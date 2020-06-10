@@ -87,6 +87,17 @@ export class ObservedSlot extends Set<ChangeObserver> {
   constructor(readonly owner: Observable, readonly key: ObservedKey) {
     super()
   }
+
+  emit(change: Change) {
+    if (this.size) {
+      // Clone the observer list to protect against mutations.
+      for (const observer of Array.from(this)) {
+        if (observer.onChange) {
+          observer.onChange(change)
+        }
+      }
+    }
+  }
 }
 
 /** An observed mutation of an observable object. */
