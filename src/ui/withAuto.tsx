@@ -96,11 +96,23 @@ function useAutoRender(component: React.FunctionComponent<any>) {
         if (isDev) {
           addDebugAction(auto, 'dirty')
         }
-        const { nonce } = auto
+        const { observer } = auto
+        // If no observer exists, our `component` is either unmounted
+        // or its first render is not committed yet. In the latter case,
+        // the reconciled nonce will soon be validated in a layout effect.
+        if (!observer) {
+          return
+        }
+        // The `dirty` flag is reset when our `component` rerenders,
+        // which means this `onDirty` function can be called again,
+        // before this batched update is ever processed.
         batch.render(depth, () => {
-          // Skip any update whose "component" was reconciled sometime
-          // between when it became dirty and when the batch was flushed.
-          if (nonce == auto.nonce) {
+          // If our component replaced its observer, it would be risky to
+          // validate the reconciled nonce with an old observer, because it
+          // might be observing a value that isn't observed by the newer
+          // observer. Otherwise, if the reconciled nonce is less than the
+          // nonce of the cached observer, forcing a render is desirable.
+          if (observer == auto.observer && observer.nonce > auto.nonce) {
             if (isDev) {
               addDebugAction(auto, 'batch')
             }
