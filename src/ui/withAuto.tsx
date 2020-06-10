@@ -146,6 +146,8 @@ function useAutoRender(component: React.FunctionComponent<any>) {
       if (isDev) {
         getDebug(auto).actions = []
       }
+      // The `nonce` from the render phase will force an update
+      // if any observed values have changed since then.
       if (!auto.commit(observer, nonce)) {
         if (isDev) {
           addDebugAction(auto, 'dirty')

@@ -151,9 +151,9 @@ export class Auto {
     const { observer, nonce } = this
     if (!this.sync) {
       batch.run(() => {
-        // The observer must be equal, or the Auto was likely disposed.
+        // The observer is replaced when the effect is rerun or when disposed.
         if (observer == this.observer) {
-          // The observer must have a higher nonce than the previous run.
+          // If the current nonce is not greater, no dependencies have changed.
           if (observer!.nonce > nonce) {
             this.rerun()
           } else {
