@@ -1,6 +1,6 @@
 import { is } from '@alloc/is'
 import { globals } from './globals'
-import { Change, Observable, ObservedSlot } from './observable'
+import { Change, Observable, ObservedSlot, ObserverTarget } from './observable'
 import { $O, SIZE } from './symbols'
 
 const { get } = Map.prototype
@@ -23,8 +23,8 @@ function onChange(observable: Observable, key: any, change: Change) {
   }
 }
 
-function emit(target: object, change: Change) {
-  const observable = target[$O]
+function emit(target: ObserverTarget, change: Change) {
+  const observable = target[$O]!
 
   // The "clear" op never has a key.
   if (change.op !== 'clear') {
