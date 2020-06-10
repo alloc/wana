@@ -1,4 +1,4 @@
-import { no, o } from '../src'
+import { auto, flushSync, no, o } from '../src'
 import { globals } from '../src/globals'
 import { $$, $O, SIZE } from '../src/symbols'
 
@@ -93,12 +93,6 @@ describe('o()', () => {
       foo.foo = foo
       expect(foo.this).toBe(foo)
     })
-  })
-
-  // Note: See "useDerived.spec.tsx" for more tests.
-  describe('observable function', () => {
-    it.todo('wraps a normal function')
-    it.todo('never wraps another observable getter')
   })
 })
 
@@ -486,6 +480,75 @@ describe('o(Map)', () => {
 
   describe('.clear()', () => {
     it.todo('emits only when not empty')
+  })
+})
+
+// Note: See "useDerived.spec.tsx" for more tests.
+describe('o(Function)', () => {
+  it.todo('returns an observable getter')
+  it.todo('avoids wrapping an already observable getter')
+
+  it('can be observed by an "auto" call', () => {
+    const state = o({ count: 1 })
+
+    const get = jest.fn(() => Math.abs(state.count) * 2)
+    const memo = o(get)
+
+    const effect = jest.fn(() => memo())
+    const reaction = auto(effect)
+    const onDirty = (reaction.onDirty = jest.fn(
+      reaction.onDirty.bind(reaction)
+    ))
+
+    const expectedCalls = new Map<any, number>()
+    const expectCalls = (fn: jest.Mock, count: number) => {
+      let sum = expectedCalls.get(fn)
+      if (sum == null) sum = 0
+      expect(fn).toBeCalledTimes((sum += count))
+      expectedCalls.set(fn, sum)
+    }
+
+    // The effect is run immediately.
+    expectCalls(effect, 1)
+
+    // Initialize the `memo` value.
+    expect(memo()).toBe(2)
+    expectCalls(get, 1)
+
+    // Flip the count, so its value is changed,
+    // but the `memo` value stays the same.
+    state.count = -1
+
+    // No reaction should happen yet.
+    expectCalls(effect, 0)
+    // ...but it should have been batched.
+    expectCalls(onDirty, 1)
+
+    // Synchronous derivation should still work.
+    expect(memo()).toBe(2)
+    expectCalls(get, 1)
+
+    // Flush the batch and no reaction should occur,
+    // because the `memo` value is unchanged.
+    flushSync()
+    expectCalls(effect, 0)
+
+    // Ensure the `memo` value will be different.
+    state.count = 2
+
+    // The reaction should not be synchronous.
+    expectCalls(effect, 0)
+    // ...but it should have been batched.
+    expectCalls(onDirty, 1)
+
+    // Synchronous derivation should still work.
+    expect(memo()).toBe(4)
+    expectCalls(get, 1)
+
+    // The reaction should happen when flushing the batch,
+    // because the `memo` value has changed.
+    flushSync()
+    expectCalls(effect, 1)
   })
 })
 
