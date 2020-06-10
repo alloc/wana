@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { o, withAuto } from '../src'
+import { Derived, flushSync, o, withAuto } from '../src'
 
 describe('withAuto', () => {
   describe('when a parent component reacts to the same observed change', () => {
@@ -66,8 +66,65 @@ describe('withAuto', () => {
   })
 
   describe('when a chain of derivations is observed', () => {
-    it.todo('waits until the chain is finished updating')
-    it.todo('skips updating when the chain stops early')
+    let state: { count: number; bonus: number }
+    let memo1: Derived<number>
+    let memo2: Derived<number>
+
+    beforeEach(() => {
+      state = o({ count: 1, bonus: 1 })
+      memo1 = o(() => Math.abs(state.count))
+      memo2 = o(() => memo1() + state.bonus)
+    })
+
+    it('rerenders when a direct dependency is changed', () => {
+      const onRender = jest.fn()
+      const Test = withAuto(() => {
+        onRender(memo2())
+        return null
+      })
+
+      render(<Test />)
+      expect(onRender).toBeCalledWith(2)
+
+      state.bonus++
+      flushSync()
+
+      expect(onRender).toBeCalledWith(3)
+    })
+
+    it('rerenders when an upstream dependency is changed', () => {
+      const onRender = jest.fn()
+      const Test = withAuto(() => {
+        onRender(memo2())
+        return null
+      })
+
+      render(<Test />)
+      expect(onRender).toBeCalledWith(2)
+
+      state.count++
+      flushSync()
+
+      expect(onRender).toBeCalledWith(3)
+    })
+
+    it('does not rerender when a memoized dependency is unchanged', () => {
+      const onRender = jest.fn()
+      const Test = withAuto(() => {
+        onRender(memo2())
+        return null
+      })
+
+      render(<Test />)
+      onRender.mockReset()
+
+      // Flip the count, which adds `memo1` to the next batch,
+      // but its result will be unchanged.
+      state.count = -1
+      flushSync()
+
+      expect(onRender).not.toBeCalled()
+    })
   })
 
   describe('when an observed value changes between render and commit', () => {
