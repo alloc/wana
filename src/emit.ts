@@ -18,6 +18,10 @@ function onChange(observable: Observable, key: any, change: Change) {
 function emit(target: ObserverTarget, change: Change) {
   const observable = target[$O]!
 
+  if (globals.beforeChange) {
+    globals.beforeChange(change)
+  }
+
   // The "clear" op never has a key.
   if (change.op !== 'clear') {
     onChange(observable, change.key, change)
