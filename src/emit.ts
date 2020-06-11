@@ -18,6 +18,10 @@ function onChange(observable: Observable, key: any, change: Change) {
 function emit(target: ObserverTarget, change: Change) {
   const observable = target[$O]!
 
+  if (globals.onChange) {
+    globals.onChange(change)
+  }
+
   // The "clear" op never has a key.
   if (change.op !== 'clear') {
     onChange(observable, change.key, change)
@@ -31,10 +35,6 @@ function emit(target: ObserverTarget, change: Change) {
   // so avoid notifying `$O` observers more than once.
   if (change.key !== SIZE) {
     onChange(observable, $O, change)
-  }
-
-  if (globals.onChange) {
-    globals.onChange(change)
   }
 
   return true
