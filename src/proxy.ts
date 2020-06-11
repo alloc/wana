@@ -41,7 +41,7 @@ const ArrayOverrides: any = {
       const index = oldLength - 1
       const exists = index in self
       const value = self.pop()
-      if (exists) emitRemove(self, index, value)
+      if (exists) emitSplice(self, oldLength-1, 1, emptyArray, [value])
       emitReplace(self, SIZE, index, oldLength)
       return value
     }
@@ -51,7 +51,7 @@ const ArrayOverrides: any = {
     const oldLength = self.length
     if (values.length) {
       const length = self.push(...values)
-      emitSplice(self, oldLength, values, emptyArray)
+      emitSplice(self, oldLength-1, 1, values, emptyArray)
       emitReplace(self, SIZE, length, oldLength)
       return length
     }
@@ -61,7 +61,7 @@ const ArrayOverrides: any = {
     const self: any[] = this[$$]
     const oldValue = [...self]
     self.reverse()
-    emitSplice(self, 0, [...self], oldValue)
+    emitSplice(self, 0, oldValue.length, [...self], oldValue)
     return this
   },
   shift() {
@@ -70,7 +70,7 @@ const ArrayOverrides: any = {
     if (oldLength) {
       const exists = 0 in self
       const value = self.shift()
-      if (exists) emitRemove(self, 0, value)
+      if (exists) emitSplice(self, 0, 1, emptyArray, [value])
       emitReplace(self, SIZE, oldLength - 1, oldLength)
       return value
     }
@@ -79,7 +79,7 @@ const ArrayOverrides: any = {
     const self: any[] = this[$$]
     const oldValue = [...self]
     self.sort(compare)
-    emitSplice(self, 0, [...self], oldValue)
+    emitSplice(self, 0, oldValue.length, [...self], oldValue)
     return this
   },
   splice(start: number, removeCount = 0, ...values: any[]): any[] {
@@ -95,7 +95,7 @@ const ArrayOverrides: any = {
     const addCount = values.length
     if (addCount || removeCount) {
       const delta = addCount - removeCount
-      emitSplice(self, start, values, [...removed])
+      emitSplice(self, start, removeCount, [...values], [...removed])
       if (delta) emitReplace(self, SIZE, oldLength + delta, oldLength)
     }
     return removed
@@ -105,7 +105,7 @@ const ArrayOverrides: any = {
     const oldLength = self.length
     if (values.length) {
       const length = self.unshift(...values)
-      emitSplice(self, 0, values, emptyArray)
+      emitSplice(self, 0, 0, values, emptyArray)
       emitReplace(self, SIZE, length, oldLength)
       return length
     }

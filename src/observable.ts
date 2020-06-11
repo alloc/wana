@@ -105,6 +105,7 @@ export interface Change<T = any> {
   op: 'add' | 'replace' | 'remove' | 'splice' | 'clear'
   target: object
   key?: any
+  removeCount?: any
   value?: T
   oldValue?: T
 }

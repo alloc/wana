@@ -73,6 +73,7 @@ export const emitReplace = (
 export const emitSplice = (
   target: any[],
   key: number,
+  removeCount: number,
   value: readonly any[],
   oldValue: readonly any[]
 ) =>
@@ -80,6 +81,7 @@ export const emitSplice = (
     op: 'splice',
     target,
     key,
+    removeCount,
     value,
     oldValue,
   })
