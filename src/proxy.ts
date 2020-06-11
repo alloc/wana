@@ -60,7 +60,8 @@ const ArrayOverrides: any = {
   reverse() {
     const self: any[] = this[$$]
     const oldValue = [...self]
-    emitSplice(self, 0, oldValue.length, [...self].reverse(), oldValue)
+    self.reverse()
+    emitSplice(self, 0, oldValue.length, [...self], oldValue)
     return this
   },
   shift() {
