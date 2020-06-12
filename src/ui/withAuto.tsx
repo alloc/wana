@@ -107,16 +107,17 @@ function useAutoRender(component: React.FunctionComponent<any>) {
         // which means this `onDirty` function can be called again,
         // before this batched update is ever processed.
         batch.render(depth, () => {
-          // If our component replaced its observer, it would be risky to
-          // validate the reconciled nonce with an old observer, because it
-          // might be observing a value that isn't observed by the newer
-          // observer. Otherwise, if the reconciled nonce is less than the
-          // nonce of the cached observer, forcing a render is desirable.
-          if (observer == auto.observer && observer.nonce > auto.nonce) {
-            if (isDev) {
-              addDebugAction(auto, 'batch')
+          // When the observer changes before the batch can be flushed,
+          // we bail out to avoid using the nonce of a value no longer observed.
+          if (observer == auto.observer) {
+            if (observer.nonce > auto.nonce) {
+              if (isDev) {
+                addDebugAction(auto, 'batch')
+              }
+              forceUpdate()
+            } else {
+              auto.dirty = false
             }
-            forceUpdate()
           }
         })
       },
