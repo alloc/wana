@@ -14,6 +14,7 @@ export function mountAuto(auto: Auto) {
   let observer: AutoObserver
   let nonce = 0
 
+  // XXX: Never call this with both `observer` and `mounted` props.
   return (props: Props) => {
     if (props.observer) {
       observer = props.observer
