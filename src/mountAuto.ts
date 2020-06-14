@@ -17,10 +17,12 @@ export function mountAuto(auto: Auto) {
   return (props: Props) => {
     if (props.observer) {
       observer = props.observer
-      if (mounted) {
-        auto.commit(observer)
-      } else {
+      if (!mounted) {
         nonce = observer.nonce
+      }
+      // The observer might already be committed.
+      else if (observer != auto.observer) {
+        auto.commit(observer)
       }
     } else {
       mounted = props.mounted!
