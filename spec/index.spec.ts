@@ -565,6 +565,11 @@ describe('o(Function)', () => {
 
     state.count++
     expect(effect).toBeCalledWith(4)
+    effect.mockReset()
+
+    // This calls into `get`, but `memo` stays the same.
+    state.count = -state.count
+    expect(effect).not.toBeCalled()
   })
 
   describe('observing another observable getter', () => {
