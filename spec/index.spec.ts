@@ -551,6 +551,22 @@ describe('o(Function)', () => {
     expectCalls(effect, 1)
   })
 
+  it('can be observed by a sync "auto" call', () => {
+    const state = o({ count: 1 })
+
+    const get = jest.fn(() => Math.abs(state.count) * 2)
+    const memo = o(get)
+
+    const effect = jest.fn()
+    auto(() => effect(memo()), { sync: true })
+
+    expect(effect).toBeCalledWith(2)
+    effect.mockReset()
+
+    state.count++
+    expect(effect).toBeCalledWith(4)
+  })
+
   describe('observing another observable getter', () => {
     it('can rerun synchronously if needed', () => {
       const state = o({ count: 1 })
