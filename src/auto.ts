@@ -1,3 +1,4 @@
+import { is } from '@alloc/is'
 import { isDev } from '@alloc/is-dev'
 import { batch } from './batch'
 import { noop, rethrowError } from './common'
@@ -143,6 +144,11 @@ export class Auto {
   protected _onChange(change: Change) {
     if (isDev && getDebug(this)) {
       addDebugAction(this, change)
+    }
+    // Derived values used by sync reactions are forced to rerun immediately
+    // so the reactions can know whether the value actually changed.
+    if (this.sync && change.op == 'clear' && is.function(change.target)) {
+      change.target()
     }
     this.clear()
   }
