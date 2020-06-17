@@ -88,7 +88,7 @@ export class ObservedSlot extends Set<ChangeObserver> {
     super()
   }
 
-  emit(change: Change) {
+  onChange(change: Change) {
     if (this.size) {
       // Clone the observer list to protect against mutations.
       for (const observer of Array.from(this)) {

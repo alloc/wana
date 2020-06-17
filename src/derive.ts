@@ -41,7 +41,7 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
         // value has changed.
         // Avoid mutating the `nonce` of our observers until our getter
         // produces a new value (which may never happen).
-        observable.get($O).emit({
+        observable.get($O).onChange({
           op: 'clear',
           target: derived,
           oldValue: memo,

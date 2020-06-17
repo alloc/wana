@@ -11,7 +11,7 @@ function onChange(observable: Observable, key: any, change: Change) {
     // Increase the nonce even if no observers exist, because there
     // might be a pending observer (like a "withAuto" component).
     observers.nonce++
-    observers.emit(change)
+    observers.onChange(change)
   }
 }
 
