@@ -34,18 +34,18 @@ engine from scratch.
 
 ## API Reference
 
-The entirety of `wana` is 11 functions:
-- `o` for making observable objects
-- `auto` for reactive effects
-- `when` for reactive promises
-- `no` for unobserved objects
-- `noto` for unobserved scopes
-- `watch` for listening to deep changes
-- `withAuto` for reactive components
-- `useAuto` for easy `auto` calls in components
-- `useO` for observable component state
-- `useDerived` for observable getters
-- `useChanges` for change listeners
+- `o()` for making observable objects
+- `auto()` for reactive effects
+- `when()` for reactive promises
+- `no()` for unobserved objects
+- `noto()` for unobserved scopes
+- `watch()` for listening to deep changes
+- `withAuto()` for reactive components
+- `useAuto()` for easy `auto` calls in components
+- `useO()` for observable component state
+- `useDerived()` for observable getters
+- `useChanges()` for change listeners
+- `useEffects()` for reactive mounting/unmounting of effects
 
 &nbsp;
 
@@ -372,6 +372,53 @@ const state = o({ count: 0 })
 
 const MyView = () => {
   useChanges(state, console.log)
+  return null
+}
+```
+
+&nbsp;
+
+### useEffects ⚛️
+
+The `useEffects` hook works differently depending on the type of object you pass it.
+
+For arrays and sets, an effect is mounted for each **unique value**. When a unique
+value is added, an effect is mounted. When removed, its effect is unmounted, using
+the cleanup function returned by its effect.
+
+```tsx
+import { o, useEffects } from 'wana'
+
+const arr = o([ 1, 2 ])
+
+const MyView = () => {
+  useEffects(arr, value => {
+    console.log('Added value:', value)
+    return () => {
+      console.log('Removed value:', value)
+    }
+  })
+  return null
+}
+```
+
+For maps and plain objects, an effect is mounted for each **unique key**. When a
+unique key is added, an effect is mounted. When removed, its effect is unmounted,
+using the cleanup function returned by its effect. Whenever a key's value is
+replaced, the effect is remounted.
+
+```tsx
+import { o, useEffects } from 'wana'
+
+const obj = o({ a: 1, b: 2 })
+
+const MyView = () => {
+  useEffects(obj, (value, key) => {
+    console.log('Added key/value:', key, '=>', value)
+    return () => {
+      console.log('Removed key/value:', key, '=>', value)
+    }
+  })
   return null
 }
 ```
