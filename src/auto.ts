@@ -155,20 +155,19 @@ export class Auto {
 
   protected _onDirty() {
     const { observer, nonce } = this
-    if (!this.sync) {
-      batch.run(() => {
+    const maybeRerun = () =>
+      // If the current nonce is not greater, no dependencies have changed.
+      observer!.nonce > nonce //
+        ? this.rerun()
+        : (this.dirty = false)
+
+    if (this.sync) {
+      maybeRerun()
+    } else {
+      batch.run(
         // The observer is replaced when the effect is rerun or when disposed.
-        if (observer == this.observer) {
-          // If the current nonce is not greater, no dependencies have changed.
-          if (observer!.nonce > nonce) {
-            this.rerun()
-          } else {
-            this.dirty = false
-          }
-        }
-      })
-    } else if (observer!.nonce > nonce) {
-      this.rerun()
+        () => observer == this.observer && maybeRerun()
+      )
     }
   }
 }
