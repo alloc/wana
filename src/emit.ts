@@ -90,3 +90,17 @@ export const emitClear = (target: object, oldValue: any) =>
     target,
     oldValue,
   })
+
+export const emitDefine = (
+  target: object,
+  key: keyof any,
+  value: PropertyDescriptor,
+  oldValue?: PropertyDescriptor
+) =>
+  emit(target, {
+    op: 'define',
+    target,
+    key,
+    value,
+    oldValue,
+  })

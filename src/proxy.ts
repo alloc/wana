@@ -3,11 +3,19 @@ import {
   emptyArray,
   flop,
   getDescriptor,
+  getOwnDescriptor,
   hasOwn,
   nope,
   setHidden,
 } from './common'
-import { emitAdd, emitClear, emitRemove, emitReplace, emitSplice } from './emit'
+import {
+  emitAdd,
+  emitClear,
+  emitDefine,
+  emitRemove,
+  emitReplace,
+  emitSplice,
+} from './emit'
 import { globals, observe } from './globals'
 import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
@@ -133,13 +141,15 @@ const ObjectTraps: ProxyHandler<object> = {
     }
     return self[key]
   },
-  set(self, key, value) {
-    const desc = getDescriptor(self, key)
-    return desc && desc.get
-      ? desc.set
-        ? (desc.set.call(self[$O].proxy, value), true)
-        : false
-      : setProperty(self, key, value)
+  defineProperty(self, key, desc) {
+    const prevDesc = getOwnDescriptor(self, key)
+    return Reflect.defineProperty(self, key, desc) &&
+      (desc.get || (prevDesc && prevDesc.get))
+      ? emitDefine(self, key, desc, prevDesc)
+      : prevDesc
+      ? desc.value === prevDesc.value ||
+        emitReplace(self, key, desc.value, prevDesc.value)
+      : emitAdd(self, key, desc.value)
   },
   deleteProperty,
   preventExtensions: nope,

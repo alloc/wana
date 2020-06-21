@@ -102,7 +102,7 @@ export class ObservedSlot extends Set<ChangeObserver> {
 
 /** An observed mutation of an observable object. */
 export interface Change<T = any> {
-  op: 'add' | 'replace' | 'remove' | 'splice' | 'clear'
+  op: 'add' | 'replace' | 'remove' | 'splice' | 'clear' | 'define'
   target: object
   key?: any
   value?: T
