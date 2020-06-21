@@ -157,6 +157,66 @@ describe('o(Object)', () => {
       obj.a = 1
       expect(calls).toEqual([])
     })
+
+    describe('own setter', () => {
+      it('is called with observable this', () => {
+        const obj = o({
+          get a() {
+            return 0
+          },
+          set a(_val) {
+            expect(this).toBe(obj)
+          },
+        })
+        obj.a = 1
+        expect.assertions(1)
+      })
+
+      it('is called without implicit observation', () => {
+        const obj = o({
+          get a() {
+            return 0
+          },
+          set a(_val) {
+            expect(globals.observe).toBe(null)
+          },
+        })
+        obj.a = 1
+        expect.assertions(1)
+      })
+    })
+
+    describe('inherited setter', () => {
+      it('is called with observable this', () => {
+        const obj: any = o({
+          __proto__: {
+            get a() {
+              return 0
+            },
+            set a(_val) {
+              expect(this).toBe(obj)
+            },
+          },
+        })
+        obj.a = 1
+        expect.assertions(1)
+      })
+
+      it('is called without implicit observation', () => {
+        const obj: any = o({
+          __proto__: {
+            get a() {
+              return 0
+            },
+            set a(_val) {
+              expect(globals.observe).toBe(null)
+            },
+          },
+        })
+        obj.a = 1
+        expect.assertions(1)
+      })
+    })
   })
 
   describe('[[Delete]]', () => {
