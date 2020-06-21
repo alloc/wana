@@ -487,6 +487,83 @@ Array [
 ]
 `;
 
+exports[`o(Object) [[DefineOwnProperty]] emits for new property 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "a",
+      "oldValue": undefined,
+      "op": "define",
+      "target": Object {},
+      "value": Object {
+        "get": [Function],
+      },
+    },
+  ],
+  Array [
+    Object {
+      "key": "b",
+      "op": "add",
+      "target": Object {},
+      "value": 2,
+    },
+  ],
+]
+`;
+
+exports[`o(Object) [[DefineOwnProperty]] emits for redefined property 1`] = `
+Array [
+  Array [
+    Object {
+      "key": "a",
+      "oldValue": Object {
+        "configurable": true,
+        "enumerable": true,
+        "get": [Function],
+        "set": undefined,
+      },
+      "op": "define",
+      "target": Object {
+        "a": 4,
+      },
+      "value": Object {
+        "get": [Function],
+      },
+    },
+  ],
+  Array [
+    Object {
+      "key": "a",
+      "oldValue": Object {
+        "configurable": true,
+        "enumerable": true,
+        "get": [Function],
+        "set": undefined,
+      },
+      "op": "define",
+      "target": Object {
+        "a": 4,
+      },
+      "value": Object {
+        "value": 3,
+        "writable": true,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "key": "a",
+      "oldValue": 3,
+      "op": "replace",
+      "target": Object {
+        "a": 4,
+      },
+      "value": 4,
+    },
+  ],
+]
+`;
+
 exports[`o(Object) [[Delete]] emits for known keys 1`] = `
 Array [
   Array [

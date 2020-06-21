@@ -181,6 +181,52 @@ describe('o(Object)', () => {
     it.todo('tracks unknown keys')
     it.todo('tracks inherited keys')
   })
+
+  describe('[[DefineOwnProperty]]', () => {
+    it('emits for new property', () => {
+      const obj: any = o({})
+      const calls = watch(obj)
+
+      // 1. Define with "get" descriptor
+      Object.defineProperty(obj, 'a', {
+        get: () => 1,
+      })
+
+      // 2. Define with "value" descriptor
+      Object.defineProperty(obj, 'b', {
+        value: 2,
+      })
+
+      expect(calls).toMatchSnapshot()
+    })
+
+    it('emits for redefined property', () => {
+      const obj = o({
+        get a() {
+          return 1
+        },
+      })
+      const calls = watch(obj)
+
+      // 1. Redefine with "get" descriptor
+      Object.defineProperty(obj, 'a', {
+        get: () => 2,
+      })
+
+      // 2. Redefine with "value" descriptor
+      Object.defineProperty(obj, 'a', {
+        value: 3,
+        writable: true,
+      })
+
+      // 3. Redefine with "value" descriptor (again)
+      Object.defineProperty(obj, 'a', {
+        value: 4,
+      })
+
+      expect(calls).toMatchSnapshot()
+    })
+  })
 })
 
 describe('o(Array)', () => {
