@@ -172,16 +172,18 @@ describe('o(Object)', () => {
         expect.assertions(1)
       })
 
-      it('is called without implicit observation', () => {
+      it('can be observed', () => {
         const obj = o({
           get a() {
             return 0
           },
           set a(_val) {
-            expect(globals.observe).toBe(null)
+            expect(globals.observe).toBeTruthy()
           },
         })
-        obj.a = 1
+        auto(() => {
+          obj.a = 1
+        })
         expect.assertions(1)
       })
     })
@@ -202,18 +204,20 @@ describe('o(Object)', () => {
         expect.assertions(1)
       })
 
-      it('is called without implicit observation', () => {
+      it('can be observed', () => {
         const obj: any = o({
           __proto__: {
             get a() {
               return 0
             },
             set a(_val) {
-              expect(globals.observe).toBe(null)
+              expect(globals.observe).toBeTruthy()
             },
           },
         })
-        obj.a = 1
+        auto(() => {
+          obj.a = 1
+        })
         expect.assertions(1)
       })
     })
