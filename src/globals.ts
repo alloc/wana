@@ -7,7 +7,7 @@ type OnRender = (
   component: React.FunctionComponent<any>
 ) => void
 
-interface Global {
+type Globals = {
   /** React-managed render batching. Defaults to no-op. */
   batchedUpdates: (effect: () => void) => void
   /** Notify the current observer. */
@@ -20,7 +20,7 @@ interface Global {
   onChange: ((change: Change) => void) | null
 }
 
-export const globals: Global = {
+export const globals: Globals = {
   batchedUpdates: effect => effect(),
   observe: null,
   auto: null,
