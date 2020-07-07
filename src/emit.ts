@@ -17,6 +17,7 @@ function onChange(observable: Observable, key: any, change: Change) {
 
 function emit(target: ObserverTarget, change: Change) {
   const observable = target[$O]!
+  console.log('wana:emit (%O, %O)', change.op, change.key)
 
   if (globals.onChange) {
     globals.onChange(change)

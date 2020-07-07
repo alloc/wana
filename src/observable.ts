@@ -89,6 +89,7 @@ export class ObservedSlot extends Set<ChangeObserver> {
   }
 
   onChange(change: Change) {
+    console.log('wana:onChange (%O, %O)', this.key, this.size)
     if (this.size) {
       // Clone the observer list to protect against mutations.
       for (const observer of Array.from(this)) {

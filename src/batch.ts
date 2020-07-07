@@ -36,6 +36,7 @@ export const batch: Batch = {
   render(depth, effect) {
     let i = renderQueue.findIndex(other => other.depth > depth)
     if (i < 0) i = renderQueue.length
+    console.log('wana:batch:render', { depth })
     renderQueue.splice(i, 0, { depth, effect })
     flushAsync()
   },
@@ -62,6 +63,10 @@ function flushAsync() {
  * Useful when testing `wana`-integrated components/hooks.
  */
 export function flushSync() {
+  console.log('wana:flush:start', {
+    pendingRuns: runQueue.length,
+    pendingRenders: renderQueue.length,
+  })
   globals.batchedUpdates(() => {
     // Run any pending reactions.
     let runs = 0
@@ -76,6 +81,10 @@ export function flushSync() {
     // Stale components always rerender after reactions.
     renderQueue.forEach(({ effect }) => effect())
     renderQueue.length = 0
+  })
+  console.log('wana:flush:end', {
+    pendingRuns: runQueue.length,
+    pendingRenders: renderQueue.length,
   })
 
   return !!(runQueue.length || renderQueue.length)
