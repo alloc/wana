@@ -4,6 +4,7 @@
     "no-var-keyword": false,
     "object-literal-sort-keys": false,
     "only-arrow-functions": false,
+    "quotemark": [true, "single", "jsx-double"],
     "unified-signatures": false
   }
 }

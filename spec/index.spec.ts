@@ -141,7 +141,7 @@ describe('o(Object)', () => {
             return 0
           },
         })
-        obj.a
+        obj.a // tslint:disable-line
         expect.assertions(1)
       })
     })
@@ -156,7 +156,7 @@ describe('o(Object)', () => {
             },
           },
         })
-        obj.a
+        obj.a // tslint:disable-line
         expect.assertions(1)
       })
     })
