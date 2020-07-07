@@ -126,13 +126,13 @@ const ObjectTraps: ProxyHandler<object> = {
     // TODO: Avoid observing "replace" events here.
     observe(self, key), Reflect.has(self, key)
   ),
-  get(self, key) {
+  get(self, key, proxy) {
     if (key === $$) return self
     if (key !== $O) {
       const desc = getDescriptor(self, key)
       const get = desc && desc.get
       if (get) {
-        return get.call(self[$O].proxy)
+        return get.call(proxy)
       }
       // Observe unknown keys and own keys only.
       if (!desc || hasOwn(self, key)) {
@@ -141,12 +141,10 @@ const ObjectTraps: ProxyHandler<object> = {
     }
     return self[key]
   },
-  set(self, key, value) {
+  set(self, key, value, proxy) {
     const desc = getDescriptor(self, key)
     return desc && desc.get
-      ? desc.set
-        ? (desc.set.call(self[$O].proxy, value), true)
-        : false
+      ? Reflect.set(self, key, value, proxy)
       : setProperty(self, key, value)
   },
   defineProperty(self, key, desc) {
