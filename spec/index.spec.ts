@@ -132,6 +132,34 @@ describe('o(Object)', () => {
       expect(obj.toString).toBeDefined()
       expect(observed).toEqual([])
     })
+
+    describe('own getter', () => {
+      it('is called with observable this', () => {
+        const obj = o({
+          get a() {
+            expect(this).toBe(obj)
+            return 0
+          },
+        })
+        obj.a
+        expect.assertions(1)
+      })
+    })
+
+    describe('inherited getter', () => {
+      it('is called with observable this', () => {
+        const obj: any = o({
+          __proto__: {
+            get a() {
+              expect(this).toBe(obj)
+              return 0
+            },
+          },
+        })
+        obj.a
+        expect.assertions(1)
+      })
+    })
   })
 
   describe('[[Set]]', () => {
