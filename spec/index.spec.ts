@@ -158,6 +158,26 @@ describe('o(Object)', () => {
       expect(calls).toEqual([])
     })
 
+    it('throws when a non-writable property is assigned to', () => {
+      const obj: any = o({})
+      Object.defineProperty(obj, 'a', { value: 1 })
+      expect(() => {
+        obj.a = 2
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"Cannot assign to read only property 'a' of object '#<Object>'"`
+      )
+    })
+
+    it('throws when a getter is assigned to', () => {
+      const obj: any = o({})
+      Object.defineProperty(obj, 'a', { get: () => 1 })
+      expect(() => {
+        obj.a = 2
+      }).toThrowErrorMatchingInlineSnapshot(
+        `"'set' on proxy: trap returned falsish for property 'a'"`
+      )
+    })
+
     describe('own setter', () => {
       it('is called with observable this', () => {
         const obj = o({
