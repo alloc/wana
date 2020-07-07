@@ -141,6 +141,14 @@ const ObjectTraps: ProxyHandler<object> = {
     }
     return self[key]
   },
+  set(self, key, value) {
+    const desc = getDescriptor(self, key)
+    return desc && desc.get
+      ? desc.set
+        ? (desc.set.call(self[$O].proxy, value), true)
+        : false
+      : setProperty(self, key, value)
+  },
   defineProperty(self, key, desc) {
     const prevDesc = getOwnDescriptor(self, key)
     return Reflect.defineProperty(self, key, desc) &&
