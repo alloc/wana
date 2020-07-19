@@ -73,6 +73,14 @@ export class Observable<T extends object = any> extends Map<
     }
     return observers
   }
+
+  /** Create an observer for the given key. */
+  observe(key: ObservedKey, onChange: (change: Change) => void) {
+    const observers = this.get(key)
+    const observer = { onChange, dispose: () => observers.delete(observer) }
+    observers.add(observer)
+    return observer
+  }
 }
 
 /** Mutable state with an associated observable */
