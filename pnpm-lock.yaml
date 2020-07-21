@@ -2,7 +2,7 @@ dependencies:
   '@alloc/is': 2.1.1
   '@alloc/is-dev': 1.2.0
   '@babel/runtime': 7.10.2
-  queue-microtask: 1.1.2
+  queue-microtask: 1.1.4
   react-layout-effect: 1.0.5_react@16.9.0
   use-memo-one: 1.1.1_react@16.9.0
 devDependencies:
@@ -3436,10 +3436,10 @@ packages:
       node: '>=0.6'
     resolution:
       integrity: sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
-  /queue-microtask/1.1.2:
+  /queue-microtask/1.1.4:
     dev: false
     resolution:
-      integrity: sha512-F9wwNePtXrzZenAB3ax0Y8TSKGvuB7Qw16J30hspEUTbfUM+H827XyN3rlpwhVmtm5wuZtbKIHjOnwDn7MUxWQ==
+      integrity: sha512-eY/4Obve9cE5FK8YvC1cJsm5cr7XvAurul8UtBDJ2PR1p5NmAwHtvAt5ftcLtwYRCUKNhxCneZZlxmUDFoSeKA==
   /react-dom/16.9.0_react@16.9.0:
     dependencies:
       loose-envify: 1.4.0
@@ -4773,7 +4773,7 @@ specifiers:
   jest: ^24.8.0
   prettier: ^1.18.2
   prettier-tslint: ^0.4.2
-  queue-microtask: ^1.1.2
+  queue-microtask: ^1.1.4
   react: ~16.9.0
   react-dom: ~16.9.0
   react-layout-effect: ^1.0.1
