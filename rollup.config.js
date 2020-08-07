@@ -1,92 +1,24 @@
-import path from 'path'
-
-import ts from 'rollup-plugin-typescript2'
 import dts from 'rollup-plugin-dts'
-import babel from '@rollup/plugin-babel'
-import resolve from '@rollup/plugin-node-resolve'
+import esbuild from 'rollup-plugin-esbuild'
 
-const external = id => !id.startsWith('.')
-const extensions = ['.ts', '.tsx']
+const name = require('./package.json').main.replace(/\.js$/, '')
 
-const bundle = ({
-  input = 'src/index.ts',
-  output = 'dist/wana.js',
-  sourcemap = true,
-  sourcemapExcludeSources = true,
-  sourceRoot = path.dirname(input),
-} = {}) => {
-  const config = {
-    input,
-    output,
-    sourcemap,
-    sourcemapExcludeSources,
-    sourceRoot,
-  }
-  return [esmBundle(config), cjsBundle(config), dtsBundle(config)]
-}
+const ext = format =>
+  format == 'dts' ? 'd.ts' : format == 'cjs' ? 'js' : 'mjs'
 
-const esmBundle = config => ({
-  input: config.input,
+const bundle = format => ({
+  input: 'src/index.ts',
   output: {
-    file: config.output,
-    format: 'esm',
-    sourcemap: config.sourcemap,
-    sourcemapExcludeSources: config.sourcemapExcludeSources,
+    file: `${name}.${ext(format)}`,
+    format: format == 'cjs' ? 'cjs' : 'es',
+    sourcemap: format != 'dts',
   },
-  external,
-  plugins: [
-    resolve({ extensions }),
-    ts({ check: false }),
-    babel(
-      getBabelOptions({
-        useESModules: true,
-      })
-    ),
-  ],
+  plugins: format == 'dts' ? [dts()] : [esbuild()],
+  external: id => !/^[./]/.test(id),
 })
 
-const cjsBundle = config => ({
-  input: config.input,
-  output: {
-    file: config.output.replace(/\.js$/, '.cjs.js'),
-    format: 'cjs',
-    sourcemap: config.sourcemap,
-    sourcemapExcludeSources: config.sourcemapExcludeSources,
-  },
-  external,
-  plugins: [
-    resolve({ extensions }),
-    ts({ check: false }),
-    babel(
-      getBabelOptions({
-        useESModules: false,
-      })
-    ),
-  ],
-})
-
-const dtsBundle = config => ({
-  input: config.input,
-  output: [
-    {
-      file: config.output.replace(/\.js$/, '.d.ts'),
-      format: 'es',
-    },
-  ],
-  plugins: [dts()],
-  external,
-})
-
-const getBabelOptions = ({ useESModules }, targets) => ({
-  babelrc: false,
-  exclude: '**/node_modules/**',
-  extensions: ['ts'],
-  babelHelpers: 'runtime',
-  comments: false,
-  presets: ['@babel/preset-modules'],
-  plugins: [
-    ['@babel/plugin-transform-runtime', { regenerator: false, useESModules }],
-  ],
-})
-
-export default bundle()
+export default [
+  bundle('es'), //
+  bundle('cjs'),
+  bundle('dts'),
+]

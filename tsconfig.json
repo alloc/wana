@@ -7,7 +7,6 @@
     "moduleResolution": "node",
     "noUnusedLocals": true,
     "plugins": [{ "name": "typescript-snapshots-plugin" }],
-    "sourceMap": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "esnext"

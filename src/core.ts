@@ -1,10 +1,12 @@
 // Observation
 export { o } from './o'
-export { auto, Auto, AutoConfig } from './auto'
+export { auto, Auto } from './auto'
 export { when } from './when'
 export { watch, Watcher } from './watch'
-export { Derived, isDerived } from './derive'
-export { Change, ChangeObserver, Observer } from './observable'
+export { isDerived } from './derive'
+export type { Derived } from './derive'
+export type { AutoConfig } from './auto'
+export type { Change, ChangeObserver, Observer } from './observable'
 
 // Escape hatches
 export { no } from './no'
@@ -18,4 +20,5 @@ export { $O, $$ } from './symbols'
 export { globals } from './globals'
 export { flushSync } from './batch'
 export { mountAuto } from './mountAuto'
-export { Observable, ObserverTarget, ObservedSlot } from './observable'
+export { Observable, ObservedSlot } from './observable'
+export type { ObserverTarget } from './observable'
