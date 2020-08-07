@@ -1,4 +1,4 @@
-import queueMicrotask from 'queue-microtask'
+import queueMicrotask from '@alloc/queue-microtask'
 import { globals } from './globals'
 
 type Effect = () => void

@@ -25,7 +25,7 @@
   "dependencies": {
     "@alloc/is": "^2.0.0",
     "@alloc/is-dev": "^1.1.0",
-    "queue-microtask": "^1.1.4",
+    "@alloc/queue-microtask": "^1.1.4",
     "react-layout-effect": "^1.0.1",
     "use-memo-one": "^1.1.1"
   },
