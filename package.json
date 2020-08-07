@@ -40,7 +40,7 @@
     "esbuild": "^0.6.17",
     "flush-microtasks": "^1.0.1",
     "jest": "^24.8.0",
-    "prettier": "^1.18.2",
+    "prettier": "^2.0.5",
     "prettier-tslint": "^0.4.2",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
