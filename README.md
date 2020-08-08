@@ -57,7 +57,7 @@ Even custom class instances can be wrapped with an observable proxy!
 
 Passing the same object into `o` twice always returns the same proxy.
 
-By wrapping a function with `o`, you get an observable getter, which memoizes its result until one of its observed values is changed. Calling an observable getter triggers an observation! To prevent leaks, call the `dispose` method before releasing an observable getter. Lastly, you can call the `clear` method to force re-memoization on next call.
+By wrapping a function with `o`, you get an observable getter, which memoizes its result until one of its observed values is changed. Calling an observable getter triggers an observation! To prevent leaks, call the `dispose` method before releasing an observable getter.
 
 Passing an observable getter into `o` is a no-op.
 
