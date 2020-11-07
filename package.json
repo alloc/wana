@@ -46,7 +46,7 @@
     "react-dom": "~16.9.0",
     "rollup": "^2.23.0",
     "rollup-plugin-dts": "^1.4.10",
-    "rollup-plugin-esbuild": "^2.4.2",
+    "rollup-plugin-esbuild": "^2.5.2",
     "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
     "tslint-mango": "^0.1.12",
