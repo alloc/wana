@@ -6,3 +6,6 @@ export const $O = Symbol.for('wana:observable')
 
 /** For observing "size" changes */
 export const SIZE = Symbol.for('wana:size')
+
+/** For injecting custom proxy traps */
+export const $T = Symbol.for('wana:traps')

@@ -3,7 +3,7 @@ import { isDev } from '@alloc/is-dev'
 import { Disposable } from './common'
 import { setDebug } from './debug'
 import { ArrayTraps, ObjectTraps, ObservableMap, ObservableSet } from './proxy'
-import { $O } from './symbols'
+import { $O, $T } from './symbols'
 
 /** Return true if `value` could be made observable or is already observable */
 export const canMakeObservable = (value: unknown): boolean =>
@@ -58,7 +58,10 @@ export class Observable<T extends object = any> extends Map<
         ? new ObservableMap(source)
         : is.set(source)
         ? new ObservableSet(source)
-        : new Proxy(source as any, is.array(source) ? ArrayTraps : ObjectTraps)
+        : new Proxy(
+            source as any,
+            source[$T] || (is.array(source) ? ArrayTraps : ObjectTraps)
+          )
     }
   }
 

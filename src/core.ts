@@ -16,7 +16,7 @@ export { noto } from './noto'
 export * from './debug'
 
 // Internals
-export { $O, $$ } from './symbols'
+export { $O, $T, $$ } from './symbols'
 export { globals } from './globals'
 export { flushSync } from './batch'
 export { mountAuto } from './mountAuto'
