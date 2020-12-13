@@ -21,13 +21,6 @@ import { ArrayIterators, MapIterators, SetIterators } from './iterators'
 import { noto } from './noto'
 import { $$, $O, SIZE } from './symbols'
 
-export const createProxy = (source: any) =>
-  is.map(source)
-    ? new ObservableMap(source)
-    : is.set(source)
-    ? new ObservableSet(source)
-    : new Proxy(source, is.array(source) ? ArrayTraps : ObjectTraps)
-
 const ArrayOverrides: any = {
   concat(...args: any[]) {
     const self: any[] = this[$$]
@@ -121,7 +114,7 @@ const ArrayOverrides: any = {
   },
 }
 
-const ObjectTraps: ProxyHandler<object> = {
+export const ObjectTraps: ProxyHandler<object> = {
   has: (self, key) => (
     // TODO: Avoid observing "replace" events here.
     observe(self, key), Reflect.has(self, key)
@@ -161,7 +154,7 @@ const ObjectTraps: ProxyHandler<object> = {
   preventExtensions: nope,
 }
 
-const ArrayTraps: ProxyHandler<any[]> = {
+export const ArrayTraps: ProxyHandler<any[]> = {
   has: ObjectTraps.has,
   get(self: any, key: keyof any) {
     if (key === $$) return self
@@ -199,7 +192,7 @@ const ArrayTraps: ProxyHandler<any[]> = {
   preventExtensions: nope,
 }
 
-class ObservableMap<K, V> extends Map<K, V> {
+export class ObservableMap<K, V> extends Map<K, V> {
   [$$]!: Map<K, V>
 
   constructor(source: Map<K, V>) {
@@ -264,7 +257,7 @@ class ObservableMap<K, V> extends Map<K, V> {
   }
 }
 
-class ObservableSet<T> extends Set<T> {
+export class ObservableSet<T> extends Set<T> {
   [$$]!: Set<T>
 
   constructor(source: Set<T>) {

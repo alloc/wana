@@ -2,7 +2,7 @@ import { is } from '@alloc/is'
 import { isDev } from '@alloc/is-dev'
 import { Disposable } from './common'
 import { setDebug } from './debug'
-import { createProxy } from './proxy'
+import { ArrayTraps, ObjectTraps, ObservableMap, ObservableSet } from './proxy'
 import { $O } from './symbols'
 
 /** Return true if `value` could be made observable or is already observable */
@@ -54,7 +54,11 @@ export class Observable<T extends object = any> extends Map<
       })
     }
     if (source) {
-      this.proxy = createProxy(source)
+      this.proxy = is.map(source)
+        ? new ObservableMap(source)
+        : is.set(source)
+        ? new ObservableSet(source)
+        : new Proxy(source as any, is.array(source) ? ArrayTraps : ObjectTraps)
     }
   }
 
