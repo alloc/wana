@@ -13,6 +13,7 @@ devDependencies:
   codecov: 3.7.2
   concurrently: 4.1.2
   esbuild: 0.8.46
+  esbuild-jest: /@alloc/esbuild-jest/0.3.2_esbuild@0.8.46
   flush-microtasks: 1.0.1
   jest: 24.9.0
   prettier: 2.0.5
@@ -29,6 +30,14 @@ devDependencies:
   typescript-snapshots-plugin: 1.7.0
 lockfileVersion: 5.2
 packages:
+  /@alloc/esbuild-jest/0.3.2_esbuild@0.8.46:
+    dependencies:
+      esbuild: 0.8.46
+    dev: true
+    peerDependencies:
+      esbuild: '>=0.8.31'
+    resolution:
+      integrity: sha512-AL/dnEhKK2ifjDmeWRqjYH7h08hB72DpJib39ZxzJVPeDaeL0iCXvFT35tDsJws9F7FQ/34qKiEGNed6uw4lAg==
   /@alloc/is-dev/1.2.1:
     dev: false
     resolution:
@@ -4488,6 +4497,7 @@ specifiers:
   codecov: ^3.5.0
   concurrently: ^4.1.1
   esbuild: ^0.8.46
+  esbuild-jest: npm:@alloc/esbuild-jest@0.3.2
   flush-microtasks: ^1.0.1
   jest: ^24.8.0
   prettier: ^2.0.5
