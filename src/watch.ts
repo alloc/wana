@@ -95,4 +95,4 @@ export class Watcher extends Observer {
 }
 
 export const canWatch = (value: unknown): value is object =>
-  value && typeof value == 'object'
+  (value as any) && typeof value == 'object'
