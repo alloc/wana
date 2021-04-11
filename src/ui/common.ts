@@ -8,9 +8,10 @@ export const RenderAction = ({ useAction }: { useAction: () => void }) => (
 )
 
 /** Return a function that re-renders this component, if still mounted */
-export const useForceUpdate = () => {
-  const mounted = useMounted()
-  const update = useState<any>(0)[1]
+export function useForceUpdate() {
+  const update = useState<any>()[1]
+  const mounted = useMemo(makeMountedRef, [])
+  useEffect(mounted.unmount, emptyArray)
   return () => {
     if (mounted.current) {
       update({})
@@ -18,9 +19,13 @@ export const useForceUpdate = () => {
   }
 }
 
-export const useMounted = () => {
-  const mounted = useMemo(() => ({ current: true }), [])
-  useDispose(() => (mounted.current = false))
+function makeMountedRef() {
+  const mounted = {
+    current: true,
+    unmount: () => () => {
+      mounted.current = false
+    },
+  }
   return mounted
 }
 
