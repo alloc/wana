@@ -46,6 +46,7 @@ engine from scratch.
 - `useDerived()` for observable getters
 - `useChanges()` for change listeners
 - `useEffects()` for reactive mounting/unmounting of effects
+- `useBinding()` for situations where `withAuto` is too invasive
 
 &nbsp;
 
@@ -421,6 +422,35 @@ const MyView = () => {
   })
   return null
 }
+```
+
+&nbsp;
+
+### useBinding ⚛️
+
+The `useBinding` hook re-renders your component whenever the given object/property is changed. Any observable object can be passed, including observable getters. You can also bind to a specific property (including `length` of an array).
+
+```tsx
+import { o, useBinding } from 'wana'
+
+const todo = o({ text: '' })
+
+const TodoView = () => {
+  const text = useBinding(todo, 'text')
+  return <span>{text}</span>
+}
+```
+
+**Why not use `withAuto`?** You *should* use `withAuto` whenever possible. This hook has a few unavoidable performance pitfalls (see [here](https://github.com/alloc/wana/blob/72b730162c3217836c287c4d93a9b9ea4287b9b0/src/ui/useBinding.ts#L15-L18)). Nonetheless, this hook is useful when you're not the end user, so you can't guarantee anything. See the example below.
+
+```ts
+const pages = o({
+  foo: {...} // Let's say the page data is static, but pages can be replaced.
+})
+
+// We're not the end user, so we need useBinding to ensure
+// the component observes the required page data.
+export const usePage = (name: string) => useBinding(pages, name)
 ```
 
 &nbsp;
