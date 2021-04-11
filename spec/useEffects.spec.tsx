@@ -145,7 +145,10 @@ describe('useEffects', () => {
       ])
     })
     it('unmounts the effect for removed key', () => {
-      const obj = o({ a: 0 })
+      interface State {
+        a?: number
+      }
+      const obj: State = o({ a: 0 })
       testRemoved(obj, [
         () => ((obj.a = 1), [[0, 'a']]), // changed value
         () => (delete obj.a, [[1, 'a']]), // removed key

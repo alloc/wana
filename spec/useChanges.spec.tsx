@@ -3,9 +3,13 @@ import React from 'react'
 import { $O, Change, o, useChanges } from '../src'
 
 describe('useChanges', () => {
+  interface State {
+    count?: number
+  }
+
   it('lets you observe Change events for an observable object', () => {
     const spy = jest.fn()
-    const state = o({ count: 0 })
+    const state: State = o({ count: 0 })
     const Test = () => {
       useChanges(state, spy)
       return null
@@ -13,7 +17,7 @@ describe('useChanges', () => {
 
     render(<Test />)
 
-    state.count++ // Replace
+    state.count!++ // Replace
     delete state.count // Remove
     state.count = 0 // Add
 
