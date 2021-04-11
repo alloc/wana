@@ -17,14 +17,14 @@ import { useForceUpdate } from './common'
  * to avoid multiple re-renders. It also cannot wait for ancestor
  * components to re-render first, which also leads to excessive re-renders.
  */
+export function useBinding<T extends object, P extends keyof T>(
+  target: T extends ReadonlyMap<any, any> ? never : T,
+  key: P
+): T[P]
 export function useBinding<K, V>(
   target: ReadonlyMap<K, V>,
   key: K
 ): V | undefined
-export function useBinding<T extends object, P extends keyof T>(
-  target: T,
-  key: P
-): T[P]
 export function useBinding<T>(target: Derived<T>): T
 export function useBinding<T extends object>(target: T): T
 export function useBinding(
