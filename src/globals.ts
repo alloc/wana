@@ -8,8 +8,6 @@ type OnRender = (
 ) => void
 
 type Globals = {
-  /** React-managed render batching. Defaults to no-op. */
-  batchedUpdates: (effect: () => void) => void
   /** Notify the current observer. */
   observe: ((target: ObserverTarget, key: any) => void) | null
   /** The `Auto` object for the current `withAuto` component being rendered. */
@@ -21,7 +19,6 @@ type Globals = {
 }
 
 export const globals: Globals = {
-  batchedUpdates: effect => effect(),
   observe: null,
   auto: null,
   onRender: null,

@@ -1,5 +1,4 @@
 import { act } from '@testing-library/react'
-import { setupEnv } from '@wana/test-utils'
-import { globals } from '../src'
+import { setBatchedUpdates } from 'react-batched-updates'
 
-setupEnv({ act, globals })
+setBatchedUpdates(effect => void act(effect))
