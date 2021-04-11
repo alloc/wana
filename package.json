@@ -23,7 +23,7 @@
     "react": ">=16.9"
   },
   "dependencies": {
-    "@alloc/is": "^2.0.0",
+    "@alloc/is": "^3.0.0",
     "@alloc/is-dev": "^1.1.0",
     "@alloc/queue-microtask": "^1.1.4",
     "react-batched-updates": "^1.0.1",
