@@ -1,7 +1,7 @@
 dependencies:
   '@alloc/is': 3.1.0
   '@alloc/is-dev': 1.2.2
-  '@alloc/queue-microtask': 1.1.4
+  '@alloc/queue-microtask': 1.1.5
   react-batched-updates: 1.0.1
   react-layout-effect: 1.0.5_react@16.9.0
   use-memo-one: 1.1.2_react@16.9.0
@@ -46,10 +46,10 @@ packages:
   /@alloc/is/3.1.0:
     resolution:
       integrity: sha512-2Nw+GPsYbpHM33mG4Ua4bL6gesJYWXyQi/EHMABVdHrVE9zFhcq/1+DMXuPW+SO+/Mh0ib9PUqLq4qKkxbgwtA==
-  /@alloc/queue-microtask/1.1.4:
+  /@alloc/queue-microtask/1.1.5:
     dev: false
     resolution:
-      integrity: sha512-RQ73vSCZyYWoCORvA5rT/Xg99Zt+MyRhoVhYY2Xm/lXAyx5nsWCPB3xDiS+3fmll3iZ3tDHmtOdiCBX8n2RdVg==
+      integrity: sha512-+11mLrN7Xu9a9uU0fdsZICVDi8vhxtqxaqX+nPyPXmrDJBPUqKc34aJak8KEdjkhhGFTuqs8ZiiuwP423Do14w==
   /@alloc/types/2.1.0:
     dev: true
     resolution:
@@ -4869,7 +4869,7 @@ packages:
 specifiers:
   '@alloc/is': ^3.0.0
   '@alloc/is-dev': ^1.1.0
-  '@alloc/queue-microtask': ^1.1.4
+  '@alloc/queue-microtask': ^1.1.5
   '@testing-library/react': ^8.0.5
   '@types/jest': ^24.0.15
   '@types/react': ^16.8.23
