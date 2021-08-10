@@ -83,6 +83,11 @@ export function withAuto(render: any) {
     })
     component = forwardRef(component as any)
   }
+  if (isDev) {
+    Object.defineProperty(component, '__render', {
+      value: render,
+    })
+  }
   return component
 }
 
