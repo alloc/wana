@@ -5,6 +5,12 @@ import { setDebug } from './debug'
 import { ArrayTraps, ObjectTraps, ObservableMap, ObservableSet } from './proxy'
 import { $O, $T } from './symbols'
 
+/** Watch the properties of the given observable object */
+export const shallowChanges = (
+  target: ObserverTarget,
+  onChange: (change: Change) => void
+) => target[$O]!.observe($O, onChange)
+
 /** Return true if `value` could be made observable or is already observable */
 export const canMakeObservable = (value: unknown): boolean =>
   is.object(value) &&
