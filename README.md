@@ -40,6 +40,7 @@ engine from scratch.
 - `no()` for unobserved objects
 - `noto()` for unobserved scopes
 - `watch()` for listening to deep changes
+- `shallowChanges()` for listening to shallow changes
 - `withAuto()` for reactive components
 - `useAuto()` for easy `auto` calls in components
 - `useO()` for observable component state
@@ -238,6 +239,20 @@ observer.dispose()
 ```
 
 **Note:** When an object is made observable *after* being added to a watched object, it won't be watched. Be sure you pass objects to `o()` before adding them to a watched object!
+
+&nbsp;
+
+### shallowChanges ⚡️
+
+Just like `watch`, but only the given object is observed.
+
+```ts
+import { shallowChanges } from 'wana'
+
+const observer = shallowChanges(obj, change => {
+  console.log('changed:', change)
+})
+```
 
 &nbsp;
 
