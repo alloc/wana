@@ -1,6 +1,6 @@
 {
   "name": "wana",
-  "version": "0.13.13",
+  "version": "0.13.14",
   "description": "Easy observable state for React",
   "author": "Alec Larson",
   "license": "MIT",
