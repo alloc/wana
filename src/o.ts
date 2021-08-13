@@ -4,14 +4,14 @@ import { derive, Derived } from './derive'
 import { canMakeObservable, Observable, ObserverTarget } from './observable'
 import { $O } from './symbols'
 
-/** Create an observable getter that memoizes its result. */
-export function o<T>(fn: () => T): Derived<T>
-
-/** Create an observable getter that memoizes its result. */
-export function o(fn: Function): Derived
-
-/** Get an observable proxy for an object. Non-objects are returned as-is. */
-export function o<T>(value: T): T
+/**
+ * Pass an **object** to receive an observable proxy.
+ * Pass a **function** to receive an observable getter.
+ * Anything else is returned as-is.
+ */
+export function o<T>(
+  value: T
+): T extends () => infer U ? Derived<U> : T extends Function ? Derived : T
 
 export function o(value: ObserverTarget) {
   let state = value && value[$O]
