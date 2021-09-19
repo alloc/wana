@@ -24,7 +24,32 @@ export function useDerived<T>(
   deps?: readonly any[]
 ): Derived<T> | null
 
-export function useDerived<T>(compute: (() => T) | Falsy, deps = emptyArray) {
+export function useDerived<T>(
+  compute: () => T,
+  discard: (memo: T, oldMemo: T | undefined) => boolean,
+  deps?: readonly any[]
+): Derived<T>
+
+export function useDerived<T>(
+  compute: (() => T) | Falsy,
+  discard: (memo: T, oldMemo: T | undefined) => boolean,
+  deps?: readonly any[]
+): Derived<T> | null
+
+export function useDerived<T>(
+  compute: (() => T) | Falsy,
+  discardOrDeps?:
+    | ((memo: T, oldMemo: T | undefined) => boolean)
+    | readonly any[],
+  deps?: readonly any[]
+) {
+  let discard: ((memo: T, oldMemo: T | undefined) => boolean) | undefined
+  if (typeof discardOrDeps == 'function') {
+    discard = discardOrDeps
+  } else {
+    deps = discardOrDeps
+  }
+
   const [derived, setState] = useMemo(() => {
     if (!compute) {
       return [null, null]
@@ -38,17 +63,17 @@ export function useDerived<T>(compute: (() => T) | Falsy, deps = emptyArray) {
       }
       setState({ observer })
       return result
-    })
+    }, discard)
     const setState = mountAuto(derived.auto)
     return [derived, setState]
-  }, deps)
+  }, deps || emptyArray)
 
   useLayoutEffect(() => {
     if (setState) {
       setState({ mounted: true })
       return () => setState({ mounted: false })
     }
-  }, deps)
+  }, [setState])
 
   return derived
 }
