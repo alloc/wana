@@ -24,7 +24,10 @@ export interface Derived<T = any> extends Disposable {
 }
 
 /** @internal */
-export function derive<T>(run: (auto: Auto) => T): Derived<T> {
+export function derive<T>(
+  run: (auto: Auto) => T,
+  discard: (memo: T, oldMemo: T | undefined) => boolean = Object.is
+): Derived<T> {
   // The memoized result
   let memo: T | undefined
 
@@ -55,9 +58,9 @@ export function derive<T>(run: (auto: Auto) => T): Derived<T> {
     if (auto.dirty) {
       noto(() => {
         const oldMemo = memo
-        memo = run(auto)
-        if (memo !== oldMemo) {
-          emitReplace(derived, null, memo, oldMemo)
+        const newMemo = run(auto)
+        if (!discard(newMemo, oldMemo)) {
+          emitReplace(derived, null, (memo = newMemo), oldMemo)
         }
       })
     }
