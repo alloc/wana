@@ -83,6 +83,9 @@ export function withAuto(render: any) {
     })
     component = forwardRef(component as any)
   }
+  if (/^[A-Z]/.test(render.name)) {
+    component.displayName = render.name
+  }
   if (isDev) {
     Object.defineProperty(component, '__render', {
       value: render,
