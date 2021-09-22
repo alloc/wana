@@ -1,5 +1,6 @@
 import { is } from '@alloc/is'
 import { globals } from './globals'
+import { noto } from './noto'
 import { Change, Observable, ObservedSlot, ObserverTarget } from './observable'
 import { $O, SIZE } from './symbols'
 
@@ -16,27 +17,27 @@ function onChange(observable: Observable, key: any, change: Change) {
 }
 
 function emit(target: ObserverTarget, change: Change) {
-  const observable = target[$O]!
+  noto(() => {
+    const observable = target[$O]!
+    if (globals.onChange) {
+      globals.onChange(change)
+    }
 
-  if (globals.onChange) {
-    globals.onChange(change)
-  }
+    // The "clear" op never has a key.
+    if (change.op !== 'clear') {
+      onChange(observable, change.key, change)
+    }
+    // When a `Map` object is cleared, notify every key observer.
+    else if (is.map(change.oldValue)) {
+      change.oldValue.forEach((_, key) => onChange(observable, key, change))
+    }
 
-  // The "clear" op never has a key.
-  if (change.op !== 'clear') {
-    onChange(observable, change.key, change)
-  }
-  // When a `Map` object is cleared, notify every key observer.
-  else if (is.map(change.oldValue)) {
-    change.oldValue.forEach((_, key) => onChange(observable, key, change))
-  }
-
-  // Size changes always come after a related change,
-  // so avoid notifying `$O` observers more than once.
-  if (change.key !== SIZE) {
-    onChange(observable, $O, change)
-  }
-
+    // Size changes always come after a related change,
+    // so avoid notifying `$O` observers more than once.
+    if (change.key !== SIZE) {
+      onChange(observable, $O, change)
+    }
+  })
   return true
 }
 
