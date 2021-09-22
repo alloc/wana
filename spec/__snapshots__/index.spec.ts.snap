@@ -24,9 +24,9 @@ Array [
     Object {
       "key": 0,
       "oldValue": Array [
-        undefined,
-        undefined,
-        undefined,
+        ,
+        ,
+        ,
       ],
       "op": "splice",
       "target": Array [],
@@ -450,7 +450,7 @@ Array [
       "key": "1",
       "op": "add",
       "target": Array [
-        undefined,
+        ,
         1,
       ],
       "value": 1,
@@ -462,7 +462,7 @@ Array [
       "oldValue": 0,
       "op": "replace",
       "target": Array [
-        undefined,
+        ,
         1,
       ],
       "value": 2,
