@@ -1,4 +1,5 @@
-import { o, watch, Watcher } from '../src'
+import { flushMicroTasks } from 'flush-microtasks'
+import { auto, o, watch, Watcher } from '../src'
 
 let spy: jest.Mock
 let root: any
@@ -81,6 +82,28 @@ describe('watch()', () => {
     expect(spy).toBeCalledTimes(1)
     obj.b++
     expect(spy).toBeCalledTimes(1)
+  })
+
+  it('does not leak into observer that triggered the change', async () => {
+    const obj = o({ a: 0, b: 0 })
+
+    const watchFn = jest.fn(() => {
+      obj.a // Access observable property.
+    })
+    watch(obj, watchFn)
+
+    let calls = 0
+    auto(() => {
+      obj.a = obj.b + 1
+      calls += 1
+    })
+    expect(watchFn).toBeCalled()
+
+    // This mutation should not be seen by the AutoObserver.
+    obj.a += 1
+
+    await flushMicroTasks()
+    expect(calls).toBe(1)
   })
 
   it.todo('observes object keys in Map objects')
