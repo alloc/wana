@@ -1,5 +1,6 @@
 import { is } from '@alloc/is'
-import { useLayoutEffect, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
+import { useLayoutEffect } from 'react-layout-effect'
 import { noop } from '../common'
 import { no } from '../no'
 import { Change } from '../observable'
