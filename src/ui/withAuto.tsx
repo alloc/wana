@@ -73,7 +73,7 @@ export function withAuto(render: any) {
   }
   if (isDev) {
     const name = /^[A-Z]/.test(render.name) ? render.name : 'Unknown'
-    component = toNamedComponent(name, component, render)
+    component = toNamedComponent(name, component, render, inferSourceURL())
   }
   if (render.length > 1) {
     // Bind its component name to the ref forwarder.
@@ -173,7 +173,8 @@ let renderVars: any = null
 function toNamedComponent(
   name: string,
   component: React.FunctionComponent<any>,
-  render: Function
+  render: Function,
+  sourceURL?: string
 ) {
   // The name may have been injected with a Babel plugin,
   // which may result in a naming conflict that is resolved
@@ -181,10 +182,20 @@ function toNamedComponent(
   name = name.replace(/[0-9]+$/, '')
 
   // Convert `component` into a named function.
-  const named = `return function ${name} ${component
+  let code = `return function ${name} ${component
     .toString()
     .replace('=>', '')
     .replace('component', name)}`
+
+  const isESM = typeof exports == 'undefined'
+  if (sourceURL) {
+    // Exclude the querystring in SSR environments, so that
+    // stack traces point to the real file path.
+    if (isESM && typeof process == 'undefined') {
+      sourceURL += (sourceURL.includes('?') ? '&' : '?') + `wana=${name}`
+    }
+    code += `\n//# sourceURL=${sourceURL}`
+  }
 
   return new Function(
     `render`,
@@ -193,14 +204,24 @@ function toNamedComponent(
         useAutoRender,
         RenderAction,
         AutoContext,
-        // ESM bindings
-        useLayoutEffect,
-        React,
-        // CommonJS bindings
-        reactLayoutEffect: { useLayoutEffect },
-        React__namespace: React,
+        ...(isESM
+          ? { useLayoutEffect, React }
+          : {
+              // CommonJS bindings
+              reactLayoutEffect: { useLayoutEffect },
+              React__namespace: React,
+            }),
       })
     )}}`,
-    named
+    code
   )(render, renderVars)
+}
+
+function inferSourceURL() {
+  const frame = new Error()
+    .stack!.split('\n')
+    .slice(1)
+    .find(frame => !frame.includes('/wana/'))
+  const match = frame?.match(/at (\S+):\d+:\d+/)
+  return match?.[1]
 }
