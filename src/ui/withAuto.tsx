@@ -71,6 +71,10 @@ export function withAuto(render: any) {
       </AutoContext>
     )
   }
+  if (isDev) {
+    const name = /^[A-Z]/.test(render.name) ? render.name : 'Unknown'
+    component = toNamedComponent(name, component, render)
+  }
   if (render.length > 1) {
     // Bind its component name to the ref forwarder.
     Object.defineProperty(component, 'displayName', {
@@ -162,4 +166,41 @@ function useAutoRender(component: React.FunctionComponent<any>) {
       }
     },
   }
+}
+
+let renderVars: any = null
+
+function toNamedComponent(
+  name: string,
+  component: React.FunctionComponent<any>,
+  render: Function
+) {
+  // The name may have been injected with a Babel plugin,
+  // which may result in a naming conflict that is resolved
+  // by appending a number. This can be safely removed.
+  name = name.replace(/[0-9]+$/, '')
+
+  // Convert `component` into a named function.
+  const named = `return function ${name} ${component
+    .toString()
+    .replace('=>', '')
+    .replace('component', name)}`
+
+  return new Function(
+    `render`,
+    `{${Object.keys(
+      (renderVars ||= {
+        useAutoRender,
+        RenderAction,
+        AutoContext,
+        // ESM bindings
+        useLayoutEffect,
+        React,
+        // CommonJS bindings
+        reactLayoutEffect: { useLayoutEffect },
+        React__namespace: React,
+      })
+    )}}`,
+    named
+  )(render, renderVars)
 }
