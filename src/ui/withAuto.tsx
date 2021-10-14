@@ -176,45 +176,51 @@ function toNamedComponent(
   render: Function,
   sourceURL?: string
 ) {
+  let code = component.toString()
+
+  if (!renderVars) {
+    renderVars = {}
+    let parsedVar: RegExpExecArray | null
+    const parsedVarRE = /\b((use)?[A-Z][\w\$]+|createElement)\b(?!:)/g
+    while ((parsedVar = parsedVarRE.exec(code))) {
+      let name = parsedVar[1]
+
+      // Find the identifier that isn't a property name.
+      let start = parsedVar.index
+      while (code[--start] == '.') {
+        const end = start
+        while (/[\w\$]/.test(code[start - 1])) start--
+        name = code.slice(start, end)
+      }
+
+      renderVars[name] = eval(name)
+    }
+  }
+
   // The name may have been injected with a Babel plugin,
   // which may result in a naming conflict that is resolved
   // by appending a number. This can be safely removed.
   name = name.replace(/[0-9]+$/, '')
 
   // Convert `component` into a named function.
-  let code = `return function ${name} ${component
-    .toString()
+  code = `return function ${name} ${code
     .replace('=>', '')
-    .replace('component', name)}`
+    .replace(/component[0-9]*/, name)
+    .replace(/render[0-9]*/g, 'render')}`
 
-  const isESM = typeof exports == 'undefined'
   if (sourceURL) {
-    // Exclude the querystring in SSR environments, so that
-    // stack traces point to the real file path.
-    if (isESM && typeof process == 'undefined') {
+    // Exclude the querystring in SSR environments, so that stack traces
+    // point to the real file path.
+    if (typeof exports == 'undefined' && typeof process == 'undefined') {
       sourceURL += (sourceURL.includes('?') ? '&' : '?') + `wana=${name}`
     }
     code += `\n//# sourceURL=${sourceURL}`
   }
 
-  return new Function(
-    `render`,
-    `{${Object.keys(
-      (renderVars ||= {
-        useAutoRender,
-        RenderAction,
-        AutoContext,
-        ...(isESM
-          ? { useLayoutEffect, React }
-          : {
-              // CommonJS bindings
-              reactLayoutEffect: { useLayoutEffect },
-              React__namespace: React,
-            }),
-      })
-    )}}`,
-    code
-  )(render, renderVars)
+  return new Function(`render`, `{${Object.keys(renderVars)}}`, code)(
+    render,
+    renderVars
+  )
 }
 
 function inferSourceURL() {
