@@ -2,7 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   '@alloc/is': ^3.0.0
-  '@alloc/is-dev': ^1.1.0
+  '@alloc/is-dev': ^1.3.0
   '@alloc/queue-microtask': ^1.1.5
   '@testing-library/react': ^8.0.5
   '@types/jest': ^24.0.15
@@ -29,7 +29,7 @@ specifiers:
 
 dependencies:
   '@alloc/is': 3.1.0
-  '@alloc/is-dev': 1.2.2
+  '@alloc/is-dev': 1.3.0
   '@alloc/queue-microtask': 1.1.5
   react-batched-updates: 1.0.1
   react-layout-effect: 1.0.5_react@16.9.0
@@ -67,8 +67,8 @@ packages:
       nebu: 2.2.1
     dev: true
 
-  /@alloc/is-dev/1.2.2:
-    resolution: {integrity: sha512-EkpBVIODXFYUWxou3xJmRD+bmwYTOYMShG0tswjZ6uv0k7INOzXzp/uyjOdSZ4K9ygp8mNCLOxjCkiRfd7TDYA==}
+  /@alloc/is-dev/1.3.0:
+    resolution: {integrity: sha512-irqXVVsz2gfLC9RMwHH40BAxtO1T5vrQj/Lviv/7kACVSiXc2TM8XAMzUMfHiZ3JZ5Cufx/0fKH49CaO4OLbsg==}
     dev: false
 
   /@alloc/is/3.1.0:
@@ -82,19 +82,20 @@ packages:
     resolution: {integrity: sha512-3HpQjwvBKe2zrNwUjdIsM/UrgmDtRgoDBwJR7whMvG6xM+SOhu2w7EQyDmpqyxS4+1ENSr1dlCKlSR2JC4L0Ug==}
     dev: true
 
-  /@babel/code-frame/7.12.13:
-    resolution: {integrity: sha512-HV1Cm0Q3ZrpCR93tkWOYiuYIgLxZXZFVG2VgK+MBWjUqZTundupbfx2aXarXuw5Ko5aMcjtJgbSs4vUGBS5v6g==}
-    dependencies:
-      '@babel/highlight': 7.13.10
-    dev: true
-    optional: true
-
   /@babel/code-frame/7.14.5:
     resolution: {integrity: sha512-9pzDqyc6OLDaqe+zbACgFkb6fKMNG6CObKpnYXChRsvYGyEdc7CA2BaqeOM+vOtCS5ndmJicPJhKAwYRI6UfFw==}
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/highlight': 7.14.5
     dev: true
+
+  /@babel/code-frame/7.15.8:
+    resolution: {integrity: sha512-2IAnmn8zbvC/jKYhq5Ki9I+DwjlrtMPUCH/CpHvqI4dNnlwHwsxoIhlc8WcYY5LSYknXQtAlFYuHfqAFCvQ4Wg==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      '@babel/highlight': 7.14.5
+    dev: true
+    optional: true
 
   /@babel/compat-data/7.15.0:
     resolution: {integrity: sha512-0NqAC1IJE0S0+lL1SWFMxMkz1pKCNCjI4tr2Zx4LJSXxCLAdr6KyArnY+sno5m3yH9g737ygOyPABDsnXkpxiA==}
@@ -237,11 +238,6 @@ packages:
       '@babel/types': 7.15.6
     dev: true
 
-  /@babel/helper-validator-identifier/7.12.11:
-    resolution: {integrity: sha512-np/lG3uARFybkoHokJUmf1QfEvRVCPbmQeUQpKow5cQ3xWrV9i3rUHodKDJPQfTVX61qKi+UdYk8kik84n7XOw==}
-    dev: true
-    optional: true
-
   /@babel/helper-validator-identifier/7.15.7:
     resolution: {integrity: sha512-K4JvCtQqad9OY2+yTU8w+E82ywk/fe+ELNlt1G8z3bVGlZfn/hOcQQsUhGhW/N+tb3fxK800wLtKOE/aM0m72w==}
     engines: {node: '>=6.9.0'}
@@ -262,15 +258,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /@babel/highlight/7.13.10:
-    resolution: {integrity: sha512-5aPpe5XQPzflQrFwL1/QoeHkP2MsA4JCntcXHRhEsdsfPVkvPi2w7Qix4iV7t5S/oC9OodGrggd8aco1g3SZFg==}
-    dependencies:
-      '@babel/helper-validator-identifier': 7.12.11
-      chalk: 2.4.2
-      js-tokens: 4.0.0
-    dev: true
-    optional: true
 
   /@babel/highlight/7.14.5:
     resolution: {integrity: sha512-qf9u2WFWVV0MppaL877j2dBtQIDgmidgjGk5VIMw3OadXvYaXn66U1BFlH2t4+t3i+8PhedppRv+i40ABzd+gg==}
@@ -1430,8 +1417,8 @@ packages:
       source-map: 0.6.1
     dev: true
 
-  /eslint-visitor-keys/2.0.0:
-    resolution: {integrity: sha512-QudtT6av5WXels9WjIM7qz1XD1cWGvX4gGXvp/zBn9nXG02D0utdU3Em2m/QjTnrsk6bBjmCygl3rmj118msQQ==}
+  /eslint-visitor-keys/2.1.0:
+    resolution: {integrity: sha512-0rSmRBzXgDzIsD6mGdJgevzgezI534Cer5L/vyMX0kHzT/jiB43jRhd9YUlMGYLQy2zprNmoT8qasCGtY+QaKw==}
     engines: {node: '>=10'}
     dev: true
 
@@ -2529,8 +2516,8 @@ packages:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
     dev: true
 
-  /meriyah/4.1.5:
-    resolution: {integrity: sha512-ptw5umwiQILhfIGKO99NIY3Y2/jhEyEPIwSFwKLBQdXnN/6606rQoHyF4WK+2WiUmvFbBbTVMo4Q+po30xVjtg==}
+  /meriyah/4.2.0:
+    resolution: {integrity: sha512-fCVh5GB9YT53Bq14l00HLYE3i9DywrY0JVZxbk0clXWDuMsUKKwluvC5sY0bMBqHbnIbpIjfSSIsnrzbauA8Yw==}
     engines: {node: '>=10.4.0'}
     dev: true
 
@@ -2595,9 +2582,9 @@ packages:
     dependencies:
       '@alloc/is': 3.1.0
       '@alloc/types': 2.1.0
-      eslint-visitor-keys: 2.0.0
+      eslint-visitor-keys: 2.1.0
       magic-string: 0.24.1
-      meriyah: 4.1.5
+      meriyah: 4.2.0
     dev: true
 
   /nice-try/1.0.5:
@@ -2977,7 +2964,7 @@ packages:
       rollup: 2.45.1
       typescript: 4.2.4
     optionalDependencies:
-      '@babel/code-frame': 7.12.13
+      '@babel/code-frame': 7.15.8
     dev: true
 
   /rollup-plugin-esbuild/3.0.2_esbuild@0.8.57+rollup@2.45.1:
