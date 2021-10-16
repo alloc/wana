@@ -178,10 +178,13 @@ function toNamedComponent(
 ) {
   let code = component.toString()
 
+  // When rewriting `component` into a named function, we need to inject
+  // any out-of-scope variables using `eval` to access them at runtime.
+  // Since this is development-only logic, using eval is fine.
   if (!renderVars) {
     renderVars = {}
     let parsedVar: RegExpExecArray | null
-    const parsedVarRE = /\b((use)?[A-Z][\w\$]+|createElement)\b(?!:)/g
+    const parsedVarRE = /\b((use)?[A-Z][\w\$]+|[\w\$]*jsx[\w\$]*|createElement|_s\d+)\b(?!:)/g
     while ((parsedVar = parsedVarRE.exec(code))) {
       let name = parsedVar[1]
 
@@ -193,7 +196,9 @@ function toNamedComponent(
         name = code.slice(start, end)
       }
 
-      renderVars[name] = eval(name)
+      // Fast Refresh injects a function call like `_s10()` when wana is
+      // a local clone, so using an empty function prevents breakage.
+      renderVars[name] = name.startsWith('_s') ? () => {} : eval(name)
     }
   }
 
