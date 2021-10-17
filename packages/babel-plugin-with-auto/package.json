@@ -1,6 +1,6 @@
 {
   "name": "@wana/babel-plugin-with-auto",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Ensure withAuto components appear in stack traces",
   "author": "Alec Larson",
   "license": "MIT",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@wana/babel-plugin-add-react-displayname": "^1.0.5"
+    "@wana/babel-plugin-add-react-displayname": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.15.8",
