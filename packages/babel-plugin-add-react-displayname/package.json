@@ -14,8 +14,8 @@
     "directory": "packages/babel-plugin-add-react-displayname"
   },
   "scripts": {
-    "build": "tsc -p .",
-    "prepublishOnly": "pnpm build"
+    "dev": "tsc -p . -w",
+    "build": "tsc -p ."
   },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0"

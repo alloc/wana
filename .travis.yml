@@ -12,5 +12,4 @@ install:
   - pnpm install
 script:
   - pnpm run test:cov
-  - pnpm run lint
   - pnpm run build

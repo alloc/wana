@@ -10,8 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p .",
-    "prepublishOnly": "pnpm build"
+    "dev": "tsc -p . -w",
+    "build": "tsc -p ."
   },
   "repository": {
     "type": "git",

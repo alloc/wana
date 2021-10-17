@@ -1,6 +1,6 @@
 // @ts-check
-const exec = require('@cush/exec').sync
 const fs = require('fs')
+const { run, tagExists } = require('./utils')
 
 // Update changelogs and bump versions
 run(`pnpm changeset`)
@@ -13,21 +13,27 @@ const packages = ['.'].concat(
     .map(name => 'packages/' + name)
 )
 
-const versions = packages.map(dir => {
+// Collect new tags
+const names = []
+const tags = []
+for (const dir of packages) {
   const pkg = JSON.parse(fs.readFileSync(dir + '/package.json', 'utf8'))
-  return pkg.name + '@' + pkg.version
-})
+  const tag = pkg.name + '@' + pkg.version
+  if (!tagExists(tag)) {
+    names.push(pkg.name)
+    tags.push(tag)
+  }
+}
+
+// Build packages
+run(`pnpm build --parallel ${names.map(name => `--filter=` + name).join(` `)}`)
 
 // Commit and tag
 run(`git add -A`)
-run(`git commit -m "chore: release" -m "${versions.join('\n')}"`)
-versions.forEach(version => run(`git tag ${version}`))
+run(`git commit -m "chore: release" -m "${tags.join('\n')}"`)
+tags.forEach(tag => run(`git tag ${tag}`))
 
 // Push and publish
 run(`git push`)
 run(`git push --tags`)
 run(`pnpm m publish`)
-
-function run(cmd) {
-  exec(cmd, { stdio: 'inherit' })
-}

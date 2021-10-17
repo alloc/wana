@@ -13,9 +13,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "lint": "tsc -p . --noEmit",
-    "prepublishOnly": "yarn lint && yarn build",
+    "dev": "rollup -c -w",
+    "build": "tsc -p . --noEmit && rollup -c",
     "test": "jest",
     "test:cov": "jest --coverage && codecov",
     "release": "node scripts/release"
