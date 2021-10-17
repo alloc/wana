@@ -56,6 +56,13 @@ Many of `wana`'s exports are tree-shakeable. 🌲
 
 &nbsp;
 
+## Babel Plugins
+
+- `@wana/babel-plugin-with-auto`  
+  **For development only.** It ensures that `withAuto` components appear in the "component stack" printed by React when an error is thrown while rendering. **This makes debugging a lot easier,** but also inflates the size of your application. This plugin produces broken code when used on a production bundle, because it relies on an API that exists only in development.
+
+- `@wana/babel-plugin-add-react-displayname`  
+  A fork of [babel-plugin-add-react-displayname](https://www.npmjs.com/package/babel-plugin-add-react-displayname) that works with Babel 7 and up. It also provides a `callees` option, which means HOCs like `withAuto` are supported. Basically, this plugin sets the `displayName` of your components for you, which makes React Devtools a better experience. It's recommended to use this plugin in both development and production.
 
 &nbsp;
 
