@@ -9,6 +9,7 @@ importers:
       '@alloc/queue-microtask': ^1.1.5
       '@changesets/changelog-github': ^0.4.1
       '@changesets/cli': ^2.17.0
+      '@cush/exec': ^1.7.1
       '@testing-library/react': ^8.0.5
       '@types/jest': ^24.0.15
       '@types/react': ~16.14.12
@@ -41,6 +42,7 @@ importers:
     devDependencies:
       '@changesets/changelog-github': 0.4.1
       '@changesets/cli': 2.17.0
+      '@cush/exec': 1.7.1
       '@testing-library/react': 8.0.9_react-dom@16.9.0+react@16.9.0
       '@types/jest': 24.9.1
       '@types/react': 16.14.12
@@ -871,6 +873,13 @@ packages:
       fs-extra: 7.0.1
       human-id: 1.0.2
       prettier: 1.19.1
+    dev: true
+
+  /@cush/exec/1.7.1:
+    resolution: {integrity: sha512-VhUZ39FqmWhXqMiKKsV1XzcNt0jTnc/vYYCn1TYHttrW1QGYWweD+f7MlgPABfLsAQDhYLVTvOjPdfY+1o0nsA==}
+    dependencies:
+      shell-quote: 1.7.2
+      type-error: 1.0.3
     dev: true
 
   /@istanbuljs/load-nyc-config/1.1.0:
@@ -4118,6 +4127,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /shell-quote/1.7.2:
+    resolution: {integrity: sha512-mRz/m/JVscCrkMyPqHc/bczi3OQHkLTqXHEFu0zDhK/qfv3UcOA4SVmRCLmos4bhjr9ekVQubj/R7waKapmiQg==}
+    dev: true
+
   /signal-exit/3.0.3:
     resolution: {integrity: sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==}
     dev: true
@@ -4496,6 +4509,10 @@ packages:
   /type-detect/4.0.8:
     resolution: {integrity: sha512-0fr/mIH1dlO+x7TlcMy+bIDqKPsw/70tVyeHW787goQjhmqaZe10uwLujubK9q9Lg6Fiho1KUKDYz0Z7k7g5/g==}
     engines: {node: '>=4'}
+    dev: true
+
+  /type-error/1.0.3:
+    resolution: {integrity: sha512-hlNA4NwwjtL9clb8nv+x/5C45uzxND+N+h+/y3z2dYdubGSmdtNtJjHVH4E68ZHR98Bkav4ACf1lmTZepc/4sg==}
     dev: true
 
   /type-fest/0.13.1:
