@@ -1,6 +1,6 @@
 import type { NodePath, types as t } from '@babel/core'
 import addReactDisplayName from '@wana/babel-plugin-add-react-displayname'
-import { BabelAPI, declare } from '@babel/helper-plugin-utils'
+import { declare } from '@babel/helper-plugin-utils'
 
 export default declare((babel, _options, dirname) => {
   babel.assertVersion(7)
