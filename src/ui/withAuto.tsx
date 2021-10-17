@@ -71,10 +71,6 @@ export function withAuto(render: any) {
       </AutoContext>
     )
   }
-  if (isDev) {
-    const name = /^[A-Z]/.test(render.name) ? render.name : 'Unknown'
-    component = toNamedComponent(name, component, render, inferSourceURL())
-  }
   if (render.length > 1) {
     // Bind its component name to the ref forwarder.
     Object.defineProperty(component, 'displayName', {
@@ -91,6 +87,42 @@ export function withAuto(render: any) {
     })
   }
   return component
+}
+
+// withAuto.dev is used by @wana/babel-plugin-with-auto
+if (isDev) {
+  withAuto.dev = (render: any) => {
+    const Component = render.length > 1 ? React.forwardRef(render) : render
+    function AutoRender(props: any) {
+      const { auto, depth, commit } = useAutoRender(Component)
+      function useCommit(observer: AutoObserver) {
+        let nonce = 0
+        useLayoutEffect(() => commit(observer, nonce))
+        return () => {
+          nonce = observer.nonce
+          return (
+            <RenderAction
+              useAction={() => {
+                auto.nonce = nonce
+              }}
+            />
+          )
+        }
+      }
+      return (
+        <AutoContext depth={depth}>
+          <Component {...props} $auto={auto} $useCommit={useCommit} />
+        </AutoContext>
+      )
+    }
+    Object.defineProperty(AutoRender, 'displayName', {
+      get: () => 'AutoRender',
+      set(displayName) {
+        Component.displayName = displayName
+      },
+    })
+    return AutoRender
+  }
 }
 
 function useAutoRender(component: React.FunctionComponent<any>) {
@@ -166,73 +198,4 @@ function useAutoRender(component: React.FunctionComponent<any>) {
       }
     },
   }
-}
-
-let renderVars: any = null
-
-function toNamedComponent(
-  name: string,
-  component: React.FunctionComponent<any>,
-  render: Function,
-  sourceURL?: string
-) {
-  let code = component.toString()
-
-  // When rewriting `component` into a named function, we need to inject
-  // any out-of-scope variables using `eval` to access them at runtime.
-  // Since this is development-only logic, using eval is fine.
-  if (!renderVars) {
-    renderVars = {}
-    let parsedVar: RegExpExecArray | null
-    const parsedVarRE = /\b((use)?[A-Z][\w\$]+|[\w\$]*jsx[\w\$]*|createElement|_s\d+)\b(?!:)/g
-    while ((parsedVar = parsedVarRE.exec(code))) {
-      let name = parsedVar[1]
-
-      // Find the identifier that isn't a property name.
-      let start = parsedVar.index
-      while (code[--start] == '.') {
-        const end = start
-        while (/[\w\$]/.test(code[start - 1])) start--
-        name = code.slice(start, end)
-      }
-
-      // Fast Refresh injects a function call like `_s10()` when wana is
-      // a local clone, so using an empty function prevents breakage.
-      renderVars[name] = name.startsWith('_s') ? () => {} : eval(name)
-    }
-  }
-
-  // The name may have been injected with a Babel plugin,
-  // which may result in a naming conflict that is resolved
-  // by appending a number. This can be safely removed.
-  name = name.replace(/[0-9]+$/, '')
-
-  // Convert `component` into a named function.
-  code = `return function ${name} ${code
-    .replace('=>', '')
-    .replace(/component[0-9]*/, name)
-    .replace(/render[0-9]*/g, 'render')}`
-
-  if (sourceURL) {
-    // Exclude the querystring in SSR environments, so that stack traces
-    // point to the real file path.
-    if (typeof exports == 'undefined' && typeof process == 'undefined') {
-      sourceURL += (sourceURL.includes('?') ? '&' : '?') + `wana=${name}`
-    }
-    code += `\n//# sourceURL=${sourceURL}`
-  }
-
-  return new Function(`render`, `{${Object.keys(renderVars)}}`, code)(
-    render,
-    renderVars
-  )
-}
-
-function inferSourceURL() {
-  const frame = new Error()
-    .stack!.split('\n')
-    .slice(1)
-    .find(frame => !frame.includes('/wana/'))
-  const match = frame?.match(/at (\S+):\d+:\d+/)
-  return match?.[1]
 }
