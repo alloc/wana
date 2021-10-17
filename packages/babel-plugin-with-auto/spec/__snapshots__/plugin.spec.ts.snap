@@ -1,0 +1,321 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`anonymous fn expression (no props) 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(function ({
+  $auto,
+  $useCommit
+}) {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`anonymous fn expression 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(function ({
+  $auto,
+  $useCommit,
+  ...props
+}) {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div {...props} />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`destructured props parameter 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit,
+  x
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div {...x} />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`injected displayName 1`] = `
+"import { withAuto } from 'wana';
+const Foo = withAuto.dev(function Foo({
+  $auto,
+  $useCommit
+}) {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div />;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});
+Foo.displayName = \\"Foo\\";"
+`;
+
+exports[`multi-line arrow fn (no props) 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`multi-line arrow fn 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit,
+  ...props
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div {...props} />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`named fn expression (no props) 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(function Foo({
+  $auto,
+  $useCommit
+}) {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`named fn expression 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(function Foo({
+  $auto,
+  $useCommit,
+  ...props
+}) {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div {...props} />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`one-line arrow fn (no props) 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div />;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`one-line arrow fn 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit,
+  ...props
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div {...props} />;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`return inside if block (no else block) 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit,
+  ...props
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    if (props.xxx) {
+      $result = <div {...props} />;
+      break $render;
+    }
+
+    const {
+      a,
+      b
+    } = props;
+    $result = <div {...props} b={a} a={b} />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`return inside if block 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit,
+  ...props
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    if (props.xxx) {
+      $result = <div {...props} />;
+      break $render;
+    } else {
+      $result = <div {...props} xxy />;
+      break $render;
+    }
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;
+
+exports[`return inside nested function 1`] = `
+"import { withAuto } from 'wana';
+withAuto.dev(({
+  $auto,
+  $useCommit
+}) => {
+  let $result,
+      $commit = $useCommit($auto.start());
+
+  $render: try {
+    $result = <div onClick={() => {
+      return;
+    }} />;
+    break $render;
+  } finally {
+    $auto.stop();
+  }
+
+  return <>
+    {$result}
+    {$commit()}
+  </>;
+});"
+`;

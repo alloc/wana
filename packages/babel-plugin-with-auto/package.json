@@ -1,0 +1,21 @@
+{
+  "name": "@wana/babel-plugin-with-auto",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alloc/wana.git",
+    "directory": "packages/babel-plugin-with-auto"
+  },
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@wana/babel-plugin-add-react-displayname": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-syntax-jsx": "^7.14.5",
+    "@babel/plugin-syntax-typescript": "^7.14.5",
+    "@types/babel__helper-plugin-utils": "^7.10.0",
+    "endent": "^2.1.0",
+    "wana": "workspace:^0.13.19"
+  }
+}
