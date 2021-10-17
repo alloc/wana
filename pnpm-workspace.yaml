@@ -1,2 +1,3 @@
 packages:
+  - 'packages/babel-plugin-add-react-displayname'
   - 'packages/babel-plugin-with-auto'

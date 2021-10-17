@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`add-react-displayname transform transforms calleesOption 1`] = `
+"const Test1 = withThing(arg);
+export const Test2 = withThing(() => null);
+Test2.displayName = \\"Test2\\";"
+`;
+
+exports[`add-react-displayname transform transforms createClass 1`] = `
+"// not supported
+export const Test1 = React.createClass({
+  displayName: \\"Test1\\",
+
+  render() {
+    return React.createElement(\\"div\\", null);
+  }
+
+});"
+`;
+
+exports[`add-react-displayname transform transforms multipleWraps 1`] = `
+"export const Test1 = React.memo(React.forwardRef((props, ref) => {
+  return React.createElement(\\"div\\", null);
+}));
+Test1.displayName = \\"Test1\\";
+const Test2 = React.memo(React.forwardRef((props, ref) => {
+  return React.createElement(\\"div\\", null);
+}));
+Test2.displayName = \\"Test2\\";"
+`;
+
+exports[`add-react-displayname transform transforms nestedInFunction 1`] = `
+"export const Test1 = () => {
+  const Test2 = withAuto(() => {
+    return React.createElement(\\"div\\", null);
+  });
+  Test2.displayName = \\"Test2\\";
+  return React.createElement(Test2, null);
+};"
+`;
+
+exports[`add-react-displayname transform transforms nestedInObject 1`] = `
+"const Foo = {
+  Bar: withAuto(() => {
+    return React.createElement(\\"div\\", null);
+  })
+};"
+`;
+
+exports[`add-react-displayname transform transforms singleWrap 1`] = `
+"export const Test1 = withAuto(() => {
+  return React.createElement(\\"div\\", null);
+});
+Test1.displayName = \\"Test1\\";
+const Test2 = withAuto(() => {
+  return React.createElement(\\"div\\", null);
+});
+Test2.displayName = \\"Test2\\";"
+`;
