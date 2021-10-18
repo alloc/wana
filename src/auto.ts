@@ -53,7 +53,7 @@ export class Auto {
       this.stop().commit(observer)
       this.nonce = observer.nonce
       return result
-    } catch (error) {
+    } catch (error: any) {
       this.stop().onError(error)
     }
   }
