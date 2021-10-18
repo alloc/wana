@@ -35,7 +35,7 @@
     "build": "tsc -p . --noEmit && rimraf dist && rollup -c",
     "test": "jest",
     "test:cov": "jest --coverage && codecov",
-    "release": "node scripts/release"
+    "release": "pnpm --parallel exec sh $PWD/scripts/version.sh && sh scripts/release.sh"
   },
   "peerDependencies": {
     "react": ">=16.9"
@@ -50,9 +50,6 @@
   },
   "devDependencies": {
     "@alloc/fast-rimraf": "^1.0.8",
-    "@changesets/changelog-github": "^0.4.1",
-    "@changesets/cli": "^2.17.0",
-    "@cush/exec": "^1.7.1",
     "@testing-library/react": "^8.0.5",
     "@types/jest": "^24.0.15",
     "@types/react": "~16.14.12",
@@ -69,6 +66,7 @@
     "rollup": "^2.43.1",
     "rollup-plugin-dts": "^3.0.1",
     "rollup-plugin-esbuild": "^3.0.2",
+    "standard-version": "^9.3.2",
     "ts-jest": "^24.0.2",
     "typescript": "^4.5.0-beta",
     "typescript-snapshots-plugin": "^1.7.0",
