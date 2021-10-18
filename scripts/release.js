@@ -25,6 +25,10 @@ for (const dir of packages) {
   }
 }
 
+if (tags.length == 0) {
+  process.exit()
+}
+
 // Build packages
 run(`pnpm build --parallel ${names.map(name => `--filter=` + name).join(` `)}`)
 
