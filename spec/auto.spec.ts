@@ -1,6 +1,4 @@
-import { auto, Auto, o } from '../src'
-import { ObserverTarget } from '../src/observable'
-import { $O } from '../src/symbols'
+import { $O, auto, Auto, o, ObserverTarget } from 'wana/core'
 
 let runs: number
 let prevRuns: number

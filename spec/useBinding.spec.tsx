@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { o, useBinding } from '../src'
+import { o, useBinding } from 'wana'
 
 describe('useBinding', () => {
   it('can observe a whole object', () => {

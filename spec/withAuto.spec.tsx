@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { Derived, flushSync, o, withAuto } from '../src'
+import { Derived, flushSync, o } from 'wana/core'
+import { withAuto } from 'wana'
 
 describe('withAuto', () => {
   describe('when a parent component reacts to the same observed change', () => {

@@ -1,6 +1,5 @@
-import { auto, flushSync, no, o } from '../src'
-import { globals } from '../src/globals'
-import { $$, $O, SIZE } from '../src/symbols'
+import { $$, $O, auto, flushSync, globals, no, o } from 'wana/core'
+import { SIZE } from '../src/symbols'
 
 const observed: any[] = []
 afterEach(() => {

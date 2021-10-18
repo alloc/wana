@@ -1,4 +1,4 @@
-import { auto, o, when } from '../src'
+import { auto, o, when } from 'wana'
 
 // Sleep for `n` microtask queue flushes.
 const sleep = (n = 1) => {
