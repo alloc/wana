@@ -4,7 +4,7 @@
     "esModuleInterop": true,
     "jsx": "react",
     "lib": ["es2018", "dom"],
-    "moduleResolution": "node",
+    "module": "node12",
     "noUnusedLocals": true,
     "plugins": [{ "name": "typescript-snapshots-plugin" }],
     "strict": true,

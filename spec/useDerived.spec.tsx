@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { $O, noto, o, useAuto, useDerived } from '../src'
-import { Derived } from '../src/derive'
+import { $O, noto, o, Derived } from 'wana/core'
+import { useAuto, useDerived } from 'wana'
 
 describe('useDerived', () => {
   it('memoizes the result until an observed value changes', () => {

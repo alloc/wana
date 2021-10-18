@@ -1,5 +1,5 @@
 import { flushMicroTasks } from 'flush-microtasks'
-import { auto, o, watch, Watcher } from '../src'
+import { auto, o, watch, Watcher } from 'wana'
 
 let spy: jest.Mock
 let root: any

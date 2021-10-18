@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import React from 'react'
-import { o, useEffects } from '../src'
+import { o, useEffects } from 'wana'
 
 describe('useEffects', () => {
   describe('with array', () => {

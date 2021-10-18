@@ -1,5 +1,5 @@
-import { $O, auto, o } from '../src'
-import { shims } from '../src/shims'
+import { $O, auto, o } from 'wana/core'
+import { shims } from 'wana/shims'
 import { getObservers } from './auto.spec'
 
 shims.forEach(([namespace, keys]) => {

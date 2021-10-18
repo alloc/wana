@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { o, useAuto, withAuto } from '../src'
+import { o, useAuto, withAuto } from 'wana'
 
 describe('useAuto', () => {
   it('runs on every render by default', () => {
