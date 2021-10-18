@@ -51,7 +51,8 @@ export default declare((babel, _options, dirname) => {
 
             if (isFunction(renderFn)) {
               // Turn "withAuto" into "withAuto.dev"
-              callee.replaceWith(
+              rewrite(
+                callee,
                 t.memberExpression(
                   t.cloneNode(callee.node),
                   t.identifier('dev')
@@ -85,7 +86,8 @@ export default declare((babel, _options, dirname) => {
   ) {
     const bodyPath = renderFn.get('body')
     if (bodyPath.isExpression()) {
-      return bodyPath.replaceWith(
+      return rewrite(
+        bodyPath,
         t.blockStatement([
           t.expressionStatement(
             t.assignmentExpression(
@@ -105,7 +107,8 @@ export default declare((babel, _options, dirname) => {
       ReturnStatement(stmt) {
         stmt.insertAfter(t.breakStatement(t.identifier('$render')))
         if (stmt.node.argument)
-          stmt.replaceWith(
+          rewrite(
+            stmt,
             t.expressionStatement(
               t.assignmentExpression(
                 '=',
@@ -161,6 +164,17 @@ export default declare((babel, _options, dirname) => {
     }
   }
 })
+
+function rewrite(path: NodePath, node: t.Node) {
+  node.start = path.node.start
+  node.end = path.node.end
+  node.loc = path.node.loc
+  node.range = path.node.range
+  node.extra = path.node.extra
+  node.leadingComments = path.node.leadingComments
+  node.trailingComments = path.node.trailingComments
+  path.replaceWith(node)
+}
 
 function getImportDeclaration(
   program: NodePath<t.Program>,
