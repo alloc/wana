@@ -32,9 +32,12 @@ if (tags.length == 0) {
 // Build packages
 run(`pnpm build --parallel ${names.map(name => `--filter=` + name).join(` `)}`)
 
+const message =
+  tags.length > 1 ? `"chore: release" -m "${tags.join('\n')}"` : `"${tags[0]}"`
+
 // Commit and tag
 run(`git add -A`)
-run(`git commit -m "chore: release" -m "${tags.join('\n')}"`)
+run(`git commit -m ${message}`)
 tags.forEach(tag => run(`git tag ${tag}`))
 
 // Push and publish
