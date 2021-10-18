@@ -15,7 +15,7 @@
   },
   "scripts": {
     "dev": "tsc -p . -w",
-    "build": "tsc -p ."
+    "build": "rimraf dist && tsc -p ."
   },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0"
