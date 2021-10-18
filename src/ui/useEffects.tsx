@@ -7,7 +7,6 @@ import { Change } from '../observable'
 import { SIZE } from '../symbols'
 import { useChanges } from './useChanges'
 
-type Deps = readonly any[]
 type UnmountFn = () => undefined | void
 
 type Source<T = any> =
@@ -35,7 +34,7 @@ type Effect<T extends Source> = T extends Source<infer U>
 export function useEffects<T extends Source>(
   source: T,
   effect: Effect<T>,
-  deps?: Deps
+  deps?: readonly any[]
 ) {
   const unmountFns = useMemo(() => new Map<any, UnmountFn>(), [])
 

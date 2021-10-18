@@ -1,13 +1,5 @@
 {
   "repos": {
-    "packages/debug": {
-      "url": "git@github.com:alloc/wana-debug.git",
-      "head": "master"
-    },
-    "packages/babel-plugin-add-react-displayname": {
-      "url": "git@github.com:alloc/babel-plugin-add-react-displayname.git",
-      "head": "master"
-    },
     "packages/test-utils": {
       "url": "git@github.com:alloc/wana-test-utils.git",
       "head": "master"

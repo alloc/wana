@@ -13,9 +13,6 @@ export type { Change, ChangeObserver, Observer } from './observable'
 export { no } from './no'
 export { noto } from './noto'
 
-// Debugging
-export * from './debug'
-
 // Internals
 export { $O, $T, $$ } from './symbols'
 export { globals } from './globals'

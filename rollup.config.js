@@ -1,24 +1,55 @@
+// @ts-check
 import dts from 'rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
+import path from 'path'
 
-const name = require('./package.json').main.replace(/\.js$/, '')
+const name = require('./package.json').name
 
-const ext = format =>
-  format == 'dts' ? 'd.ts' : format == 'cjs' ? 'js' : 'mjs'
-
-const bundle = format => ({
-  input: 'src/index.ts',
-  output: {
-    file: `${name}.${ext(format)}`,
-    format: format == 'cjs' ? 'cjs' : 'es',
-    sourcemap: format != 'dts',
+/**
+ * @param {import('rollup').RollupOptions} options
+ * @returns {import('rollup').RollupOptions}
+ */
+const bundle = options => ({
+  input: {
+    [name]: 'src/index.ts',
+    core: 'src/core.ts',
+    debug: 'src/debug/index.ts',
+    shims: 'src/shims.ts',
   },
-  plugins: format == 'dts' ? [dts()] : [esbuild()],
   external: id => !/^[./]/.test(id),
+  ...options,
 })
 
 export default [
-  bundle('es'), //
-  bundle('cjs'),
-  bundle('dts'),
+  bundle({
+    plugins: [esbuild()],
+    output: [
+      {
+        dir: 'dist',
+        format: 'es',
+        sourcemap: true,
+        entryFileNames: '[name].mjs',
+        chunkFileNames: 'shared/[hash].mjs',
+        minifyInternalExports: false,
+      },
+      {
+        dir: 'dist',
+        format: 'cjs',
+        sourcemap: true,
+        entryFileNames: '[name].js',
+        chunkFileNames: 'shared/[hash].js',
+        minifyInternalExports: false,
+      },
+    ],
+  }),
+  bundle({
+    plugins: [dts()],
+    output: {
+      dir: 'dist',
+      format: 'es',
+      entryFileNames: '[name].d.ts',
+      chunkFileNames: 'shared/[hash].d.ts',
+      minifyInternalExports: false,
+    },
+  }),
 ]
