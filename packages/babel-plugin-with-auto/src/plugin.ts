@@ -34,8 +34,22 @@ export default declare((babel, _options, dirname) => {
               return
             }
 
-            const [renderFn] = call.get('arguments')
-            if (isFunctionExpression(renderFn)) {
+            let [renderFn] = call.get('arguments')
+
+            // Support two-step calls:
+            //    function Foo() {}
+            //    export default withAuto(Foo)
+            if (renderFn.isIdentifier()) {
+              if (/^[$_]?[a-z]/.test(renderFn.node.name)) return
+              const renderBinding = renderFn.scope.getBinding(
+                renderFn.node.name
+              )
+              if (renderBinding) {
+                renderFn = renderBinding.path as any
+              }
+            }
+
+            if (isFunction(renderFn)) {
               // Turn "withAuto" into "withAuto.dev"
               callee.replaceWith(
                 t.memberExpression(
@@ -54,11 +68,14 @@ export default declare((babel, _options, dirname) => {
     },
   }
 
-  function isFunctionExpression(
-    arg: any
+  function isFunction(
+    arg: NodePath
   ): arg is NodePath<t.ArrowFunctionExpression | t.FunctionExpression> {
     return (
-      arg && (arg.isFunctionExpression() || arg.isArrowFunctionExpression())
+      arg &&
+      (arg.isFunctionExpression() ||
+        arg.isArrowFunctionExpression() ||
+        arg.isFunctionDeclaration())
     )
   }
 
