@@ -10,7 +10,7 @@ type Deps = readonly any[]
 type EffectReturn = void | (() => void | undefined)
 
 /** Wrap a `useEffect` call with magic observable tracking */
-export function useAuto(effect: () => EffectReturn, deps?: Deps): Auto
+export function useAuto(effect: () => EffectReturn, deps?: readonly any[]): Auto
 
 /**
  * Combine a `useEffect` call with an `Auto` instance that invokes an
@@ -19,7 +19,7 @@ export function useAuto(effect: () => EffectReturn, deps?: Deps): Auto
 export function useAuto<T>(
   compute: () => T,
   effect: (value: T) => EffectReturn,
-  deps?: Deps
+  deps?: readonly any[]
 ): Auto
 
 /** @internal */

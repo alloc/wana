@@ -90,7 +90,7 @@ export class Observable<T extends object = any> extends Map<
   /** Create an observer for the given key. */
   observe(key: ObservedKey, onChange: (change: Change) => void) {
     const observers = this.get(key)
-    const observer = {
+    const observer: ChangeObserver = {
       onChange,
       dispose() {
         observers.delete(observer)
