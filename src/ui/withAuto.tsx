@@ -6,7 +6,7 @@ import { Auto, AutoObserver } from '../auto'
 import { batch } from '../batch'
 import { addDebugAction, getDebug, setDebug } from '../debug'
 import { globals } from '../globals'
-import { AutoContext, useAutoContext } from './AutoContext'
+import { AutoDepth, useAutoDepth } from './context'
 import { RenderAction, useDispose, useForceUpdate } from './common'
 
 interface Component<P = any> {
@@ -65,10 +65,10 @@ export function withAuto(render: any) {
     )
 
     return (
-      <AutoContext depth={depth + 1}>
+      <AutoDepth value={depth + 1}>
         {recon}
         {content}
-      </AutoContext>
+      </AutoDepth>
     )
   }
   if (render.length > 1) {
@@ -110,9 +110,9 @@ if (isDev) {
         }
       }
       return (
-        <AutoContext depth={depth}>
+        <AutoDepth value={depth + 1}>
           <Component {...props} $auto={auto} $useCommit={useCommit} />
-        </AutoContext>
+        </AutoDepth>
       )
     }
     Object.defineProperty(AutoRender, 'displayName', {
@@ -126,7 +126,7 @@ if (isDev) {
 }
 
 function useAutoRender(component: React.FunctionComponent<any>) {
-  const { depth } = useAutoContext()
+  const depth = useAutoDepth()
 
   const forceUpdate = useForceUpdate()
   const auto = useMemo(() => {
