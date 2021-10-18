@@ -32,7 +32,7 @@
   },
   "scripts": {
     "dev": "rollup -c -w",
-    "build": "tsc -p . --noEmit && rollup -c",
+    "build": "tsc -p . --noEmit && rimraf dist && rollup -c",
     "test": "jest",
     "test:cov": "jest --coverage && codecov",
     "release": "node scripts/release"
@@ -49,6 +49,7 @@
     "use-memo-one": "^1.1.1"
   },
   "devDependencies": {
+    "@alloc/fast-rimraf": "^1.0.8",
     "@changesets/changelog-github": "^0.4.1",
     "@changesets/cli": "^2.17.0",
     "@cush/exec": "^1.7.1",
