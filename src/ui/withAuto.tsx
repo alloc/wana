@@ -93,7 +93,7 @@ export function withAuto(render: any) {
 if (isDev) {
   withAuto.dev = (render: any) => {
     const Component = render.length > 1 ? React.forwardRef(render) : render
-    function AutoRender(props: any) {
+    const AutoRender = React.forwardRef((props: any, ref: any) => {
       const { auto, depth, commit } = useAutoRender(Component)
       function useCommit(observer: AutoObserver) {
         let nonce = 0
@@ -111,10 +111,10 @@ if (isDev) {
       }
       return (
         <AutoDepth value={depth + 1}>
-          <Component {...props} $auto={auto} $useCommit={useCommit} />
+          <Component {...props} ref={ref} $auto={auto} $useCommit={useCommit} />
         </AutoDepth>
       )
-    }
+    })
     Object.defineProperty(AutoRender, 'displayName', {
       get: () => 'AutoRender',
       set(displayName) {
