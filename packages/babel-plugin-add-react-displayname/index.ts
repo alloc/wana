@@ -36,7 +36,7 @@ export default declare(babel => {
     if (!prevStmt) return
 
     const displayName = inferDisplayName(path, state.opts as Options)
-    if (!displayName || /^[a-z]/.test(displayName)) return
+    if (!displayName || /^[$_]?[a-z]/.test(displayName)) return
 
     if (path.isArrowFunctionExpression()) {
       const { params, body, returnType, typeParameters } = path.node
