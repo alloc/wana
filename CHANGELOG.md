@@ -2,8 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 1.0.6 (2021-10-19)
+## 0.14.0 (2021-10-19)
 
-### Bug Fixes
+### Features
 
-- **add-react-displayname:** resolve typescript issues ([5252bb5](https://github.com/alloc/wana/commit/5252bb5ed1619aa75229074e0b94f5e9a2ba2c16))
+- add submodules ([53a9293](https://github.com/alloc/wana/commit/53a929357129dd83e68faa3da4233cbddd068aad))

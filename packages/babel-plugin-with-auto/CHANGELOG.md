@@ -2,8 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### 1.0.6 (2021-10-19)
+## 0.1.0 (2021-10-19)
 
-### Bug Fixes
+### Features
 
-- **add-react-displayname:** resolve typescript issues ([5252bb5](https://github.com/alloc/wana/commit/5252bb5ed1619aa75229074e0b94f5e9a2ba2c16))
+- add @wana/babel-plugin-with-auto ([21b5554](https://github.com/alloc/wana/commit/21b5554a5520a30c8fe564888a11dc8b6ca7ee0c))
