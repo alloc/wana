@@ -58,7 +58,7 @@
     "codecov": "^3.5.0",
     "concurrently": "^4.1.1",
     "esbuild": "^0.8.46",
-    "esbuild-jest": "npm:@alloc/esbuild-jest@^0.3.6",
+    "esbuild-jest": "npm:@alloc/esbuild-jest@0.4.0-0",
     "flush-microtasks": "^1.0.1",
     "jest": "^27.2.1",
     "prettier": "^2.0.5",
