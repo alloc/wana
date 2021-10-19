@@ -1,6 +1,6 @@
 {
   "name": "@wana/babel-plugin-with-auto",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ensure withAuto components appear in stack traces",
   "author": "Alec Larson",
   "license": "MIT",
