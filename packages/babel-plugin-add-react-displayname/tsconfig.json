@@ -1,11 +1,11 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["index.ts"],
+  "include": ["src"],
   "exclude": [],
   "compilerOptions": {
     "lib": ["es2020"],
     "module": "commonjs",
-    "outDir": "./",
+    "outDir": "dist",
     "skipLibCheck": true,
     "sourceMap": true,
     "target": "es2020"

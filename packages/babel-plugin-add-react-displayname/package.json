@@ -4,9 +4,10 @@
   "description": "Set the displayName of your higher-order function components",
   "author": "Alec Larson",
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/plugin.js",
   "files": [
-    "index.*"
+    "src",
+    "dist"
   ],
   "repository": {
     "type": "git",
