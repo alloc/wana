@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
-import { Derived, flushSync, o } from 'wana/core'
+import { Derived, flushSync, o } from '../src/core'
 import { withAuto } from 'wana'
 
 describe('withAuto', () => {

@@ -1,4 +1,4 @@
-import { $O, auto, o } from 'wana/core'
+import { $O, auto, o } from '../src/core'
 import { shims } from 'wana/shims'
 import { getObservers } from './auto.spec'
 

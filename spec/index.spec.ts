@@ -1,4 +1,4 @@
-import { $$, $O, auto, flushSync, globals, no, o } from 'wana/core'
+import { $$, $O, auto, flushSync, globals, no, o } from '../src/core'
 import { SIZE } from '../src/symbols'
 
 const observed: any[] = []
@@ -44,7 +44,7 @@ describe('o()', () => {
     const nativePromise = Promise.resolve()
     expect(o(nativePromise)).toBe(nativePromise)
 
-    const generatorFn = function*() {}
+    const generatorFn = function* () {}
     expect(o(generatorFn)).toBe(generatorFn)
 
     const generator = generatorFn()
