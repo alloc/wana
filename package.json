@@ -36,7 +36,7 @@
     "format": "sh scripts/format.sh",
     "test": "jest",
     "test:cov": "jest --coverage && codecov",
-    "release": "pnpm --parallel exec sh $PWD/scripts/version.sh && sh scripts/release.sh"
+    "release": "pnpm m exec sh $PWD/scripts/version.sh && sh scripts/release.sh"
   },
   "peerDependencies": {
     "react": ">=16.9"
