@@ -33,6 +33,7 @@
   "scripts": {
     "dev": "rollup -c -w",
     "build": "tsc -p . --noEmit && rimraf dist && rollup -c",
+    "format": "sh scripts/format.sh",
     "test": "jest",
     "test:cov": "jest --coverage && codecov",
     "release": "pnpm --parallel exec sh $PWD/scripts/version.sh && sh scripts/release.sh"
@@ -61,6 +62,7 @@
     "flush-microtasks": "^1.0.1",
     "jest": "^27.2.1",
     "prettier": "^2.0.5",
+    "pretty-quick": "^3.1.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "rollup": "^2.43.1",
