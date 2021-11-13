@@ -14,18 +14,22 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/wana.d.ts",
       "import": "./dist/wana.mjs",
       "default": "./dist/wana.js"
     },
     "./core": {
+      "types": "./dist/core.d.ts",
       "import": "./dist/core.mjs",
       "default": "./dist/core.js"
     },
     "./debug": {
+      "types": "./dist/debug.d.ts",
       "import": "./dist/debug.mjs",
       "default": "./dist/debug.js"
     },
     "./shims": {
+      "types": "./dist/shims.d.ts",
       "import": "./dist/shims.mjs",
       "default": "./dist/shims.js"
     }
