@@ -75,8 +75,7 @@
     "standard-version": "^9.3.2",
     "ts-jest": "^24.0.2",
     "typescript": "^4.5.0-beta",
-    "typescript-snapshots-plugin": "^1.7.0",
-    "wana": "link:."
+    "typescript-snapshots-plugin": "^1.7.0"
   },
   "keywords": [
     "transparent",

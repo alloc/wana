@@ -1,10 +1,15 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "esModuleInterop": true,
     "jsx": "react",
     "lib": ["es2018", "dom"],
     "module": "node12",
     "noUnusedLocals": true,
+    "paths": {
+      "wana": ["../src/index.ts"],
+      "wana/*": ["../src/*"]
+    },
     "plugins": [{ "name": "typescript-snapshots-plugin" }],
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
