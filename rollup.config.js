@@ -1,7 +1,6 @@
 // @ts-check
 import dts from 'rollup-plugin-dts'
 import esbuild from 'rollup-plugin-esbuild'
-import path from 'path'
 
 const name = require('./package.json').name
 

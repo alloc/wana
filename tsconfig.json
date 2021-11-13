@@ -1,5 +1,5 @@
 {
-  "include": ["src", "spec"],
+  "include": ["src", "rollup.config.js"],
   "compilerOptions": {
     "esModuleInterop": true,
     "jsx": "react",
@@ -7,6 +7,7 @@
     "module": "node12",
     "noUnusedLocals": true,
     "plugins": [{ "name": "typescript-snapshots-plugin" }],
+    "resolveJsonModule": true,
     "strict": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "esnext"
