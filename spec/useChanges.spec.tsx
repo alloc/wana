@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react'
 import React from 'react'
-import { $O, Change, o } from '../src/core'
+import { $O, Change, o } from 'wana/core'
 import { useChanges } from 'wana'
 
 describe('useChanges', () => {

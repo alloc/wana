@@ -1,4 +1,4 @@
-import { $O, auto, Auto, o, ObserverTarget } from '../src/core'
+import { $O, auto, Auto, o, ObserverTarget } from 'wana/core'
 
 let runs: number
 let prevRuns: number

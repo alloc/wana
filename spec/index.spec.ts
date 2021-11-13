@@ -1,4 +1,4 @@
-import { $$, $O, auto, flushSync, globals, no, o } from '../src/core'
+import { $$, $O, auto, flushSync, globals, no, o } from 'wana/core'
 import { SIZE } from '../src/symbols'
 
 const observed: any[] = []

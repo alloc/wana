@@ -1,4 +1,4 @@
-import { globals, no, o } from '../src/core'
+import { globals, no, o } from 'wana/core'
 
 describe('no()', () => {
   it('returns the original object when given an observable proxy', () => {
