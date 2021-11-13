@@ -4,6 +4,8 @@ export {
   Auto,
   auto,
   isDerived,
+  setDerived,
+  removeDerived,
   no,
   noto,
   o,

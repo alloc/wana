@@ -83,3 +83,38 @@ export function isDerived(value: unknown): value is Derived {
 export type WithDerived<T extends object> = {
   [P in keyof T]: T[P] extends Derived<infer U> ? U : T[P]
 }
+
+/**
+ * Create an observable getter and bind it to the given property name.
+ *
+ * ⚠️ Make sure you call `removeDerived` at some point to avoid memory leaks.
+ */
+export function setDerived<T extends object, P extends keyof T>(
+  obj: T,
+  key: P,
+  compute: () => T[P],
+  discard?: (memo: T[P], oldMemo: T[P] | undefined) => boolean
+) {
+  Object.defineProperty(obj, key, {
+    get: derive(auto => auto.run(compute), discard),
+  })
+}
+
+/**
+ * If you call `setDerived` on an object, you must call `removeDerived` on
+ * the same object before trying to release its memory, or else it will be
+ * retained by the observables being observed by its derived properties
+ * (leading to a memory leak).
+ *
+ * Note: The derived properties' latest values will still be accessible,
+ * but they won't be automatically updated anymore.
+ */
+export function removeDerived(obj: object) {
+  const props = Object.getOwnPropertyDescriptors(obj)
+  for (const prop in props) {
+    const derived = props[prop].get as Derived
+    if (derived[$O]) {
+      derived.dispose()
+    }
+  }
+}
