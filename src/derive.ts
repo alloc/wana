@@ -64,7 +64,7 @@ export function derive<T>(
         }
       })
     }
-    observe(derived, $O)
+    observe(derived)
     return memo!
   }
 

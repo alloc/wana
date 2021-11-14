@@ -24,11 +24,11 @@ import { $$, $O, SIZE } from './symbols'
 const ArrayOverrides: any = {
   concat(...args: any[]) {
     const self: any[] = this[$$]
-    observe(self, $O)
+    observe(self)
     args.forEach(arg => {
       arg = arg && arg[$$]
       if (is.array(arg)) {
-        observe(arg, $O)
+        observe(arg)
       }
     })
     return noto(() => self.concat(...args))

@@ -1,6 +1,6 @@
 import { setHidden } from './common'
 import { globals, observe } from './globals'
-import { $$, $O } from './symbols'
+import { $$ } from './symbols'
 
 export const shims: Array<[Function, string[]]> = [
   [Object, ['keys', 'values', 'entries']],
@@ -13,7 +13,7 @@ shims.forEach(([namespace, keys]) =>
     const shim = (...args: any[]) => {
       const target = args[0] && args[0][$$]
       if (target) {
-        observe(target, $O)
+        observe(target)
         args[0] = target
       }
       return fn(...args)

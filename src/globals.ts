@@ -1,5 +1,6 @@
 import { Auto } from './auto'
 import { Change, ObserverTarget } from './observable'
+import { $O } from './symbols'
 
 type OnRender = (
   auto: Auto,
@@ -26,5 +27,5 @@ export const globals: Globals = {
 }
 
 /** Tell the current observer to track the given object/key pair  */
-export const observe = (target: ObserverTarget, key: any) =>
+export const observe = (target: ObserverTarget, key: any = $O) =>
   !!globals.observe && (globals.observe(target, key), true)

@@ -1,5 +1,5 @@
 import { observe } from './globals'
-import { $$, $O } from './symbols'
+import { $$ } from './symbols'
 
 // These methods observe everything.
 const observeAll = [
@@ -29,9 +29,9 @@ const wrapIterators = (ctr: Function) =>
   observeAll.reduce(
     (methods, name) => (
       ctr.prototype[name] &&
-        (methods[name] = function(...args: any[]) {
+        (methods[name] = function (...args: any[]) {
           const self = this[$$]
-          observe(self, $O)
+          observe(self)
           return self[name](...args)
         }),
       methods
