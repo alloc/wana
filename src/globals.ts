@@ -1,5 +1,5 @@
 import { Auto } from './auto'
-import { Change, ObserverTarget } from './observable'
+import { Change, Observable, ObserverTarget } from './observable'
 import { $O } from './symbols'
 
 type OnRender = (
@@ -10,7 +10,7 @@ type OnRender = (
 
 type Globals = {
   /** Notify the current observer. */
-  observe: ((target: ObserverTarget, key: any) => void) | null
+  observe: ((target: ObserverTarget | Observable, key: any) => void) | null
   /** The `Auto` object for the current `withAuto` component being rendered. */
   auto: Auto | null
   /** For debugging re-renders. Only called in development. */

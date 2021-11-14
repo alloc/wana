@@ -113,7 +113,7 @@ export class Auto {
     const observer = new AutoObserver(effect)
     globals.auto = this
     globals.observe = (target, key) => {
-      observer.observed.add(target[$O]!.get(key))
+      observer.observed.add((target[$O] || target).get(key))
     }
     return observer
   }
