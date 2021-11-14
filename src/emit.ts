@@ -16,6 +16,8 @@ function onChange(observable: Observable, key: any, change: Change) {
   }
 }
 
+export { emit as emitChange }
+
 function emit(target: ObserverTarget, change: Change) {
   noto(() => {
     const observable = target[$O]!
