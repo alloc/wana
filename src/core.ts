@@ -15,7 +15,7 @@ export { noto } from './noto'
 
 // Internals
 export { $O, $T, $$ } from './symbols'
-export { globals } from './globals'
+export { globals, observe } from './globals'
 export { flushSync } from './batch'
 export { mountAuto } from './mountAuto'
 export { ObjectTraps } from './proxy'
