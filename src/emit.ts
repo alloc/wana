@@ -18,9 +18,9 @@ function onChange(observable: Observable, key: any, change: Change) {
 
 export { emit as emitChange }
 
-function emit(target: ObserverTarget, change: Change) {
+function emit(target: ObserverTarget | Observable, change: Change) {
   noto(() => {
-    const observable = target[$O]!
+    const observable: Observable = target[$O] || target
     if (globals.onChange) {
       globals.onChange(change)
     }
