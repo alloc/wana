@@ -95,9 +95,9 @@ export function setDerived<T extends object, P extends keyof T>(
   compute: () => T[P],
   discard?: (memo: T[P], oldMemo: T[P] | undefined) => boolean
 ) {
-  Object.defineProperty(obj, key, {
-    get: derive(auto => auto.run(compute), discard),
-  })
+  const get = derive(auto => auto.run(compute), discard)
+  Object.defineProperty(obj, key, { get })
+  return get
 }
 
 /**
