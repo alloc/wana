@@ -101,6 +101,18 @@ export function setDerived<T extends object, P extends keyof T>(
 }
 
 /**
+ * Force a derived property to rerun. Useful when the property
+ * depends on a non-observable, mutable value.
+ */
+export const clearDerived = <T extends object, P extends keyof T>(
+  obj: T,
+  key: P
+) =>
+  (Object.getOwnPropertyDescriptor(obj, key)?.get as
+    | Derived
+    | undefined)?.auto?.clear()
+
+/**
  * If you call `setDerived` on an object, you must call `removeDerived` on
  * the same object before trying to release its memory, or else it will be
  * retained by the observables being observed by its derived properties

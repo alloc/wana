@@ -5,6 +5,7 @@ export {
   auto,
   isDerived,
   setDerived,
+  clearDerived,
   removeDerived,
   no,
   noto,
