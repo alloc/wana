@@ -2,6 +2,7 @@ import { render } from '@testing-library/react'
 import { flushMicroTasks } from 'flush-microtasks'
 import React from 'react'
 import { o, useAuto, withAuto } from 'wana'
+import { ObservableSearchParams } from './experimental/observable-search-params'
 
 describe('useAuto', () => {
   it('runs on every render by default', () => {
@@ -54,6 +55,29 @@ describe('useAuto', () => {
     state.count++
     await flushMicroTasks()
     expect(calls).toEqual([0, 2])
+  })
+
+  it('can be given two functions: a getter and a reactor', async () => {
+    const calls: any[] = []
+    const searchParams = new ObservableSearchParams()
+    const Test = () => {
+      useAuto(
+        () => searchParams.get('q'),
+        query => {
+          calls.push(query)
+        }
+      )
+      return null
+    }
+
+    render(<Test />)
+    expect(calls).toEqual([null])
+
+    searchParams.set('q', 'foo')
+    searchParams.set('q', 'bar')
+
+    await flushMicroTasks()
+    expect(calls).toEqual([null, 'bar'])
   })
 
   it.todo('stops observing on dismount')
