@@ -27,5 +27,5 @@ export const globals: Globals = {
 }
 
 /** Tell the current observer to track the given object/key pair  */
-export const observe = (target: ObserverTarget, key: any = $O) =>
+export const observe = (target: ObserverTarget | Observable, key: any = $O) =>
   !!globals.observe && (globals.observe(target, key), true)
