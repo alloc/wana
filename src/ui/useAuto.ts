@@ -40,12 +40,13 @@ export function useAuto(
     deps = effectOrDeps as any
   }
 
-  useEffect(
-    () =>
-      batchedUpdates(() => {
-        auto.run(effect)
-      }),
-    deps
-  )
+  useEffect(() => {
+    let result: EffectReturn | undefined
+    batchedUpdates(() => {
+      result = auto.run(effect)
+    })
+    return result
+  }, deps)
+
   return auto
 }
