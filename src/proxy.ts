@@ -181,7 +181,8 @@ export const ArrayTraps: ProxyHandler<any[]> = {
       }
     } else {
       const oldLength = self.length
-      setProperty(self, key, value)
+      type IsNaN = (value: unknown) => value is string | symbol
+      setProperty(self, (is.nan as IsNaN)(key) ? key : +key, value)
       if (oldLength !== self.length) {
         emitReplace(self, SIZE, self.length, oldLength)
       }
