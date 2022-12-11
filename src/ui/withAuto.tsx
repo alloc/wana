@@ -36,8 +36,8 @@ export function withAuto<T extends RefForwardingComponent>(
 
 /** @internal */
 export function withAuto(render: any) {
-  let component: React.FunctionComponent<any> = (props, ref) => {
-    const { auto, depth, commit } = useAutoRender(component)
+  let Component: React.FunctionComponent<any> = (props, ref) => {
+    const { auto, depth, commit } = useAutoRender(Component)
 
     // Subscribe to observables as early as possible, because
     // we don't want effects to trigger the previous observer.
@@ -73,20 +73,20 @@ export function withAuto(render: any) {
   }
   if (render.length > 1) {
     // Bind its component name to the ref forwarder.
-    Object.defineProperty(component, 'displayName', {
-      get: () => component.displayName,
+    Object.defineProperty(Component, 'displayName', {
+      get: () => Component.displayName,
     })
-    component = forwardRef(component as any)
+    Component = forwardRef(Component as any)
   }
   if (/^[A-Z]/.test(render.name)) {
-    component.displayName = render.name
+    Component.displayName = render.name
   }
   if (isDev) {
-    Object.defineProperty(component, '__render', {
+    Object.defineProperty(Component, '__render', {
       value: render,
     })
   }
-  return component
+  return Component
 }
 
 // withAuto.dev is used by @wana/babel-plugin-with-auto
