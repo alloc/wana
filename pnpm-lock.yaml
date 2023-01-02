@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 importers:
 
@@ -41,7 +41,7 @@ importers:
       use-memo-one: 1.1.2_react@16.9.0
     devDependencies:
       '@alloc/fast-rimraf': 1.0.8
-      '@testing-library/react': 8.0.9_react-dom@16.9.0+react@16.9.0
+      '@testing-library/react': 8.0.9_dsp4qj7lggdet3zmisfy3gq4ym
       '@types/jest': 24.9.1
       '@types/react': 16.14.12
       '@types/react-dom': 16.9.14
@@ -56,8 +56,8 @@ importers:
       react: 16.9.0
       react-dom: 16.9.0_react@16.9.0
       rollup: 2.45.1
-      rollup-plugin-dts: 3.0.1_a1fe541e431ea1295520dde1163b9d8b
-      rollup-plugin-esbuild: 3.0.2_esbuild@0.8.57+rollup@2.45.1
+      rollup-plugin-dts: 3.0.1_uh7fihsdd2qssvja3xqrmo45rm
+      rollup-plugin-esbuild: 3.0.2_yxsntw534psbacotdlmuiin23q
       standard-version: 9.3.2
       ts-jest: 24.3.0_jest@27.2.1
       typescript: 4.5.0-beta
@@ -403,12 +403,16 @@ packages:
     resolution: {integrity: sha512-rycZXvQ+xS9QyIcJ9HXeDWf1uxqlbVFAUq0Rq0dbc50Zb/+wUe/ehyfzGfm9KZZF0kBejYgxltBXocP+gKdL2g==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.15.6
     dev: true
 
   /@babel/parser/7.15.8:
     resolution: {integrity: sha512-BRYa3wcQnjS/nqI8Ac94pYYpJfojHVvVXJ97+IDCImX4Jc8W8Xv1+47enbruk+q1etOpsQNwnfFcNGw+gtPGxA==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.15.6
     dev: true
 
   /@babel/plugin-proposal-class-properties/7.14.5_@babel+core@7.15.8:
@@ -954,7 +958,7 @@ packages:
       wait-for-expect: 1.3.0
     dev: true
 
-  /@testing-library/react/8.0.9_react-dom@16.9.0+react@16.9.0:
+  /@testing-library/react/8.0.9_dsp4qj7lggdet3zmisfy3gq4ym:
     resolution: {integrity: sha512-I7zd+MW5wk8rQA5VopZgBfxGKUd91jgZ6Vzj2gMqFf2iGGtKwvI5SVTrIJcSFaOXK88T2EUsbsIKugDtoqOcZQ==}
     engines: {node: '>=8'}
     peerDependencies:
@@ -1720,8 +1724,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -3049,7 +3053,6 @@ packages:
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-    dev: true
 
   /js-yaml/3.14.0:
     resolution: {integrity: sha512-/4IbIeHcD9VMHFqDR/gQ7EdZdLimOvW2DdcxFjdyyZ9NsbS+ccrXqVWDtab/lRl5AlUqmpBx8EhPaWR+OtY17A==}
@@ -3235,7 +3238,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: true
 
   /lru-cache/6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
@@ -3507,7 +3509,6 @@ packages:
   /object-assign/4.1.1:
     resolution: {integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /once/1.4.0:
     resolution: {integrity: sha1-WDsap3WWHUsROsF9nFC6753Xa9E=}
@@ -3779,7 +3780,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       react-is: 16.13.1
-    dev: true
 
   /psl/1.8.0:
     resolution: {integrity: sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==}
@@ -3825,7 +3825,6 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-    dev: true
 
   /react-is/17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -3846,7 +3845,6 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       prop-types: 15.7.2
-    dev: true
 
   /read-pkg-up/3.0.0:
     resolution: {integrity: sha1-PtSWaF26D4/hGNBpHcUfSh/5bwc=}
@@ -3961,7 +3959,7 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /rollup-plugin-dts/3.0.1_a1fe541e431ea1295520dde1163b9d8b:
+  /rollup-plugin-dts/3.0.1_uh7fihsdd2qssvja3xqrmo45rm:
     resolution: {integrity: sha512-sdTsd0tEIV1b5Bio1k4Ei3N4/7jbwcVRdlYotGYdJOKR59JH7DzqKTSCbfaKPzuAcKTp7k317z2BzYJ3bkhDTw==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -3975,7 +3973,7 @@ packages:
       '@babel/code-frame': 7.15.8
     dev: true
 
-  /rollup-plugin-esbuild/3.0.2_esbuild@0.8.57+rollup@2.45.1:
+  /rollup-plugin-esbuild/3.0.2_yxsntw534psbacotdlmuiin23q:
     resolution: {integrity: sha512-uq+oBCeLXF1m6g9V0qpqbPbgyq24aXBKF474BvqgxfNmTP6FZ+oVk5/pCWQ/2rfSNJs4IimNU/k0q8xMaa0iCA==}
     engines: {node: '>=12'}
     peerDependencies:
