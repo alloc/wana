@@ -4,6 +4,7 @@ import { Derived } from '../derive'
 import { Observable } from '../observable'
 import { $O, SIZE } from '../symbols'
 import { useForceUpdate } from './common'
+import { globals } from '../globals'
 
 /**
  * An alternative to `withAuto` that re-renders the caller
@@ -31,19 +32,22 @@ export function useBinding(
   target: Record<string, any> & { [$O]?: Observable },
   key?: any
 ) {
-  const observable = target[$O]
-  const forceUpdate = useForceUpdate()
-  useLayoutEffect(
-    () =>
-      observable?.observe(resolveKey(target, key), change => {
-        // Ignore "clear" event from a derived getter, which only serves
-        // as a signal to check its nonce in the next batch. Since we don't
-        // use batching in this hook, just wait for a "replace" event.
-        if (change.op == 'clear' && is.function(target)) return
-        forceUpdate()
-      }).dispose,
-    [observable, key]
-  )
+  if (!globals.auto) {
+    const observable = target[$O]
+    const forceUpdate = useForceUpdate()
+    useLayoutEffect(
+      () =>
+        observable?.observe(resolveKey(target, key), change => {
+          // Ignore "clear" event from a derived getter, which only
+          // serves as a signal to check its nonce in the next batch.
+          // Since we don't use batching in this hook, just wait for a
+          // "replace" event.
+          if (change.op == 'clear' && is.function(target)) return
+          forceUpdate()
+        }).dispose,
+      [observable, key]
+    )
+  }
 
   // Return the current value.
   return key
