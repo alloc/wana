@@ -63,13 +63,3 @@ Many of `wana`'s exports are tree-shakeable. 🌲
 
 - `@wana/babel-plugin-add-react-displayname`  
   A fork of [babel-plugin-add-react-displayname](https://www.npmjs.com/package/babel-plugin-add-react-displayname) that works with Babel 7 and up. It also provides a `callees` option, which means HOCs like `withAuto` are supported. Basically, this plugin sets the `displayName` of your components for you, which makes React Devtools a better experience. It's recommended to use this plugin in both development and production.
-
-&nbsp;
-
-## Donate
-
-If you love this library, please donate! I have no income currently, because I'm working full-time on a startup. Any amount is greatly appreciated. 🥰
-
-- ETH: **0xa446626195bbe4d0697e729c1433a86fB6Cf66cF**
-- BTC: **17vYtAUPKXzubMEnNcN8SiuFgicrd5Rp9A**
-- KIN: **GBU7RDRD7VDVT254RR6PGMBJESXQVDHJ5CGGODZKRXM2P4MP3G5QSAMH**
